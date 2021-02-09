@@ -1,0 +1,234 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\PokemonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass=PokemonRepository::class)
+ */
+class Pokemon
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private $sprite;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $HP;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $attack;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $defense;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $special_attack;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $special_defense;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $speed;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $generation;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="pokemon")
+     */
+    private $types;
+
+    public function __construct()
+    {
+        $this->types = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getSprite(): ?string
+    {
+        return $this->sprite;
+    }
+
+    public function setSprite(string $sprite): self
+    {
+        $this->sprite = $sprite;
+
+        return $this;
+    }
+
+    public function getHP(): ?int
+    {
+        return $this->HP;
+    }
+
+    public function setHP(int $HP): self
+    {
+        $this->HP = $HP;
+
+        return $this;
+    }
+
+    public function getAttack(): ?int
+    {
+        return $this->attack;
+    }
+
+    public function setAttack(int $attack): self
+    {
+        $this->attack = $attack;
+
+        return $this;
+    }
+
+    public function getDefense(): ?int
+    {
+        return $this->defense;
+    }
+
+    public function setDefense(int $defense): self
+    {
+        $this->defense = $defense;
+
+        return $this;
+    }
+
+    public function getSpecialAttack(): ?int
+    {
+        return $this->special_attack;
+    }
+
+    public function setSpecialAttack(int $special_attack): self
+    {
+        $this->special_attack = $special_attack;
+
+        return $this;
+    }
+
+    public function getSpecialDefense(): ?int
+    {
+        return $this->special_defense;
+    }
+
+    public function setSpecialDefense(int $special_defense): self
+    {
+        $this->special_defense = $special_defense;
+
+        return $this;
+    }
+
+    public function getSpeed(): ?int
+    {
+        return $this->speed;
+    }
+
+    public function setSpeed(int $speed): self
+    {
+        $this->speed = $speed;
+
+        return $this;
+    }
+
+    public function getGeneration(): ?Generation
+    {
+        return $this->generation;
+    }
+
+    public function setGeneration(?Generation $generation): self
+    {
+        $this->generation = $generation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Type[]
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Type $type): self
+    {
+        if (!$this->types->contains($type)) {
+            $this->types[] = $type;
+            $type->addPokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): self
+    {
+        if ($this->types->removeElement($type)) {
+            $type->removePokemon($this);
+        }
+
+        return $this;
+    }
+}
