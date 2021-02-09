@@ -6,6 +6,7 @@ use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=PokemonRepository::class)
@@ -72,6 +73,7 @@ class Pokemon
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="pokemon")
+     * @Ignore()
      */
     private $types;
 
@@ -211,6 +213,22 @@ class Pokemon
     public function getTypes(): Collection
     {
         return $this->types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getApiTypes(): array
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $typesForApi = [];
+
+        foreach($this->types as $type)
+        {
+            $typesForApi[] = $type->getName();
+        
+        }
+        return $typesForApi;
     }
 
     public function addType(Type $type): self
