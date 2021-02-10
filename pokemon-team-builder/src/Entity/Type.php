@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 
 /**
  * @ORM\Entity(repositoryClass=TypeRepository::class)
@@ -38,44 +40,52 @@ class Type
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="vulnerability")
      * @JoinTable(name="vulnerable_to")
+     * @Ignore()
      */
     private $vulnerable_to;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="vulnerable_to")
+     * @Ignore()
      */
     private $vulnerability;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistance")
      * @JoinTable(name="resistant_to")
+     * @Ignore()
      */
     private $resistant_to;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="resistant_to")
+     * @Ignore()
      */
     private $resistance;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="neutrality")
      * @JoinTable(name="neutral_to")
+     * @Ignore()
      */
     private $neutral_to;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="neutral_to")
+     * @Ignore()
      */
     private $neutrality;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="immunity")
      * @JoinTable(name="immune_to")
+     * @Ignore()
      */
     private $immune_to;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="immune_to")
+     * @Ignore()
      */
     private $immunity;
 

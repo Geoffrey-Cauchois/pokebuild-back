@@ -68,6 +68,7 @@ class Pokemon
     /**
      * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon")
      * @ORM\JoinColumn(nullable=false)
+     * @Ignore()
      */
     private $generation;
 
@@ -229,6 +230,16 @@ class Pokemon
         
         }
         return $typesForApi;
+    }
+
+    /**
+     * @return int
+     */
+    public function getApiGeneration(): int
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $generationForApi = $this->getGeneration()->getNumber();
+        return $generationForApi;
     }
 
     public function addType(Type $type): self

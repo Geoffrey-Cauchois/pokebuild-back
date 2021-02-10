@@ -6,6 +6,7 @@ use App\Entity\Generation;
 use App\Entity\Pokemon;
 use App\Entity\Type;
 use App\Repository\GenerationRepository;
+use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +20,7 @@ class TestController extends AbstractController
     /**
      * @Route("/test", name="test")
      */
-    public function index(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository): Response
+    public function index(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository): Response
     {
 
       $apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
@@ -211,75 +212,94 @@ class TestController extends AbstractController
         $em->flush();
       }
 
-      for ($i = 1; $i <= 3; $i ++){
+      if($pokemonRepository->findOneBy(['name' => 'Bulbizarre']) == null){
 
-        $pokemonToAdd = new Pokemon;
-        
-        $pokemonDataFr = file_get_contents($apiUrlFr . $i);
+      
+        for ($i = 1; $i <= 3; $i ++){
 
-        $decodedPokemonDataFr = json_decode($pokemonDataFr);
+          $pokemonToAdd = new Pokemon;
+          
+          $pokemonDataFr = file_get_contents($apiUrlFr . $i);
 
-        dump($decodedPokemonDataFr);
+          $decodedPokemonDataFr = json_decode($pokemonDataFr);
 
-        $nameFr = $decodedPokemonDataFr->names[4]->name;
+          //dump($decodedPokemonDataFr);
 
-        $pokemonToAdd->setName($nameFr);
+          $nameFr = $decodedPokemonDataFr->names[4]->name;
 
-        $generationId = substr($decodedPokemonDataFr->generation->url, -2, 1);
+          $pokemonToAdd->setName($nameFr);
 
-        $generation = $generationRepository->findOneBy(['number' => $generationId]);
+          $generationId = substr($decodedPokemonDataFr->generation->url, -2, 1);
 
-        $pokemonToAdd->setGeneration($generation);
+          $generation = $generationRepository->findOneBy(['number' => $generationId]);
 
-        $pokemonData = file_get_contents($apiUrl . $i);
+          $pokemonToAdd->setGeneration($generation);
 
-        $decodedPokemonData = json_decode($pokemonData);
+          $pokemonData = file_get_contents($apiUrl . $i);
 
-        dump($decodedPokemonData);
+          $decodedPokemonData = json_decode($pokemonData);
 
-        $images = $decodedPokemonData->sprites->other;
-        
-        $j = 0;
-        foreach ($images as $imagedata){
+          //dump($decodedPokemonData);
 
-          if($j = 1){
-            $imageUrl = $imagedata->front_default;
+          $images = $decodedPokemonData->sprites->other;
+          
+          $j = 0;
+          foreach ($images as $imagedata){
+
+            if($j = 1){
+              $imageUrl = $imagedata->front_default;
+            }
+
+            $j += 1;
           }
 
-          $j += 1;
+          $pokemonToAdd->setImage($imageUrl);
+
+          $spriteUrl = $decodedPokemonData->sprites->front_default;
+
+          $pokemonToAdd->setSprite($spriteUrl);
+
+          $HP = $decodedPokemonData->stats[0]->base_stat;
+
+          $pokemonToAdd->setHP($HP);
+
+          $attack = $decodedPokemonData->stats[1]->base_stat;
+
+          $pokemonToAdd->setAttack($attack);
+
+          $defense = $decodedPokemonData->stats[2]->base_stat;
+
+          $pokemonToAdd->setDefense($defense);
+
+          $special_attack = $decodedPokemonData->stats[3]->base_stat;
+
+          $pokemonToAdd->setSpecialAttack($special_attack);
+
+          $special_defense = $decodedPokemonData->stats[4]->base_stat;
+
+          $pokemonToAdd->setSpecialDefense($special_defense);
+
+          $speed = $decodedPokemonData->stats[5]->base_stat;
+
+          $pokemonToAdd->setSpeed($speed);
+
+          $types = $decodedPokemonData->types;
+
+          foreach ($types as $type){
+
+            $typeName = $type->type->name;
+
+            $typeToAttribute = $typeRepository->findOneBy(['english_name' => $typeName]);
+
+            $pokemonToAdd->addType($typeToAttribute);
+          }
+
+          $em->persist($pokemonToAdd);
         }
 
-        $pokemonToAdd->setImage($imageUrl);
-
-        $spriteUrl = $decodedPokemonData->sprites->front_default;
-
-        $pokemonToAdd->setSprite($spriteUrl);
-
-        $HP = $decodedPokemonData->stats[0]->base_stat;
-
-        $pokemonToAdd->setHP($HP);
-
-        $attack = $decodedPokemonData->stats[1]->base_stat;
-
-        $pokemonToAdd->setAttack($attack);
-
-        $defense = $decodedPokemonData->stats[2]->base_stat;
-
-        $pokemonToAdd->setDefense($defense);
-
-        $special_attack = $decodedPokemonData->stats[3]->base_stat;
-
-        $pokemonToAdd->setSpecialAttack($special_attack);
-
-        $special_defense = $decodedPokemonData->stats[4]->base_stat;
-
-        $pokemonToAdd->setSpecialDefense($special_defense);
-
-        $speed = $decodedPokemonData->stats[5]->base_stat;
-
-        $pokemonToAdd->setSpeed($speed);
+        $em->flush();
       }
 
-        return $this->render('base.html.twig');
+        return $this->json($pokemonRepository->findOneBy(['name' => 'Florizarre']));
     }
 }
