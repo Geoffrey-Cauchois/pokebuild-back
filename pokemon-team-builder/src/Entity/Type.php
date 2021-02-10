@@ -79,6 +79,11 @@ class Type
      */
     private $immunity;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $english_name;
+
 
 
     public function __construct()
@@ -347,6 +352,18 @@ class Type
         if ($this->immunity->removeElement($immunity)) {
             $immunity->removeImmuneTo($this);
         }
+
+        return $this;
+    }
+
+    public function getEnglishName(): ?string
+    {
+        return $this->english_name;
+    }
+
+    public function setEnglishName(string $english_name): self
+    {
+        $this->english_name = $english_name;
 
         return $this;
     }

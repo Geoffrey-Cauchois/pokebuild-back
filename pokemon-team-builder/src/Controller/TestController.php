@@ -53,10 +53,6 @@ class TestController extends AbstractController
 
       if ($typeRepository->findOneBy(['name' => 'Normal']) == null){
 
-        $rsm = new ResultSetMapping;
-
-        $em->createQuery('ALTER TABLE `type` AUTO_INCREMENT = 1', $rsm)->execute();
-
         for($i = 1; $i <= 18; $i ++){
 
           $typeToAdd = new Type;
@@ -69,12 +65,129 @@ class TestController extends AbstractController
 
           $typeToAdd->setName($name);
 
+          $englishName = $decodedTypeData->name;
+
+          $typeToAdd->setEnglishName($englishName);
+
           $image = $typesImages[$i -1];
 
           $typeToAdd->setImage($image);
 
-          dump($decodedTypeData);
+          $em->persist($typeToAdd);
+
+
+
+          //dump($decodedTypeData);
         }
+
+        $em->flush();
+
+        $types = $typeRepository->findAll();
+
+        dump($types);
+
+        foreach ($types as $type){
+          
+          $typeData = file_get_contents($apiTypesUrl . $type->getEnglishName());
+
+          $decodedTypeData = json_decode($typeData);
+          
+          $vulnerabilities = $decodedTypeData->damage_relations->double_damage_from;
+
+          foreach ($vulnerabilities as $vulnerabilityData){
+
+            $vulnerabilityTypeData = file_get_contents($apiTypesUrl . $vulnerabilityData->name);
+
+            $decodedVulnerabilityTypeData = json_decode($vulnerabilityTypeData);
+
+            $typeEnglishName = $decodedVulnerabilityTypeData->name;
+
+            $vulnerability = $typeRepository->findOneBy(['english_name' => $typeEnglishName]);
+
+            $type->addVulnerableTo($vulnerability);
+          }
+
+          $resistances = $decodedTypeData->damage_relations->half_damage_from;
+
+          foreach ($resistances as $resistanceData){
+
+            $resistanceTypeData = file_get_contents($apiTypesUrl . $resistanceData->name);
+
+            $decodedResistanceTypeData = json_decode($resistanceTypeData);
+
+            $typeEnglishName = $decodedResistanceTypeData->name;
+
+            $resistance = $typeRepository->findOneBy(['english_name' => $typeEnglishName]);
+
+            $type->addResistantTo($resistance);
+          }
+
+          $immunities = $decodedTypeData->damage_relations->no_damage_from;
+
+          foreach ($immunities as $immunityData){
+
+            $immunityTypeData = file_get_contents($apiTypesUrl . $immunityData->name);
+
+            $decodedImmunityTypeData = json_decode($immunityTypeData);
+
+            $typeEnglishName = $decodedImmunityTypeData->name;
+
+            $immunity = $typeRepository->findOneBy(['english_name' => $typeEnglishName]);
+
+            $type->addImmuneTo($immunity);
+          }
+          
+        }
+
+        $em->flush();
+
+        $types = $typeRepository->findAll();
+
+        foreach($types as $type){
+
+          
+
+            $vulnerabilities = [];
+
+            $vulnerablesTypes = $type->getVulnerableTo();
+
+            foreach($vulnerablesTypes as $vulnerablesType){
+
+              array_push($vulnerabilities, $vulnerablesType);
+
+            }
+
+            $resistances = [];
+
+            $resistantTypes = $type->getResistantTo();
+
+            foreach($resistantTypes as $resistantType){
+
+              array_push($resistances, $resistantType);
+
+            }
+
+            $immunities = [];
+
+            $immunityTypes = $type->getImmuneTo();
+
+            foreach($immunityTypes as $immunityType){
+
+              array_push($immunities, $immunityType);
+
+            }
+          foreach($types as $testedType){
+
+            if (!in_array($testedType, $vulnerabilities) && !in_array($testedType, $resistances) && !in_array($testedType, $immunities)){
+
+              $type->addNeutralTo($testedType);
+
+            }
+          }
+        }
+
+        $em->flush();
+
       }
 
       if ($generationRepository->findOneBy(['number' => 1]) == null ){
