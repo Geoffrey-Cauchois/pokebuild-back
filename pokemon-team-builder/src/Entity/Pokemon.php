@@ -226,7 +226,8 @@ class Pokemon
 
         foreach($this->types as $type)
         {
-            $typesForApi[] = $type->getName();
+            $typesForApi[] = ['name' => $type->getName(),
+                              'image' => $type->getImage()];
         
         }
         return $typesForApi;
