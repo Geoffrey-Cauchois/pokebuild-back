@@ -31,6 +31,11 @@ class Type
      */
     private $image;
 
+       /**
+     * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="types")
+     */
+    private $pokemon;
+
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="vulnerability")
@@ -132,6 +137,29 @@ class Type
         return $this;
     }
 
+    /**
+     * @return Collection|Pokemon[]
+     */
+    public function getPokemon(): Collection
+    {
+        return $this->pokemon;
+    }
+
+    public function addPokemon(Pokemon $pokemon): self
+    {
+        if (!$this->pokemon->contains($pokemon)) {
+            $this->pokemon[] = $pokemon;
+        }
+
+        return $this;
+    }
+
+    public function removePokemon(Pokemon $pokemon): self
+    {
+        $this->pokemon->removeElement($pokemon);
+
+        return $this;
+    }
     
     /**
      * @return Collection|self[]

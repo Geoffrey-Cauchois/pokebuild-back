@@ -142,7 +142,7 @@ class Pokemon
 
     public function setAttack(int $attack): self
     {
-        $this->attack = $attack;
+        $this->attack = $attack;https://pokeapi.co/api/v2/type/1/
 
         return $this;
     }
