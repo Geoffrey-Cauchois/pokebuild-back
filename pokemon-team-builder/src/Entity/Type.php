@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass=TypeRepository::class)
@@ -30,14 +31,18 @@ class Type
      */
     private $image;
 
-    /**
+       /**
      * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="types")
      */
     private $pokemon;
 
+
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="vulnerability")
-     * @JoinTable(name="vulnerable_to")
+     * @JoinTable(name="vulnerable_to",
+     *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
+     *      )
      */
     private $vulnerable_to;
 
@@ -48,7 +53,10 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistance")
-     * @JoinTable(name="resistant_to")
+     * @JoinTable(name="resistant_to",
+     *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
+     *      )
      */
     private $resistant_to;
 
@@ -59,7 +67,10 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="neutrality")
-     * @JoinTable(name="neutral_to")
+     * @JoinTable(name="neutral_to",
+     *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
+     *      )
      */
     private $neutral_to;
 
@@ -70,7 +81,10 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="immunity")
-     * @JoinTable(name="immune_to")
+     * @JoinTable(name="immune_to",
+     *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
+     *      )
      */
     private $immune_to;
 
@@ -146,7 +160,7 @@ class Type
 
         return $this;
     }
-
+    
     /**
      * @return Collection|self[]
      */
