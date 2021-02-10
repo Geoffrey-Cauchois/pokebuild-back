@@ -7,7 +7,9 @@ use App\Entity\Pokemon;
 use App\Entity\Type;
 use App\Repository\GenerationRepository;
 use App\Repository\TypeRepository;
+use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,6 +53,10 @@ class TestController extends AbstractController
 
       if ($typeRepository->findOneBy(['name' => 'Normal']) == null){
 
+        $rsm = new ResultSetMapping;
+
+        $em->createQuery('ALTER TABLE `type` AUTO_INCREMENT = 1', $rsm)->execute();
+
         for($i = 1; $i <= 18; $i ++){
 
           $typeToAdd = new Type;
@@ -61,7 +67,13 @@ class TestController extends AbstractController
 
           $name = $decodedTypeData->names[2]->name;
 
-          dump($name);
+          $typeToAdd->setName($name);
+
+          $image = $typesImages[$i -1];
+
+          $typeToAdd->setImage($image);
+
+          dump($decodedTypeData);
         }
       }
 
