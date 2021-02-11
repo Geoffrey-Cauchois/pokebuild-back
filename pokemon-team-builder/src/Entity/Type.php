@@ -51,6 +51,7 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="vulnerable_to")
+     * @Ignore()
      */
     private $vulnerability;
 
@@ -66,6 +67,7 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="resistant_to")
+     * @Ignore()
      */
     private $resistance;
 
@@ -81,6 +83,7 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="neutral_to")
+     * @Ignore()
      */
     private $neutrality;
 
@@ -96,8 +99,14 @@ class Type
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="immune_to")
+     * @Ignore()
      */
     private $immunity;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $english_name;
 
 
 
@@ -367,6 +376,18 @@ class Type
         if ($this->immunity->removeElement($immunity)) {
             $immunity->removeImmuneTo($this);
         }
+
+        return $this;
+    }
+
+    public function getEnglishName(): ?string
+    {
+        return $this->english_name;
+    }
+
+    public function setEnglishName(string $english_name): self
+    {
+        $this->english_name = $english_name;
 
         return $this;
     }

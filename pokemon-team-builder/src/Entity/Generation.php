@@ -6,6 +6,8 @@ use App\Repository\GenerationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 
 /**
  * @ORM\Entity(repositoryClass=GenerationRepository::class)
@@ -26,6 +28,7 @@ class Generation
 
     /**
      * @ORM\OneToMany(targetEntity=Pokemon::class, mappedBy="generation")
+     * @Ignore()
      */
     private $pokemon;
 

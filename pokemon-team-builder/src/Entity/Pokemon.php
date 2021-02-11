@@ -68,6 +68,7 @@ class Pokemon
     /**
      * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon")
      * @ORM\JoinColumn(nullable=false)
+     * @Ignore()
      */
     private $generation;
 
@@ -225,10 +226,21 @@ class Pokemon
 
         foreach($this->types as $type)
         {
-            $typesForApi[] = $type->getName();
+            $typesForApi[] = ['name' => $type->getName(),
+                              'image' => $type->getImage()];
         
         }
         return $typesForApi;
+    }
+
+    /**
+     * @return int
+     */
+    public function getApiGeneration(): int
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $generationForApi = $this->getGeneration()->getNumber();
+        return $generationForApi;
     }
 
     public function addType(Type $type): self

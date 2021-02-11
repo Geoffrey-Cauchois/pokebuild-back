@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,4 +48,12 @@ class TypeRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function resetAutoIncrement()
+    {
+      /* $em = $this->getEntityManager();
+
+      $query = $em->createQuery('ALTER TABLE `type` AUTO_INCREMENT = 1');
+
+      $query->execute(); */
+    }
 }
