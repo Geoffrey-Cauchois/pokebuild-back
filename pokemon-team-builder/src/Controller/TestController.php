@@ -212,7 +212,7 @@ class TestController extends AbstractController
         $em->flush();
       }
 
-      if($pokemonRepository->findOneBy(['name' => 'Sylveroy']) == null){
+      if($pokemonRepository->findOneBy(['name' => 'Bulbizarre']) == null){
 
       
         for ($i = 1; $i <= 898; $i ++){
