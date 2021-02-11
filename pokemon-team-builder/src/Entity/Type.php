@@ -7,7 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Doctrine\ORM\Mapping\JoinColumn;
+
 
 /**
  * @ORM\Entity(repositoryClass=TypeRepository::class)
@@ -43,6 +45,7 @@ class Type
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
      *      )
+     * @Ignore()
      */
     private $vulnerable_to;
 
@@ -57,6 +60,7 @@ class Type
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
      *      )
+     * @Ignore()
      */
     private $resistant_to;
 
@@ -71,6 +75,7 @@ class Type
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
      *      )
+     * @Ignore()
      */
     private $neutral_to;
 
@@ -85,6 +90,7 @@ class Type
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
      *      )
+     * @Ignore()
      */
     private $immune_to;
 
