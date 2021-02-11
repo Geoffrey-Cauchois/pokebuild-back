@@ -20,7 +20,7 @@ class TestController extends AbstractController
     /**
      * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
-    public function index(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id): Response
+    public function fillDatabase101Pokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id): Response
     {
 
       $apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
@@ -215,7 +215,7 @@ class TestController extends AbstractController
       if($pokemonRepository->findOneBy(['name' => 'Bulbizarre']) == null){
 
       
-        for ($i = 1; $i <= 898; $i ++){
+        for ($i = $id; $i <= $id +100; $i ++){
 
           $pokemonToAdd = new Pokemon;
           
@@ -308,5 +308,19 @@ class TestController extends AbstractController
       }
 
         return $this->json($pokemonRepository->findOneBy(['name' => 'Florizarre']));
+    }    
+    
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test(PokemonRepository $pokemonRepository){
+      $test = $pokemonRepository->find(rand(1, 898));
+
+      $types = $test->getTypes();
+
+      dump($types);
+
+      return $this->json($test);
     }
 }
+
