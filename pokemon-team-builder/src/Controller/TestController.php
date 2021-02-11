@@ -18,9 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TestController extends AbstractController
 {
     /**
-     * @Route("/test", name="test")
+     * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
-    public function index(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository): Response
+    public function index(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id): Response
     {
 
       $apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
@@ -193,7 +193,7 @@ class TestController extends AbstractController
 
       if ($generationRepository->findOneBy(['number' => 1]) == null ){
 
-        for($i = 1; $i <= 7; $i ++){
+        for($i = 1; $i <= 8; $i ++){
 
           $generationToAdd = new Generation;
 
@@ -212,10 +212,10 @@ class TestController extends AbstractController
         $em->flush();
       }
 
-      if($pokemonRepository->findOneBy(['name' => 'Bulbizarre']) == null){
+      if($pokemonRepository->findOneBy(['name' => 'Sylveroy']) == null){
 
       
-        for ($i = 1; $i <= 3; $i ++){
+        for ($i = 1; $i <= 898; $i ++){
 
           $pokemonToAdd = new Pokemon;
           
@@ -225,7 +225,14 @@ class TestController extends AbstractController
 
           //dump($decodedPokemonDataFr);
 
-          $nameFr = $decodedPokemonDataFr->names[4]->name;
+          if($decodedPokemonDataFr->id < 495){
+            $nameFr = $decodedPokemonDataFr->names[4]->name;
+          }
+          else{
+            $nameFr = $decodedPokemonDataFr->names[3]->name;
+          }
+
+          
 
           $pokemonToAdd->setName($nameFr);
 
