@@ -77,9 +77,15 @@ class Pokemon
      */
     private $types;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Team::class, inversedBy="pokemon")
+     */
+    private $team;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
+        $this->team = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,6 +252,30 @@ class Pokemon
         if ($this->types->removeElement($type)) {
             $type->removePokemon($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeam(): Collection
+    {
+        return $this->team;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->team->contains($team)) {
+            $this->team[] = $team;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        $this->team->removeElement($team);
 
         return $this;
     }
