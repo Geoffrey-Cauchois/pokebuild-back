@@ -1,0 +1,13 @@
+App\Entity\User:
+    user_{1..10}:
+        username (unique): '<name()>' 
+        password: '<password()>'
+        email (unique): '<email()>'
+        
+
+App\Entity\Team:
+    team_{1..6}:
+        name (unique): '<word()>' 
+        user: '@user*'
+       
+
