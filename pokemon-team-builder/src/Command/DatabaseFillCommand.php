@@ -15,6 +15,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Validator\Constraints\Count;
+
 
 class DatabaseFillCommand extends Command
 {
@@ -220,11 +222,21 @@ class DatabaseFillCommand extends Command
   
           $this->em->flush();
 
-          $io->note('Types have been added');
+          $io->success('Types have been added');
   
         }
         else{
-          $io->note('Types already are in your database, no types added');
+
+          if (count($this->typeRepository->findAll()) == 18){
+
+            $io->note('Types already are in your database, no types added');
+
+          }
+          else{
+
+            $io->error('Your type table already has data, and this data is incorrect, please purge the table and try again');
+
+          }
         }
 
         if (empty($this->generationRepository->findAll())){
@@ -247,10 +259,21 @@ class DatabaseFillCommand extends Command
   
           $this->em->flush();
 
-          $io->note('Generations have been added');
+          $io->success('Generations have been added');
         }
         else{
-          $io->note('Generations already are in your database, no generations added');
+
+          if(count($this->generationRepository->findAll()) == 8){
+
+            $io->note('Generations already are in your database, no generations added');
+
+          }
+          else{
+
+            $io->error('Your generation table already has data, and this data is incorrect, please purge the table and try again');
+
+          }
+          
         }
 
         if (empty($this->pokemonRepository->findAll())){
@@ -2504,10 +2527,20 @@ class DatabaseFillCommand extends Command
           (54,	888)
           ");
 
-          $io->note('Pokémon have been added');
+          $io->success('Pokémon have been added');
         }
         else{
-          $io->note('Pokémon aleready are present in the database, no Pokémon added');
+
+          if(count($this->pokemonRepository->findAll()) == 898){
+
+            $io->note('Pokémon aleready are present in the database, no Pokémon added');
+
+          }
+          else{
+
+            $io->error('Your pokemon table already has data, and this data is incorrect, please purge the table and try again');
+
+          }
         }
 
         return Command::SUCCESS;
