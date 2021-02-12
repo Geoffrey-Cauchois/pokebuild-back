@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     /**
-     * @Route("/list", name="list", methods={"GET"})
+     * @Route("/pokemon", name="pokemon", methods={"GET"})
      */
 
     public function list(PokemonRepository $pokemonRepository): Response
@@ -26,10 +26,19 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show_by_id", methods={"GET"})
+     * @Route("/pokemon/{id}", name="pokemon_by_id", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function read(Pokemon $pokemon): Response
+    public function showById(Pokemon $pokemon): Response
     {
+        return $this->json($pokemon);
+    }
+
+    /**
+     * @Route("/pokemon/{name}", name="pokemon_by_name", requirements={"name"="\w+"}, methods={"GET"})
+     */
+    public function showByName(PokemonRepository $pokemonRepository, $name): Response
+    {
+        $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
         return $this->json($pokemon);
     }
 
