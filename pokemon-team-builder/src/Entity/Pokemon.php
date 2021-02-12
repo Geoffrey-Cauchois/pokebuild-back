@@ -37,31 +37,37 @@ class Pokemon
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $HP;
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $attack;
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $defense;
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $special_attack;
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $special_defense;
 
     /**
      * @ORM\Column(type="integer")
+     * @Ignore()
      */
     private $speed;
 
@@ -80,6 +86,7 @@ class Pokemon
 
     /**
      * @ORM\ManyToMany(targetEntity=Team::class, inversedBy="pokemon")
+     * @Ignore()
      */
     private $team;
 
@@ -129,7 +136,9 @@ class Pokemon
 
         return $this;
     }
-
+    /**
+     * @Ignore()
+     */
     public function getHP(): ?int
     {
         return $this->HP;
@@ -166,6 +175,9 @@ class Pokemon
         return $this;
     }
 
+    /**
+     * @Ignore()
+     */
     public function getSpecialAttack(): ?int
     {
         return $this->special_attack;
@@ -177,7 +189,9 @@ class Pokemon
 
         return $this;
     }
-
+    /**
+     * @Ignore()
+     */
     public function getSpecialDefense(): ?int
     {
         return $this->special_defense;
@@ -223,6 +237,24 @@ class Pokemon
     }
 
     /**
+     *
+     * @return array
+     */
+    public function getStats(): array
+    {
+      $statsForApi = [
+                      'HP' => $this->getHP(),
+                      'attack' => $this->getAttack(),
+                      'defense' => $this->getDefense(),
+                      'special_attack' => $this->getSpecialAttack(),
+                      'special_defense' => $this->getSpecialDefense(),
+                      'speed' => $this->getSpeed()
+                     ];
+
+      return $statsForApi;
+    }
+
+    /**
      * @return array
      */
     public function getApiTypes(): array
@@ -249,6 +281,7 @@ class Pokemon
         return $generationForApi;
     }
 
+
     public function addType(Type $type): self
     {
         if (!$this->types->contains($type)) {
@@ -258,6 +291,7 @@ class Pokemon
 
         return $this;
     }
+
 
     public function removeType(Type $type): self
     {
