@@ -90,10 +90,13 @@ class Pokemon
      */
     private $team;
 
+    private $resistances;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
         $this->team = new ArrayCollection();
+        $this->resistances = [];
     }
 
     public function getId(): ?int
@@ -322,6 +325,26 @@ class Pokemon
     public function removeTeam(Team $team): self
     {
         $this->team->removeElement($team);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of resistances
+     */ 
+    public function getResistances()
+    {
+        return $this->resistances;
+    }
+
+    /**
+     * Set the value of resistances
+     *
+     * @return  self
+     */ 
+    public function setResistances($resistances)
+    {
+        $this->resistances = $resistances;
 
         return $this;
     }
