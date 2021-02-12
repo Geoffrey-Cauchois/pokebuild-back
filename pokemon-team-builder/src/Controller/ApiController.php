@@ -14,7 +14,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api", name="api", methods={"GET"})
      */
-    public function liste(): Response
+    public function list(): Response
     {
         $pokemons = [];
 
