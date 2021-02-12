@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\Pokemon;
 use App\Repository\PokemonRepository;
+use App\Repository\TypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,7 +29,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/pokemon/{id}", name="pokemon_by_id", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function showById(Pokemon $pokemon): Response
+    public function showPokemonById(Pokemon $pokemon): Response
     {
         return $this->json($pokemon);
     }
@@ -36,10 +37,29 @@ class ApiController extends AbstractController
     /**
      * @Route("/pokemon/{name}", name="pokemon_by_name", requirements={"name"="\w+"}, methods={"GET"})
      */
-    public function showByName(PokemonRepository $pokemonRepository, $name): Response
+    public function showPokemonByName(PokemonRepository $pokemonRepository, $name): Response
     {
-        $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
-        return $this->json($pokemon);
+        $pokemonByName = $pokemonRepository->findOneBy(['name' => $name]);
+        return $this->json($pokemonByName);
+    }
+
+    /**
+     * @Route("/pokemon/type/{name}", name="pokemon_type_by_name", requirements={"name"="\w+"}, methods={"GET"})
+     */
+    public function showPokemonByType(PokemonRepository $pokemonRepository, $name): Response
+    {
+        $pokemonsByType = $pokemonRepository->findByType($name);
+        return $this->json($pokemonsByType);
+        
+    }
+
+    /**
+     * @Route("/pokemon/generation/{id}", name="pokemon_generation_by_id", requirements={"id"="\d+"}, methods={"GET"})
+     */
+    public function showPokemonByGeneration(PokemonRepository $pokemonRepository, $id): Response
+    {
+        $pokemonsByGeneration = $pokemonRepository->findBy(['generation' => $id]);
+        return $this->json($pokemonsByGeneration);
     }
 
 
