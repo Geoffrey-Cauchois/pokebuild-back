@@ -241,6 +241,8 @@ class DatabaseFillCommand extends Command
 
         if (empty($this->generationRepository->findAll())){
 
+          $this->connection->executeStatement('ALTER TABLE `generation` AUTO_INCREMENT = 1');
+
           for($i = 1; $i <= 8; $i ++){
   
             $generationToAdd = new Generation;
