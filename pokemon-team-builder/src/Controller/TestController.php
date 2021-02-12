@@ -8,6 +8,7 @@ use App\Entity\Type;
 use App\Repository\GenerationRepository;
 use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
+use App\Service\PokemonService;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -16,7 +17,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TestController extends AbstractController
-{
+{   
+    /**
+     * @Route("/test/res", name="test-res")
+     */
+    public function testResistances(PokemonRepository $pokemonRepository, PokemonService $service)
+    {
+      $pokemon = $pokemonRepository->find(rand(1, 898));
+
+      $service->calculateResistances($pokemon);
+
+      dump($pokemon);
+
+      return $this->render('base.html.twig');
+    }
+
     /**
      * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
@@ -313,9 +328,11 @@ class TestController extends AbstractController
     /**
      * @Route("/test", name="test")
      */
-    public function test(PokemonRepository $pokemonRepository){
+    public function test(PokemonRepository $pokemonRepository, PokemonService $service){
       $test = $pokemonRepository->find(rand(1, 898));
 
+      $service->calculateResistances($test);
+      
       $types = $test->getTypes();
 
       dump($types);
