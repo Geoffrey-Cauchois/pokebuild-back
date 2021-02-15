@@ -31,6 +31,20 @@ class PokemonRepository extends ServiceEntityRepository
         
     }
 
+    public function findByTypes($type1, $type2)
+    {
+      return $this->createQueryBuilder('p')
+                  ->innerJoin('p.types', 't1')
+                  ->innerJoin('p.types', 't2')
+                  ->andWhere('t1.name = :type1')
+                  ->andWhere('t2.name = :type2')
+                  ->setParameter('type1', $type1)
+                  ->setParameter('type2', $type2)
+                  ->getQuery()
+                  ->getResult();
+
+    }
+
 
 
     // /**
