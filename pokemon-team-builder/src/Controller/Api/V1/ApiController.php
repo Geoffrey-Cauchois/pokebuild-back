@@ -59,14 +59,14 @@ class ApiController extends AbstractController
      */
     public function showPokemonByType(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService): Response
     {
-      $pokemonsByType = $pokemonRepository->findByType($name);
+        $pokemonsByType = $pokemonRepository->findByType($name);
 
-      foreach($pokemonsByType as $pokemon){
+        foreach($pokemonsByType as $pokemon){
 
-        $pokemonService->calculateResistances($pokemon);
-      }
+            $pokemonService->calculateResistances($pokemon);
+        }
 
-        return $this->json($pokemonsByType);
+            return $this->json($pokemonsByType);
         
     }
 
@@ -83,6 +83,21 @@ class ApiController extends AbstractController
         }  
 
         return $this->json($pokemonsByGeneration);
+    }
+
+    /**
+     * @Route("/pokemon/limit/{number}", name="pokemon_limit", requirements={"number"="\d+"}, methods={"GET"})
+     */
+    public function showPokemonByLimit(PokemonRepository $pokemonRepository, $number, PokemonService $pokemonService): Response
+    {
+        $pokemonsByLimit = $pokemonRepository->findByLimit($number);
+
+        foreach($pokemonsByLimit as $pokemon){
+
+          $pokemonService->calculateResistances($pokemon);
+        }  
+
+        return $this->json($pokemonsByLimit);
     }
 
 
