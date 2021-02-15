@@ -55,7 +55,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/pokemon/type/{name}", name="pokemon_type_by_name", requirements={"name"="\w+"}, methods={"GET"})
+     * @Route("/pokemon/type/{name}", name="pokemon_by_type_name", requirements={"name"="\w+"}, methods={"GET"})
      */
     public function showPokemonByType(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService): Response
     {
@@ -84,8 +84,158 @@ class ApiController extends AbstractController
 
         return $this->json($pokemonsByGeneration);
     }
+    
+    /**
+    * @Route("/pokemon/limit/{number}", name="pokemon_limit", requirements={"number"="\d+"}, methods={"GET"})
+    */
+   public function showPokemonByLimit(PokemonRepository $pokemonRepository, $number, PokemonService $pokemonService): Response
+   {
+       $pokemonsByLimit = $pokemonRepository->findByLimit($number);
+
+       foreach($pokemonsByLimit as $pokemon){
+
+         $pokemonService->calculateResistances($pokemon);
+       }  
+
+       return $this->json($pokemonsByLimit);
+   }
 
 
+    /**
+     * @Route("/pokemon/types/{typeName1}/{typeName2}", name="pokemon_by_double_type", requirements={"typeName1"="\w+", "typeName2"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByDoubleType(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName1, $typeName2): Response
+    {
+      $pokemonByTypes = $pokemonRepository->findByTypes($typeName1, $typeName2);
+
+      foreach($pokemonByTypes as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+      }
+
+      return $this->json($pokemonByTypes);
+    }
+
+    /**
+     * @Route("/pokemon/type/weakness/{typeName}", name="pokemon_by_weakness", requirements={"typeName"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByWeakness(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
+    {
+      $pokemonByWeakness = [];
+
+      $allPokemon = $pokemonRepository->findAll();
+
+      foreach($allPokemon as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+
+        if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 2){
+
+          array_push($pokemonByWeakness, $pokemon);
+
+        }
+      }
+
+      return $this->json($pokemonByWeakness);
+    }
+
+    /**
+     * @Route("/pokemon/type/double-weakness/{typeName}", name="pokemon_by_double_weakness", requirements={"typeName"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByDoubleWeakness(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
+    {
+      $pokemonByDoubleWeakness = [];
+
+      $allPokemon = $pokemonRepository->findAll();
+
+      foreach($allPokemon as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+
+        if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 4){
+
+          array_push($pokemonByDoubleWeakness, $pokemon);
+
+        }
+      }
+
+      return $this->json($pokemonByDoubleWeakness);
+    }
+
+    /**
+     * @Route("/pokemon/type/resistance/{typeName}", name="pokemon_by_resistance", requirements={"typeName"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByResistance(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
+    {
+      $pokemonByResistance = [];
+
+      $allPokemon = $pokemonRepository->findAll();
+
+      foreach($allPokemon as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+
+        if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 0.5){
+
+          array_push($pokemonByResistance, $pokemon);
+
+        }
+      }
+
+      return $this->json($pokemonByResistance);
+    }
+
+    /**
+     * @Route("/pokemon/type/double-resistance/{typeName}", name="pokemon_by_double_resistance", requirements={"typeName"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByDoubleResistance(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
+    {
+      $pokemonByDoubleResistance = [];
+
+      $allPokemon = $pokemonRepository->findAll();
+
+      foreach($allPokemon as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+
+        if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 0.25){
+
+          array_push($pokemonByDoubleResistance, $pokemon);
+
+        }
+      }
+
+      return $this->json($pokemonByDoubleResistance);
+    }
+
+        /**
+     * @Route("/pokemon/type/immunity/{typeName}", name="pokemon_by_immunity", requirements={"typeName"="\w+"}, methods={"GET"})
+     *
+     */
+    public function showPokemonByImmunity(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
+    {
+      $pokemonByImmunity = [];
+
+      $allPokemon = $pokemonRepository->findAll();
+
+      foreach($allPokemon as $pokemon){
+
+        $pokemonService->calculateResistances($pokemon);
+
+        if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 0){
+
+          array_push($pokemonByImmunity, $pokemon);
+
+        }
+      }
+
+      return $this->json($pokemonByImmunity);
+    }
 
 
 }
