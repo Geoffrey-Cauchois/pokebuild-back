@@ -99,7 +99,7 @@ class DatabaseFillCommand extends Command
           //exactly 18 types exists in pokemon games
           for($i = 1; $i <= 18; $i ++){
             
-            //for each types, we get its data in pokeapi, take only the data tahta is useful to us and create a type object with it
+            //for each types, we get its data in pokeapi, take only the data that is useful to us and create a type object with it
             $typeToAdd = new Type;
   
             $typeData = file_get_contents($apiTypesUrl . $i);
@@ -149,7 +149,7 @@ class DatabaseFillCommand extends Command
               $type->addVulnerableTo($vulnerability);
             }
 
-            //then, same process for resistanaces ans immunities
+            //then, same process for resistances ans immunities
   
             $resistances = $decodedTypeData->damage_relations->half_damage_from;
   
@@ -248,7 +248,7 @@ class DatabaseFillCommand extends Command
 
           }
           else{
-            //if it is not, we notify that the table has incorrect data and that the table miust be emptied of all data
+            //if it is not, we notify that the table has incorrect data and that the table must be emptied of all data
             $io->error('Your type table already has data, and this data is incorrect, please purge the table and try again');
 
           }
@@ -288,7 +288,7 @@ class DatabaseFillCommand extends Command
 
           }
           else{
-            //if it is not, we notify that the table has incorrect data and that the table miust be emptied of all data
+            //if it is not, we notify that the table has incorrect data and that the table must be emptied of all data
             $io->error('Your generation table already has data, and this data is incorrect, please purge the table and try again');
 
           }
@@ -298,7 +298,7 @@ class DatabaseFillCommand extends Command
         if (empty($this->pokemonRepository->findAll())){
           //reset the id value to match the sql injection
           $this->connection->executeStatement('ALTER TABLE `pokemon` AUTO_INCREMENT = 1');
-          //injecting pokemon data would require 2 request to the api for each pokemon, meaning a total of 1796 api reuests, this returns an error because the treatment is too long. Therefore, we use a sql injection.
+          //injecting pokemon data would require 2 requests to the api for each pokemon, meaning a total of 1796 api reuests, this returns an error because the treatment is too long. Therefore, we use a sql injection.
           $this->connection->executeStatement("
           INSERT INTO `pokemon` (`id`, `generation_id`, `name`, `image`, `sprite`, `hp`, `attack`, `defense`, `special_attack`, `special_defense`, `speed`) VALUES
           (1,	1,	'Bulbizarre',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',	45,	49,	49,	65,	65,	45),
