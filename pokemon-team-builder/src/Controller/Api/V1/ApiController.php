@@ -84,6 +84,22 @@ class ApiController extends AbstractController
 
         return $this->json($pokemonsByGeneration);
     }
+    
+    /**
+    * @Route("/pokemon/limit/{number}", name="pokemon_limit", requirements={"number"="\d+"}, methods={"GET"})
+    */
+   public function showPokemonByLimit(PokemonRepository $pokemonRepository, $number, PokemonService $pokemonService): Response
+   {
+       $pokemonsByLimit = $pokemonRepository->findByLimit($number);
+
+       foreach($pokemonsByLimit as $pokemon){
+
+         $pokemonService->calculateResistances($pokemon);
+       }  
+
+       return $this->json($pokemonsByLimit);
+   }
+
 
     /**
      * @Route("/pokemon/types/{typeName1}/{typeName2}", name="pokemon_by_double_type", requirements={"typeName1"="\w+", "typeName2"="\w+"}, methods={"GET"})

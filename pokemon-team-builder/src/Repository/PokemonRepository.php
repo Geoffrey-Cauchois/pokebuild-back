@@ -31,6 +31,15 @@ class PokemonRepository extends ServiceEntityRepository
         
     }
 
+    public function  findByLimit($number) 
+    {
+        return $this->createQueryBuilder('p')
+        ->orderBy('p.id', 'ASC')
+        ->setMaxResults($number)
+        ->getQuery()
+        ->getResult();
+    }    
+
     public function findByTypes($type1, $type2)
     {
       return $this->createQueryBuilder('p')
