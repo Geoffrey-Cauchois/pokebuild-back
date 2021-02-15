@@ -13,6 +13,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,8 +22,13 @@ class TestController extends AbstractController
     /**
      * @Route("/test/res", name="test-res")
      */
-    public function testResistances(PokemonRepository $pokemonRepository, PokemonService $service)
+    public function testResistances(PokemonRepository $pokemonRepository, PokemonService $service, Request $request)
     {
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
+
       $pokemon = $pokemonRepository->find(rand(1, 898));
 
       $service->calculateResistances($pokemon);
@@ -35,8 +41,12 @@ class TestController extends AbstractController
     /**
      * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
-    public function fillDatabase101Pokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id): Response
+    public function fillDatabase101Pokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id, Request $request): Response
     {
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
 
       $apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
 
@@ -328,7 +338,13 @@ class TestController extends AbstractController
     /**
      * @Route("/test", name="test")
      */
-    public function test(PokemonRepository $pokemonRepository, PokemonService $service){
+    public function test(PokemonRepository $pokemonRepository, PokemonService $service, Request $request){
+
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
+      
       $test = $pokemonRepository->find(rand(1, 898));
 
       $service->calculateResistances($test);
