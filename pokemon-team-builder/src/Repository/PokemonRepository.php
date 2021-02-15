@@ -21,6 +21,7 @@ class PokemonRepository extends ServiceEntityRepository
 
     public function findByType($type)
     {
+        // query to find the pokemons which have the type of (value of $type)
         return $this->createQueryBuilder('p')
             ->innerJoin('p.types', 't')
             ->where('t.name = :type')
@@ -33,16 +34,19 @@ class PokemonRepository extends ServiceEntityRepository
 
     public function  findByLimit($number) 
     {
+        // query to find the (value of $number) first pokemons
         return $this->createQueryBuilder('p')
-        ->orderBy('p.id', 'ASC')
-        ->setMaxResults($number)
-        ->getQuery()
-        ->getResult();
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults($number)
+            ->getQuery()
+            ->getResult();
     }    
+
 
     public function findByTypes($type1, $type2)
     {
-      return $this->createQueryBuilder('p')
+        // query to find the pokemons which have the types of  (value of $type1 and $type2)
+        return $this->createQueryBuilder('p')
                   ->innerJoin('p.types', 't1')
                   ->innerJoin('p.types', 't2')
                   ->andWhere('t1.name = :type1')
