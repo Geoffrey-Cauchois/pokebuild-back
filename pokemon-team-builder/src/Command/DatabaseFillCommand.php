@@ -63,10 +63,13 @@ class DatabaseFillCommand extends Command
 
         $io->success('Database completion ongoing, checking current database for updates');
 
+        //api adress for info about a generation
         $apiGenerationUrl = 'https://pokeapi.co/api/v2/generation/';
 
+        //api adress for infp about a type
         $apiTypesUrl = 'https://pokeapi.co/api/v2/type/';
-  
+        
+        //images for each type, in the same order of the types in the api
         $typesImages = [
                         'https://cdn.pixabay.com/photo/2018/05/20/21/00/pokemon-3416764_1280.png',
                         'https://cdn.pixabay.com/photo/2018/05/20/01/40/pokemon-3414806_1280.png',
@@ -87,13 +90,16 @@ class DatabaseFillCommand extends Command
                         'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411387_1280.png',
                         'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411390_1280.png'
                       ];
-  
+        //inserts types data only if the type table is empty
         if (empty($this->typeRepository->findAll())){
 
+          //resets attributed id to keep it in check with the sql injection
           $this->connection->executeStatement('ALTER TABLE `type` AUTO_INCREMENT = 37');
-  
+          
+          //exactly 18 types exists in pokemon games
           for($i = 1; $i <= 18; $i ++){
-  
+            
+            //for each types, we get its data in pokeapi, take only the data tahta is useful to us and create a type object with it
             $typeToAdd = new Type;
   
             $typeData = file_get_contents($apiTypesUrl . $i);
@@ -117,11 +123,13 @@ class DatabaseFillCommand extends Command
           }
   
           $this->em->flush();
+
+          //we need to register types before we can create relations between them
   
           $types = $this->typeRepository->findAll();
   
           foreach ($types as $type){
-            
+            // for each type, we identify each type the current type is vulnerable to
             $typeData = file_get_contents($apiTypesUrl . $type->getEnglishName());
   
             $decodedTypeData = json_decode($typeData);
@@ -129,7 +137,7 @@ class DatabaseFillCommand extends Command
             $vulnerabilities = $decodedTypeData->damage_relations->double_damage_from;
   
             foreach ($vulnerabilities as $vulnerabilityData){
-  
+              //then, for each type it is vulnerable to, we get the data of this vulnerability, and we create the relation between the two types
               $vulnerabilityTypeData = file_get_contents($apiTypesUrl . $vulnerabilityData->name);
   
               $decodedVulnerabilityTypeData = json_decode($vulnerabilityTypeData);
@@ -140,6 +148,8 @@ class DatabaseFillCommand extends Command
   
               $type->addVulnerableTo($vulnerability);
             }
+
+            //then, same process for resistanaces ans immunities
   
             $resistances = $decodedTypeData->damage_relations->half_damage_from;
   
@@ -176,6 +186,8 @@ class DatabaseFillCommand extends Command
           $this->em->flush();
   
           $types = $this->typeRepository->findAll();
+
+          //once all resistances, vulnerabilities and immunities are set, we create a "neutrality" relation, to be able to identify types to which a type is neither vulnerable, resistant or immune to.
   
           foreach($types as $type){
   
@@ -222,29 +234,33 @@ class DatabaseFillCommand extends Command
   
           $this->em->flush();
 
+          //succes message to notify types have been added
+
           $io->success('Types have been added');
   
         }
         else{
 
+          //if data is already in the table, we check if the number of types is correct
           if (count($this->typeRepository->findAll()) == 18){
-
+            //if it is,  we notify the user that types are already correctly registered, and we go to the next step (adding generations)
             $io->note('Types already are in your database, no types added');
 
           }
           else{
-
+            //if it is not, we notify that the table has incorrect data and that the table miust be emptied of all data
             $io->error('Your type table already has data, and this data is incorrect, please purge the table and try again');
 
           }
         }
 
+        //inserts generation data only if the generation table is empty
         if (empty($this->generationRepository->findAll())){
-
+          //reset the id value so it matches the generation number and is in check with the sql injection
           $this->connection->executeStatement('ALTER TABLE `generation` AUTO_INCREMENT = 1');
-
+          //there are currently exactly 8 generation currently
           for($i = 1; $i <= 8; $i ++){
-  
+            //for each generation, we get in pokeapi the data that is useful to and we create a generation object with it
             $generationToAdd = new Generation;
   
             $generationData = file_get_contents($apiGenerationUrl . $i);
@@ -265,23 +281,24 @@ class DatabaseFillCommand extends Command
         }
         else{
 
+          //if data is already in the table, we check if the number of generation is correct
           if(count($this->generationRepository->findAll()) == 8){
-
+            //if it is,  we notify the user that generations are already correctly registered, and we go to the next step (adding pokemon)
             $io->note('Generations already are in your database, no generations added');
 
           }
           else{
-
+            //if it is not, we notify that the table has incorrect data and that the table miust be emptied of all data
             $io->error('Your generation table already has data, and this data is incorrect, please purge the table and try again');
 
           }
           
         }
-
+        //inserts pokemon data only if the pokemon table is empty
         if (empty($this->pokemonRepository->findAll())){
-
+          //reset the id value to match the sql injection
           $this->connection->executeStatement('ALTER TABLE `pokemon` AUTO_INCREMENT = 1');
-
+          //injecting pokemon data would require 2 request to the api for each pokemon, meaning a total of 1796 api reuests, this returns an error because the treatment is too long. Therefore, we use a sql injection.
           $this->connection->executeStatement("
           INSERT INTO `pokemon` (`id`, `generation_id`, `name`, `image`, `sprite`, `hp`, `attack`, `defense`, `special_attack`, `special_defense`, `speed`) VALUES
           (1,	1,	'Bulbizarre',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',	45,	49,	49,	65,	65,	45),
@@ -1184,7 +1201,7 @@ class DatabaseFillCommand extends Command
           (898,	8,	'Sylveroy',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/898.png',	'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/898.png',	100,	80,	80,	80,	80,	80)
           ");
           
-          
+          //after pokemon are added to the database, we add the associations between pokemon and their types
           $this->connection->executeStatement("
           INSERT INTO `type_pokemon` (`type_id`, `pokemon_id`) VALUES
           (37,  16),
@@ -2532,14 +2549,14 @@ class DatabaseFillCommand extends Command
           $io->success('Pokémon have been added');
         }
         else{
-
+          //if the pokemon table alread has data, we check how many pokemon are in the table
           if(count($this->pokemonRepository->findAll()) == 898){
-
+            //there are 898 existing pokemon, if we have the current number in the database, we just notify the user
             $io->note('Pokémon aleready are present in the database, no Pokémon added');
 
           }
           else{
-
+            //if the number is incorrect, we notify that the table must be emptied
             $io->error('Your pokemon table already has data, and this data is incorrect, please purge the table and try again');
 
           }

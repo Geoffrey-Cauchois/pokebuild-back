@@ -13,64 +13,62 @@ class PokemonService
   {
     $this->typeRepository = $typeRepository;
   }
-
+  /**
+   * Calculate the resistances of the pokemon and fills its 'resistances' atrributes with data contained its relation ith each type
+   *
+   * @param Pokemon $pokemon
+   * @return void
+   */
   public function calculateResistances(Pokemon $pokemon)
-  {
+  { 
+    //first, we get all the pokemon's types (1 or 2)
     $pokemonTypes = $pokemon->getTypes();
 
     $allResistances = [];
-
+    //we have have to compare each existing type to each type the pokemon has
     foreach($this->typeRepository->findAll() as $testedType){
-
+      //by default, damage does 'normal' damage, ot 100% of damage
       $damageMultiplier = 1;
 
-      foreach($pokemonTypes as $type){
+      foreach ($pokemonTypes as $type) {
+          //we register each chson pokemon type's resistances, vulnerabilities and immunities
+          $vulnerabilities = [];
 
-        $vulnerabilities = [];
+          $vulnerablesTypes = $type->getVulnerableTo();
 
-        $vulnerablesTypes = $type->getVulnerableTo();
+          foreach ($vulnerablesTypes as $vulnerablesType) {
+              array_push($vulnerabilities, $vulnerablesType);
+          }
 
-        foreach($vulnerablesTypes as $vulnerablesType){
+          $resistances = [];
 
-          array_push($vulnerabilities, $vulnerablesType);
+          $resistantTypes = $type->getResistantTo();
 
-        }
+          foreach ($resistantTypes as $resistantType) {
+              array_push($resistances, $resistantType);
+          }
 
-        $resistances = [];
+          $immunities = [];
 
-        $resistantTypes = $type->getResistantTo();
+          $immunityTypes = $type->getImmuneTo();
 
-        foreach($resistantTypes as $resistantType){
+          foreach ($immunityTypes as $immunityType) {
+              array_push($immunities, $immunityType);
+          }
 
-          array_push($resistances, $resistantType);
-
-        }
-
-        $immunities = [];
-
-        $immunityTypes = $type->getImmuneTo();
-
-        foreach($immunityTypes as $immunityType){
-
-          array_push($immunities, $immunityType);
-
-        }
-
-        if(in_array($testedType, $vulnerabilities)){
-
-          $damageMultiplier *= 2;
-        }
-        elseif(in_array($testedType, $resistances)){
-
-          $damageMultiplier /= 2;
-        }
-        elseif(in_array($testedType, $immunities)){
-
-          $damageMultiplier = 0;
-        }
-
-        
+          if (in_array($testedType, $vulnerabilities)) {
+              // damage is doubled when a type is vulnerable to another one
+              $damageMultiplier *= 2;
+          } elseif (in_array($testedType, $resistances)) {
+              // damage is halved  when a type is resistant to another one
+              $damageMultiplier /= 2;
+          } elseif (in_array($testedType, $immunities)) {
+              // damage is nullified if a type is immune to another. In the case of a pokemon with two types, the other, non-immune, type is ignored
+              $damageMultiplier = 0;
+          }
       }
+
+        //the result oh this operation generates, for each type, a damage multiplier that takes into consideration the resistances the one or both types the pokemon has. We list each different possible scenario and provide a description for it.
         if($damageMultiplier == 1){
 
           $damage_relation = 'neutral';
@@ -95,6 +93,7 @@ class PokemonService
 
           $damage_relation = 'immune';
         }
+        //then we provide for the pokemon the multiplier and description of its resistance with each type
         $typeResistance = [
                             'damage_multiplier' => $damageMultiplier,
                             'damage_relation' => $damage_relation
