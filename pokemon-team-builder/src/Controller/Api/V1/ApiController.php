@@ -55,7 +55,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/pokemon/type/{name}", name="pokemon_type_by_type", requirements={"name"="\w+"}, methods={"GET"})
+     * @Route("/pokemon/type/{name}", name="pokemon_by_type_name", requirements={"name"="\w+"}, methods={"GET"})
      */
     public function showPokemonByType(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService): Response
     {
