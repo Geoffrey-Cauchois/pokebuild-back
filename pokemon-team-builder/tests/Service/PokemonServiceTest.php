@@ -21,12 +21,22 @@ class PokemonServiceTest extends KernelTestCase
 
     }
 
-    public function testPokemonService() 
+    public function testDamageMultiplier() 
     {
         $pokemonToTest = $this->pokemonRepository->find(850);
         $this->pokemonService->calculateResistances($pokemonToTest);
         $this->assertEquals($pokemonToTest->getResistances()['Roche']['damage_multiplier'], 4);
-
-        
+  
     }
+
+    public function testDamageRelation() 
+    {
+        $pokemonToTest = $this->pokemonRepository->find(840);
+        $this->pokemonService->calculateResistances($pokemonToTest);
+        $this->assertEquals($pokemonToTest->getResistances()['Vol']['damage_relation'], 'vulnerable');
+  
+    }
+
+   
+
 }
