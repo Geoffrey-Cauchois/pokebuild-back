@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Repository\PokemonRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiControllerTest extends WebTestCase
@@ -12,7 +13,11 @@ class ApiControllerTest extends WebTestCase
         $crawler = $client->request('GET',
          'http://localhost/api/v1/pokemon');
 
-        $this->assertResponseIsSuccessful();
+        $PokemonRepository = static::$container->get(PokemonRepository::class);
+        $pokemonList = $PokemonRepository->findAll();
+        $this->assertEquals($pokemonList, $crawler);
+        
+        
         
     }
 
