@@ -328,15 +328,22 @@ class ApiController extends AbstractController
         // we find all types with the repository
         $types = $typeRepository->findAll();
         $typeNames = [];
+        $typeImages = [];
 
         foreach($types as $type){
 
             $typeName = $type->getName();
             array_push($typeNames, $typeName);
+            $typeImage = $type->getImage();
+            array_push($typeImages, $typeImage);
 
         }
-        // we send json with all typeNames
-        return $this->json($typeNames);
+    
+        // we send json with all type details
+        return $this->json([
+            $typeNames,
+            $typeImages
+        ]);
     }
 
 
