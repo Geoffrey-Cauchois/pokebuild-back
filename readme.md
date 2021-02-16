@@ -31,3 +31,4 @@
 | api/v1/pokemon/type/resistance/{typeName}        | GET    | liste des pokemons selon le nom du type auquel ils sont résistants            | Api        | api_v1_pokemon_by_resistance        |
 | api/v1/pokemon/type/double-resistance/{typeName} | GET    | liste des pokemons selon le nom du type auquel ils sont doublement résistants | Api        | api_v1_pokemon_by_double-resistance |
 | api/v1/pokemon/type/immunity/{typeName}          | GET    | liste des pokemons selon le nom du type auquel ils sont immunisés             | Api        | api_v1_pokemon_by_immunity          |
+| api/v1/pokemon/types                             | GET    | liste des types (sans les pokemons associés)                                  | Api        | api_v1_types                        |

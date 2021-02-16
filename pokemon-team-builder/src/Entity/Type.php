@@ -33,8 +33,9 @@ class Type
      */
     private $image;
 
-       /**
+    /**
      * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="types")
+     * @Ignore()
      */
     private $pokemon;
 
@@ -105,6 +106,7 @@ class Type
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Ignore()
      */
     private $english_name;
 
@@ -178,6 +180,7 @@ class Type
     
     /**
      * @return Collection|self[]
+     * @Ignore()
      */
     public function getVulnerableTo(): Collection
     {
@@ -229,6 +232,7 @@ class Type
 
     /**
      * @return Collection|self[]
+     * @Ignore()
      */
     public function getResistantTo(): Collection
     {
@@ -280,6 +284,7 @@ class Type
 
     /**
      * @return Collection|self[]
+     * @Ignore()
      */
     public function getNeutralTo(): Collection
     {
@@ -331,6 +336,7 @@ class Type
 
     /**
      * @return Collection|self[]
+     * @Ignore()
      */
     public function getImmuneTo(): Collection
     {

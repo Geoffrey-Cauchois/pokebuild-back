@@ -308,7 +308,7 @@ class ApiController extends AbstractController
             $pokemonService->calculateResistances($pokemon);
 
             if($pokemon->getResistances()[ucfirst($typeName)]['damage_multiplier'] == 0){
-
+            
             array_push($pokemonByImmunity, $pokemon);
 
             }
@@ -319,31 +319,17 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/type", name="type", methods={"GET"})
+     * @Route("/types", name="types", methods={"GET"})
      */
     
     // route to send the list of all TYpes
     public function typeList(TypeRepository $typeRepository): Response
     {
-        // we find all types with the repository
+        // we find all typess with the repository
         $types = $typeRepository->findAll();
-        $typeNames = [];
-        $typeImages = [];
 
-        foreach($types as $type){
-
-            $typeName = $type->getName();
-            array_push($typeNames, $typeName);
-            $typeImage = $type->getImage();
-            array_push($typeImages, $typeImage);
-
-        }
-    
-        // we send json with all type details
-        return $this->json([
-            $typeNames,
-            $typeImages
-        ]);
+        // we send json with all types details
+        return $this->json($types);
     }
 
 
