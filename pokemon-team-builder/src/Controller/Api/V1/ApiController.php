@@ -339,7 +339,7 @@ class ApiController extends AbstractController
 
         }
     
-        // we send json with all Pokemons details + resistances
+        // we send json with all type details
         return $this->json([
             $typeNames,
             $typeImages
