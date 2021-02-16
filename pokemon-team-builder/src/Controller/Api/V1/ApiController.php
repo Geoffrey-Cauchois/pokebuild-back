@@ -22,7 +22,7 @@ class ApiController extends AbstractController
     
     // route to send the list of all Pokemons
 
-    public function list(PokemonRepository $pokemonRepository, PokemonService $pokemonService): Response
+    public function pokemonList(PokemonRepository $pokemonRepository, PokemonService $pokemonService): Response
     {
         // we find all pokemons with the repository
         $pokemons = $pokemonRepository->findAll();
@@ -164,7 +164,7 @@ class ApiController extends AbstractController
      */
 
     // route to send the list of pokemons by weakness by type
-
+    
     public function showPokemonByWeakness(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName): Response
     {
         // we initialize an empty array
@@ -316,6 +316,27 @@ class ApiController extends AbstractController
 
         // we send json with Pokemons details + resistances
         return $this->json($pokemonByImmunity);
+    }
+
+    /**
+     * @Route("/type", name="type", methods={"GET"})
+     */
+    
+    // route to send the list of all TYpes
+    public function typeList(TypeRepository $typeRepository): Response
+    {
+        // we find all types with the repository
+        $types = $typeRepository->findAll();
+        $typeNames = [];
+
+        foreach($types as $type){
+
+            $typeName = $type->getName();
+            array_push($typeNames, $typeName);
+
+        }
+        // we send json with all Pokemons details + resistances
+        return $this->json($typeNames);
     }
 
 
