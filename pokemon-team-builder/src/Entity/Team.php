@@ -105,6 +105,21 @@ class Team
     {
         return $this->defensiveCover;
     }
+    /**
+     * @return array
+     */
+    public function getDefensiveCoverForApi()
+    {
+      $defensiveCoverForApi = [];
+
+      foreach ($this->getDefensiveCover() as $type => $defensiveCoverData){
+        $typeInfo = ['name' => $type];
+        $defensiveCoverData = array_merge($typeInfo, $defensiveCoverData);
+        $defensiveCoverForApi[] = $defensiveCoverData;
+      }
+
+      return $defensiveCoverForApi;
+    }
 
     /**
      * Set the value of defensiveCover

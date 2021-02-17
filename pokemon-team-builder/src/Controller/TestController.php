@@ -29,13 +29,13 @@ class TestController extends AbstractController
         throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
       }
 
-      dump($request->getLocale());
+      //dump($request->getLocale());
 
       $pokemon = $pokemonRepository->find(rand(1, 898));
 
       $service->calculateResistances($pokemon);
 
-      dump($pokemon);
+      return $this->json($pokemon);
 
       return $this->render('base.html.twig');
     }

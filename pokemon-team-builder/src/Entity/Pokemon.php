@@ -90,6 +90,9 @@ class Pokemon
      */
     private $team;
 
+    /**
+     * @Ignore()
+     */
     private $resistances;
 
     public function __construct()
@@ -282,6 +285,19 @@ class Pokemon
         // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
         $generationForApi = $this->getGeneration()->getNumber();
         return $generationForApi;
+    }
+
+    /**
+     * @return int
+     */
+    public function getApiResistances(): array
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $resistancesForApi = [];
+        foreach ($this->getResistances() as $type => $apiResistanceData){
+          $resistancesForApi[] = $apiResistanceData;
+        }
+        return $resistancesForApi;
     }
 
 
