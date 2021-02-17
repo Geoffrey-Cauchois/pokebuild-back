@@ -29,6 +29,8 @@ class TestController extends AbstractController
         throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
       }
 
+      dump($request->getLocale());
+
       $pokemon = $pokemonRepository->find(rand(1, 898));
 
       $service->calculateResistances($pokemon);

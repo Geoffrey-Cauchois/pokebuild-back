@@ -33,10 +33,13 @@ class Team
      * @ORM\ManyToMany(targetEntity=Pokemon::class, mappedBy="team")
      */
     private $pokemon;
+    
+    private $defensiveCover;
 
     public function __construct()
     {
         $this->pokemon = new ArrayCollection();
+        $this->defensiveCover = [];
     }
 
     public function getId(): ?int
@@ -91,6 +94,26 @@ class Team
         if ($this->pokemon->removeElement($pokemon)) {
             $pokemon->removeTeam($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of defensiveCover
+     */ 
+    public function getDefensiveCover()
+    {
+        return $this->defensiveCover;
+    }
+
+    /**
+     * Set the value of defensiveCover
+     *
+     * @return  self
+     */ 
+    public function setDefensiveCover($defensiveCover)
+    {
+        $this->defensiveCover = $defensiveCover;
 
         return $this;
     }
