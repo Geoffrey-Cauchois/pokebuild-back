@@ -15,7 +15,7 @@ class ApiControllerTest extends WebTestCase
 
         $PokemonRepository = static::$container->get(PokemonRepository::class);
         $pokemonList = $PokemonRepository->findAll();
-        $this->assertEquals($pokemonList, $crawler);
+        $this->assertEquals($pokemonList, $client->getResponse()->getContent());
         
         
         
