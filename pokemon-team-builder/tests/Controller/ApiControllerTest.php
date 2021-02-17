@@ -3,10 +3,13 @@
 namespace App\Tests\Controller;
 
 use App\Repository\PokemonRepository;
+use App\Service\PokemonService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 
 class ApiControllerTest extends WebTestCase
 {
+ 
     public function testPokemonList(): void
     {
         $client = static::createClient();
@@ -15,9 +18,7 @@ class ApiControllerTest extends WebTestCase
 
         $PokemonRepository = static::$container->get(PokemonRepository::class);
         $pokemonList = $PokemonRepository->findAll();
-        $this->assertEquals($pokemonList, $client->getResponse()->getContent());
-        
-        
+        $this->assertEquals(898, count(json_decode($client->getResponse()->getContent())));
         
     }
 
@@ -27,8 +28,11 @@ class ApiControllerTest extends WebTestCase
         $crawler = $client->request('GET',
          'http://localhost/api/v1/pokemon/840');
 
+        $PokemonRepository = static::$container->get(PokemonRepository::class);
+        $pokemonToTest = $PokemonRepository->find(840);
+        $pokemonToTestStat = $pokemonToTest->getAttack();
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('"id":840', $client->getResponse()->getContent()); 
+        $this->assertStringContainsString('"attack":40', $client->getResponse()->getContent()); 
         
     }
 
@@ -40,6 +44,39 @@ class ApiControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('Grillepattes', $client->getResponse()->getContent());
+        
+    }
+
+    public function testPokemonResistance(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET',
+         'http://localhost/api/v1/pokemon/type/resistance/eau');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('Carapuce', $client->getResponse()->getContent());
+        
+    }
+
+    public function testPokemonDoubleWeakness(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET',
+         'http://localhost/api/v1/pokemon/type/double-weakness/feu');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('Cizayox', $client->getResponse()->getContent());
+        
+    }
+
+    public function testPokemonImmunity(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET',
+         'http://localhost/api/v1/pokemon/type/immunity/spectre');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('Roucool', $client->getResponse()->getContent());
         
     }
 }
