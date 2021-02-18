@@ -11,11 +11,14 @@
 <div class="wrapper">
     <h1> Bienvenue sur l'API Pokebuild ! </h1>
     <hr>
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner">
             {% for pokemon in pokemons %}
             <div class="carousel-item {% if pokemon.id == 1 %}active{% endif %}">
-            <img class="d-block w-100" src="{{ pokemon.image }}" alt="First slide">
+            <img class="d-block w-50" src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ pokemon.name }}</h5>
+            </div>
             </div>
              {% endfor %}
         </div>

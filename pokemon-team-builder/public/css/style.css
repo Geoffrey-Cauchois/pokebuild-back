@@ -16,3 +16,13 @@ li {
 .rounded {
   margin-bottom: 2em;
 }
+
+.carousel-caption {
+  color: black;
+  margin-left: 6em;
+}
+
+.carousel-item {
+  transition-duration: 0s;
+  transition-delay: 0s;
+}
