@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Pokemon;
+use App\Entity\Team;
 use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,5 +112,95 @@ class PokemonService
     }
 
     $pokemon->setResistances($allResistances);
+  }
+
+  /**
+   * Return a team with a completed defensive coverage
+   *
+   * @param array $chosenPokemonIds array of integers eache one corresponding to the id of one of the team's pokemon
+   * @return Team
+   */
+  public function calculateDefensiveCoverage(array $chosenPokemonIds): Team
+  {
+    $team = new Team;
+
+    foreach($chosenPokemonIds as $id){
+
+      $pokemon = $this->pokemonRepository->find($id);
+      
+      $this->calculateResistances($pokemon);
+
+      $team->addPokemon($pokemon);
+    }
+
+    $defensive_coverage = [];
+
+    foreach($this->typeRepository->findAll() as $type){
+
+      $teamResistanceScore = 0;
+
+      foreach($team->getPokemon() as $teamPokemon){
+
+        $testedTypeMultiplier = $teamPokemon->getResistances()[$type->getName()]['damage_multiplier'];
+
+        if($testedTypeMultiplier == 0 || $testedTypeMultiplier == 0.25){
+
+          $teamResistanceScore += 2;
+        }
+        elseif($testedTypeMultiplier == 0.5){
+
+          $teamResistanceScore += 1;
+        }
+        elseif($testedTypeMultiplier == 2){
+
+          $teamResistanceScore -= 1;
+        }
+        elseif($testedTypeMultiplier == 4){
+
+          $teamResistanceScore -= 2;
+        }
+
+      }
+
+      if ($teamResistanceScore < -1){
+
+        $result = 'vulnerable';
+
+        $message = $this->translator->trans('vulnerable', [], 'messages');
+      }
+      elseif($teamResistanceScore == -1){
+
+        $result = 'slightly-vulnerable';
+
+        $message = $this->translator->trans('slightly-vulnerable', [], 'messages');
+      }
+      elseif($teamResistanceScore == 0){
+
+        $result = 'balanced';
+
+        $message = $this->translator->trans('balanced', [], 'messages');
+      }
+      elseif($teamResistanceScore == 1){
+         
+        $result = 'slightly-resistant';
+
+        $message = $this->translator->trans('slightly-resistant', [], 'messages');
+      }
+      elseif($teamResistanceScore > 1){
+
+        $result = 'resistant';
+
+        $message = $this->translator->trans('resistant', [], 'messages');
+      }
+
+      $defensive_coverage[$type->getName()] = [
+                                               'result' => $result,
+                                               'message' => $message
+                                              ];
+    }
+
+    $team->setDefensiveCover($defensive_coverage);
+
+      return $team;
   }
 }
