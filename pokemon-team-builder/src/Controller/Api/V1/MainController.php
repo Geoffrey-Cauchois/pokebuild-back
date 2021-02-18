@@ -18,7 +18,6 @@ class MainController extends AbstractController
         $allPokemon = $pokemonRepository->findAll();
         $testPokemon = $pokemonRepository->find(250);
         $slugger->sluggifyPokemon($testPokemon);
-        dump($testPokemon);
 
         return $this->render('api/v1/main/index.html.twig', [
             'pokemons' => $allPokemon,
