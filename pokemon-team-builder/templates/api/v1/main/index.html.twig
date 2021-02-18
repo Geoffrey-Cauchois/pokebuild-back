@@ -1,15 +1,26 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block title %} API Pokebuild {% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
+<div class="wrapper">
     <h1> Bienvenue sur l'API Pokebuild ! </h1>
+    <hr>
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for pokemon in pokemons %}
+            <div class="carousel-item {% if pokemon.id == 1 %}active{% endif %}">
+            <img class="d-block w-100" src="{{ pokemon.image }}" alt="First slide">
+            </div>
+             {% endfor %}
+        </div>
+        </div>
+       
     <hr>
     <p><strong> Liste des routes disponibles : </strong></p>
          <ul>

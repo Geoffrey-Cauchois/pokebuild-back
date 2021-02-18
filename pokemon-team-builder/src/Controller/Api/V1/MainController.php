@@ -12,11 +12,12 @@ class MainController extends AbstractController
     /**
      * @Route("/api/v1", name="api_v1_")
      */
-    public function index(): Response
+    public function index(PokemonRepository $pokemonRepository): Response
     {
-        
+        $allPokemon = $pokemonRepository->findAll();
+
         return $this->render('api/v1/main/index.html.twig', [
-            'controller_name' => 'MainController',
+            'pokemons' => $allPokemon,
         ]);
     }
 }
