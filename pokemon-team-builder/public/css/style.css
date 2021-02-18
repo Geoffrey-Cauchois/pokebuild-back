@@ -13,16 +13,36 @@ li {
   margin-bottom: 1em;
 }
 
-.rounded {
-  margin-bottom: 2em;
-}
-
-.carousel-caption {
-  color: black;
-  margin-left: 6em;
-}
-
 .carousel-item {
   transition-duration: 0s;
   transition-delay: 0s;
 }
+
+.d-block {
+  margin: auto;
+}
+
+
+.carousel-caption {
+  color: black;
+  text-align: right;
+}
+
+.carousel-control-next-icon {
+  filter: invert(100%);
+}
+
+.carousel-control-prev-icon {
+  filter: invert(100%);
+}
+
+#myCarousel {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+h1 {
+  text-align: center;
+}
+
+
