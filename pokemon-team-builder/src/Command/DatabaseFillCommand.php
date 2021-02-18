@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Constraints\Count;
+use App\Service\Slugger;
 
 
 class DatabaseFillCommand extends Command
@@ -28,8 +29,10 @@ class DatabaseFillCommand extends Command
     private $typeRepository;
     private $pokemonRepository;
     private $connection;
+    private $slugger;
 
-    public function __construct(EntityManagerInterface $em, TypeRepository $typeRepository, GenerationRepository $generationRepository, PokemonRepository $pokemonRepository, Connection $connection)
+    public function __construct(EntityManagerInterface $em, TypeRepository $typeRepository, GenerationRepository $generationRepository, 
+    PokemonRepository $pokemonRepository, Connection $connection, Slugger $slugger)
     {
       parent::__construct();
       $this->em = $em;
@@ -37,6 +40,7 @@ class DatabaseFillCommand extends Command
       $this->typeRepository = $typeRepository;
       $this->pokemonRepository = $pokemonRepository;
       $this->connection = $connection;
+      $this->slugger = $slugger;
     }
 
     protected function configure()
@@ -2546,13 +2550,21 @@ class DatabaseFillCommand extends Command
           (54,	888)
           ");
 
+          $allPokemon = $this->pokemonRepository->findAll();
+
+          foreach ($allPokemon as $pokemon) {
+            $this->slugger->sluggifyPokemon($pokemon);
+          }
+
+          $this->em->flush();
+
           $io->success('Pokémon have been added');
         }
         else{
           //if the pokemon table alread has data, we check how many pokemon are in the table
           if(count($this->pokemonRepository->findAll()) == 898){
             //there are 898 existing pokemon, if we have the current number in the database, we just notify the user
-            $io->note('Pokémon aleready are present in the database, no Pokémon added');
+            $io->note('Pokémon already are present in the database, no Pokémon added');
 
           }
           else{

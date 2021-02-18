@@ -95,6 +95,11 @@ class Pokemon
      */
     private $resistances;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
@@ -361,6 +366,18 @@ class Pokemon
     public function setResistances($resistances)
     {
         $this->resistances = $resistances;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
