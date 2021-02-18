@@ -1,0 +1,48 @@
+body {
+  background-color: aliceblue;
+}
+
+.wrapper { 
+  margin: 1em auto;
+  max-width: 800px; 
+  width: 95%; 
+  font: 18px/1.5 sans-serif; 
+}
+
+li {
+  margin-bottom: 1em;
+}
+
+.carousel-item {
+  transition-duration: 0s;
+  transition-delay: 0s;
+}
+
+.d-block {
+  margin: auto;
+}
+
+
+.carousel-caption {
+  color: black;
+  text-align: right;
+}
+
+.carousel-control-next-icon {
+  filter: invert(100%);
+}
+
+.carousel-control-prev-icon {
+  filter: invert(100%);
+}
+
+#myCarousel {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+h1 {
+  text-align: center;
+}
+
+

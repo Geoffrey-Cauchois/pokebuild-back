@@ -1,16 +1,38 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block title %} API Pokebuild {% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
+<div class="wrapper">
     <h1> Bienvenue sur l'API Pokebuild ! </h1>
-    <hr>
+  
+        <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for pokemon in pokemons %}
+            <div class="carousel-item {% if pokemon.id == 1 %}active{% endif %}">
+            <img class="d-block w-50" src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ pokemon.name }}</h5>
+            </div>
+            </div>
+             {% endfor %}
+        </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+       
+   
     <p><strong> Liste des routes disponibles : </strong></p>
          <ul>
             <li> Pour récupérer la liste de tous les Pokemon : api/v1/pokemon<br>
