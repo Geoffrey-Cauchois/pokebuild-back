@@ -3,15 +3,22 @@
 namespace App\Service;
 
 use App\Entity\Pokemon;
+use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PokemonService
 {
   private $typeRepository;
+  private $pokemonRepository;
+  private $translator;
 
-  public function __construct(TypeRepository $typeRepository)
+  public function __construct(TypeRepository $typeRepository, PokemonRepository $pokemonRepository, TranslatorInterface $translator)
   {
     $this->typeRepository = $typeRepository;
+    $this->pokemonRepository = $pokemonRepository;
+    $this->translator = $translator;
   }
   /**
    * Calculate the resistances of the pokemon and fills its 'resistances' atrributes with data contained its relation ith each type
@@ -94,7 +101,8 @@ class PokemonService
           $damage_relation = 'immune';
         }
         //then we provide for the pokemon the multiplier and description of its resistance with each type
-        $typeResistance = [
+        $typeResistance = [ 
+                            'name' => $testedType->getName(),
                             'damage_multiplier' => $damageMultiplier,
                             'damage_relation' => $damage_relation
                           ];

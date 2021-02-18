@@ -33,6 +33,7 @@ class ApiController extends AbstractController
           $pokemonService->calculateResistances($pokemon);
         }
 
+
         // we send json with all Pokemons details + resistances
         return $this->json($pokemons);
     }

@@ -105,6 +105,6 @@ class DataTreatment extends AbstractController
 
       $team->setDefensiveCover($defensive_coverage);
 
-        return $this->json($team->getDefensiveCover());
+        return $this->json($team->getDefensiveCoverForApi());
     }
 }

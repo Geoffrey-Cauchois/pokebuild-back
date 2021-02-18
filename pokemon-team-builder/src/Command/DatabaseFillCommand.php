@@ -71,24 +71,24 @@ class DatabaseFillCommand extends Command
         
         //images for each type, in the same order of the types in the api
         $typesImages = [
-                        'https://cdn.pixabay.com/photo/2018/05/20/21/00/pokemon-3416764_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/01/40/pokemon-3414806_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/01/40/pokemon-3414808_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/21/00/pokemon-3416765_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/21/00/pokemon-3416762_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/21/13/06/pokemon-3418255_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411386_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/01/40/pokemon-3414809_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/21/13/06/pokemon-3418256_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/01/40/pokemon-3414807_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/21/13/06/pokemon-3418257_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/01/41/pokemon-3414810_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411389_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/21/01/pokemon-3416767_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/20/21/00/pokemon-3416763_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411388_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411387_1280.png',
-                        'https://cdn.pixabay.com/photo/2018/05/18/15/43/pokemon-3411390_1280.png'
+                        'https://static.wikia.nocookie.net/pokemongo/images/f/fb/Normal.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/3/30/Fighting.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/7/7f/Flying.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/0/05/Poison.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/8/8f/Ground.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/0/0b/Rock.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/7/7d/Bug.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/a/ab/Ghost.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/c/c9/Steel.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/3/30/Fire.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/9/9d/Water.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/c/c5/Grass.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/2/2f/Electric.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/2/21/Psychic.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/7/77/Ice.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/c/c7/Dragon.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/0/0e/Dark.png',
+                        'https://static.wikia.nocookie.net/pokemongo/images/4/43/Fairy.png'
                       ];
         //inserts types data only if the type table is empty
         if (empty($this->typeRepository->findAll())){
