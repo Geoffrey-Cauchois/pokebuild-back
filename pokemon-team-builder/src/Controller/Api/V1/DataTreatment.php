@@ -2,11 +2,8 @@
 
 namespace App\Controller\Api\V1;
 
-use App\Entity\Team;
 use App\Repository\PokemonRepository;
-use App\Repository\TypeRepository;
 use App\Service\PokemonService;
-use PhpParser\Node\Stmt\Foreach_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
