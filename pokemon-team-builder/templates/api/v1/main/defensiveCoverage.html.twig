@@ -10,8 +10,10 @@
 <div class="wrapper">
 {{ form_start(form, {attr: {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form.pokemon) }}
+<div class="form__pokemon-label">
 {{ form_label(form.pokemon) }}
-<div class="form__box">
+</div>
+<div class="form__pokemon-checkbox">
 {{ form_widget(form.pokemon) }}
 </div>
 {{ form_end(form) }}
