@@ -41,8 +41,6 @@ class MainController extends AbstractController
 
       $form->handleRequest($request);
 
-      dump($request->server->get('API_BASE_URL'));
-
       if($form->isSubmitted() && $form->isValid()){
 
         $team = $form->getData();
@@ -84,8 +82,6 @@ class MainController extends AbstractController
       $form = $this->createForm(TeamType::class);
 
       $form->handleRequest($request);
-
-      dump($request->server->get('API_BASE_URL'));
 
       if($form->isSubmitted() && $form->isValid()){
 
