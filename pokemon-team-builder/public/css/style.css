@@ -45,4 +45,15 @@ h1 {
   text-align: center;
 }
 
+.form__box #team_pokemon{
+  height: 80vh;
+  overflow-y: scroll;
+}
 
+.form__box #team_pokemon label{
+  width: 19.5%;
+}
+
+.form__box #team_pokemon input{
+  width: 13.5%;
+}

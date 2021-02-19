@@ -107,6 +107,11 @@ class Pokemon
         $this->resistances = [];
     }
 
+    public function __toString()
+    {
+      return $this->id . ' ' . $this->name . ' ';
+    }
+
     public function getId(): ?int
     {
         return $this->id;
