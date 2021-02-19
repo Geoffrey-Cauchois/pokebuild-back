@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-{% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block title %} API Pokebuild {% endblock %}
 
@@ -17,5 +15,9 @@
 {{ form_widget(form.pokemon) }}
 </div>
 {{ form_end(form) }}
+
+<a href="{{ path('home') }}">Retour à l'accueil </a>
 </div>
+
+
 {% endblock %}

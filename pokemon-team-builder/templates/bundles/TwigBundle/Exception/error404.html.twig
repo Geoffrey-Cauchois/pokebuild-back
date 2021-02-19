@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Poké-ressource non trouvée !!</h1>
+
+    <img class="displayed" src="{{ asset('images/Gruikui.png') }}" alt="Image du pokemon Gruikui">
+    <p class="error404">
+      Pour les attraper tous : <a href="{{ path('home') }}">retour à l'accueil du Pokebuild </a>
+    </p>
+{% endblock %}
