@@ -37,7 +37,7 @@ class MainController extends AbstractController
     /**
      * @Route("/defensiveCoverTest", name="defensive-cover-test")
      */
-    public function defensieCoverageTest(Request $request)
+    public function defensiveCoverageTest(Request $request)
     {
       $form = $this->createForm(TeamType::class);
 
