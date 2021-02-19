@@ -50,6 +50,12 @@ h1 {
   overflow-y: scroll;
   display: flex;
   justify-content: space-between;
+  width: 130%;
+  margin: auto;
+}
+
+.form__pokemon-label {
+  text-align: center;
 }
 
 .form__pokemon-checkbox > *{
@@ -57,8 +63,15 @@ h1 {
   overflow-y: scroll;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 2em;
 }
 
 .form__pokemon-checkbox > * > *{
   width: 16.65%;
 }
+
+form {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
