@@ -16,6 +16,7 @@ class TeamType extends AbstractType
     {
         $builder
             ->add('pokemon', null, [
+              'label' => 'Composez votre équipe (jusqu\'à 6 Pokémon ou 5 pour la suggestion de Pokémon)',
               'expanded' => true,
               'multiple' => true,
               'constraints' => [

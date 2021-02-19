@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ServerBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -33,13 +34,15 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/defensiveCoverTest", name="defensie-cover-test")
+     * @Route("/defensiveCoverTest", name="defensive-cover-test")
      */
-    public function defensieCoverageTest(Request $request, HttpClientInterface $client)
+    public function defensieCoverageTest(Request $request)
     {
       $form = $this->createForm(TeamType::class);
 
       $form->handleRequest($request);
+
+      dump($request->server->get('API_BASE_URL'));
 
       if($form->isSubmitted() && $form->isValid()){
 
@@ -54,7 +57,49 @@ class MainController extends AbstractController
 
         $chosenPokemonIds = json_encode($chosenPokemonIds);
 
-        dump($chosenPokemonIds);
+        $opts = ['http' => [
+                            'method' => 'POST',
+                            'header' => 'Content-type: application/x-www-form-urlencoded',
+                            'content' => $chosenPokemonIds
+        ]];
+
+        $context = stream_context_create($opts);
+
+        $processedCoverage = file_get_contents($request->server->get('API_BASE_URL') . '/team/defensive-coverage', false, $context);
+
+        $decodedProcessedCoverage = json_decode($processedCoverage);
+
+        return $this->json($decodedProcessedCoverage);
+      }
+
+      return $this->render('api/v1/main/defensiveCoverage.html.twig', [
+        'form' => $form->createView()
+    ]);
+    }
+
+    /**
+     * @Route("/suggestionTest", name="suggestion-test")
+     */
+    public function suggestionTest(Request $request)
+    {
+      $form = $this->createForm(TeamType::class);
+
+      $form->handleRequest($request);
+
+      dump($request->server->get('API_BASE_URL'));
+
+      if($form->isSubmitted() && $form->isValid()){
+
+        $team = $form->getData();
+
+        $chosenPokemon = $team->getPokemon();
+
+        foreach($chosenPokemon as $pokemon){
+
+          $chosenPokemonIds[] = $pokemon->getId();
+        }
+
+        $chosenPokemonIds = json_encode($chosenPokemonIds);
 
         $opts = ['http' => [
                             'method' => 'POST',
@@ -64,7 +109,7 @@ class MainController extends AbstractController
 
         $context = stream_context_create($opts);
 
-        $processedCoverage = file_get_contents('http://ec2-3-83-51-192.compute-1.amazonaws.com/api/v1/team/defensive-coverage', false, $context);
+        $processedCoverage = file_get_contents($request->server->get('API_BASE_URL') . '/team/suggestion', false, $context);
 
         $decodedProcessedCoverage = json_decode($processedCoverage);
 

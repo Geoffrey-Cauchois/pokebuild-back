@@ -94,10 +94,13 @@
             <a href="{{ path('api_v1_pokemon_by_immunity', {'typeName' : 'Spectre' }) }}">Pokemon par immunité à un type </a>
             </li>
             
-          
+            <li>Vous pouvez aussi tester notre générateur de couverture défensive et notre suggestion automatique de Pokémon ci-dessous ! :</li>
             
-
+            <a href="{{ path('defensive-cover-test') }}">Tester le générateur de couerture défensive</a>
+            <br>
+            <a href="{{ path('suggestion-test') }}">Tester la suggestion automatique de Pokémon</a>
 </div>
 
-<a href="{{ path('defensie-cover-test') }}">Tester le générateur de couerture défensive</a>
+
+
 {% endblock %}
