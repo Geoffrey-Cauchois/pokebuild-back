@@ -56,6 +56,7 @@ h1 {
 
 .form__pokemon-label {
   text-align: center;
+  font-weight: bold;
 }
 
 .form__pokemon-checkbox > *{
@@ -74,4 +75,26 @@ form {
   margin-top: 2em;
   margin-bottom: 2em;
 }
+
+.error404 {
+  margin-top: 2em;
+  text-align: center;
+  font-size: 2em;
+}
+
+img.displayed {
+  display: block;
+  margin: auto;
+}
+
+button {
+  margin-top: 2em;
+}
+
+.generateur {
+  font-weight: bold;
+}
+
+
+
 
