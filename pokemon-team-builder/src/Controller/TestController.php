@@ -43,8 +43,13 @@ class TestController extends AbstractController
     /**
      * @Route("/api/v1/admin", name="test-api")
      */
-    public function apiTest()
+    public function apiTest(Request $request)
     {
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
+
       return $this->json('ok');
     }
 
