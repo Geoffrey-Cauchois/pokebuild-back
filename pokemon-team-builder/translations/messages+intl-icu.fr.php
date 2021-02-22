@@ -8,5 +8,10 @@ return [
   'resistant' => 'Votre équipe résiste bien à ce type !',
   'full-team' => 'Votre équipe comporte déjà 6 Pokémon. Veuillez retirer au moins un Pokémon pour avoir une suggestion.',
   'empty-team' => 'Votre équipe ne contient pas de Pokémon, veuillez sélectionner au moins un Pokemon.',
-  'too-much-pokemon' => 'Votre équipe contient trop de Pokémon'
+  'too-much-pokemon' => 'Votre équipe contient trop de Pokémon',
+  'invalid-password' => 'Mot de passe invalide.',
+  'wrong-username' => 'Utilisateur inconnu.',
+  'user-creation' => 'Utilisateur {user} créé',
+  'user-deletion' => 'Utilisateur {user} supprimé',
+  'user-edition' => 'Utilisateur {user} modifié'
 ];

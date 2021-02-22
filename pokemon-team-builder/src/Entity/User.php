@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Service\PokemonService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,12 +24,13 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Ignore()
      */
     private $password;
 
@@ -37,6 +41,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Team::class, mappedBy="user")
+     * @Ignore()
      */
     private $teams;
 
@@ -93,6 +98,22 @@ class User implements UserInterface
     {
         return $this->teams;
     }
+    /**
+     * @return array
+     */
+    public function getApiTeams()
+    {
+      $apiTeams = [];
+
+      foreach($this->getTeams() as $team){
+
+        $apiTeams[] = ['name' => $team->getName(),
+                       'pokemon' => $team->getPokemon()
+      ];
+      }
+
+      return $apiTeams;
+    }
 
     public function addTeam(Team $team): self
     {
@@ -118,6 +139,7 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @Ignore()
      */
     public function getSalt()
     {
@@ -132,7 +154,9 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
+    /**
+     * @Ignore()
+     */
     public function getRoles()
     {
       
