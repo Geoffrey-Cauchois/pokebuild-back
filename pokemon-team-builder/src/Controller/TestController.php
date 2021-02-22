@@ -41,6 +41,19 @@ class TestController extends AbstractController
     }
 
     /**
+     * @Route("/api/v1/admin", name="test-api")
+     */
+    public function apiTest(Request $request)
+    {
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
+
+      return $this->json('ok');
+    }
+
+    /**
      * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
     public function fillDatabase101Pokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id, Request $request): Response

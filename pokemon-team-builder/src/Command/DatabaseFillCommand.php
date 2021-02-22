@@ -46,6 +46,7 @@ class DatabaseFillCommand extends Command
     protected function configure()
     {
         $this
+            ->setHidden(true)
             ->setDescription(self::$defaultDescription)
             ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
