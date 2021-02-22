@@ -14,9 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/v1/team", name="api_v1_team_")
+ * @Route("/api/v1/admin/team", name="api_v1_admin_team_")
  */
-
 
 class TeamController extends AbstractController
 {
@@ -113,6 +112,20 @@ class TeamController extends AbstractController
         $em->flush();
 
         return $this->json('Equipe ' . $teamToAmend->getName() . ' modifiée');
+    }
+
+    /**
+     * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"GET", "POST"})
+     */
+    public function delete(Request $request, Team $team, EntityManagerInterface $em): Response
+    {
+
+            $em->remove($team);
+            $em->flush();
+
+            return $this->json('Equipe ' . $team->getName() . ' supprimée');
+        
+
     }
 
     
