@@ -3,6 +3,7 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\Team;
+use App\Repository\PokemonRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +16,8 @@ class TeamController extends AbstractController
     /**
      * @Route("/api/v1/team/creation", name="team_creation", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository, 
+    PokemonRepository $pokemonRepository): Response
     {
         $newTeamInfo = json_decode($request->getContent(), true);
   
@@ -25,6 +27,16 @@ class TeamController extends AbstractController
         $userName = $newTeamInfo['username'];
         $user = $userRepository->findOneBy(['username' => $userName]);
         $teamToAdd->setUser($user);
+        $pokemonList = $newTeamInfo['pokemon'];
+        foreach ($pokemonList as $pokemon) {
+            
+            $pokemonToAdd[] = $pokemonRepository->find($pokemon); 
+
+            foreach ($pokemonToAdd as $pokemon) {
+
+                $teamToAdd->addPokemon($pokemon);
+            }
+        }
   
         $em->persist($teamToAdd);
   
