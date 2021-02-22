@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-
-
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  */
