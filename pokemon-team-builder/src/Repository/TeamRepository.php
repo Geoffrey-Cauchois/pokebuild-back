@@ -19,6 +19,23 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
+    public function  findOneWithPokemon($id) : Team
+    {
+       $em = $this->getEntityManager();
+       $query = $em->createQuery("
+           SELECT t, p
+           FROM App\Entity\Team t
+           LEFT JOIN t.pokemon p
+           WHERE t.id = :id
+       ");
+
+       $query->setParameter(':id', $id);
+
+    
+       return $query->getOneOrNullResult();
+       
+    }
+
     // /**
     //  * @return Team[] Returns an array of Team objects
     //  */

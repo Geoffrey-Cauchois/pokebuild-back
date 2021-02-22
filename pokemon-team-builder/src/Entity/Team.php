@@ -6,6 +6,7 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
@@ -26,11 +27,13 @@ class Team
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="teams")
+     * @Ignore()
      */
     private $user;
 
     /**
      * @ORM\ManyToMany(targetEntity=Pokemon::class, mappedBy="team")
+     * @Ignore()
      */
     private $pokemon;
     
@@ -64,6 +67,16 @@ class Team
         return $this->user;
     }
 
+     /**
+     * @return string
+     */
+    public function getApiUser(): string
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $userForApi = $this->getUser()->getUsername();
+        return $userForApi;
+    }
+
     public function setUser(?User $user): self
     {
         $this->user = $user;
@@ -77,6 +90,22 @@ class Team
     public function getPokemon(): Collection
     {
         return $this->pokemon;
+    }
+
+    /**
+     * @return array
+     */
+    public function getApiPokemon(): array
+    {
+        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+        $pokemonForApi = [];
+
+        foreach($this->pokemon as $pokemon)
+        {
+            $pokemonForApi[] = $pokemon->getName();
+        
+        }
+        return $pokemonForApi;
     }
 
     public function addPokemon(Pokemon $pokemon): self
@@ -100,6 +129,7 @@ class Team
 
     /**
      * Get the value of defensiveCover
+     * @Ignore()
      */ 
     public function getDefensiveCover()
     {
@@ -107,6 +137,7 @@ class Team
     }
     /**
      * @return array
+     * @Ignore()
      */
     public function getDefensiveCoverForApi()
     {
