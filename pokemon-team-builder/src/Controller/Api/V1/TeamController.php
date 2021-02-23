@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/api/v1/admin/team", name="api_v1_admin_team_")
@@ -23,7 +24,7 @@ class TeamController extends AbstractController
      * @Route("/creation", name="creation", methods={"POST"})
      */
     public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository, 
-    PokemonRepository $pokemonRepository): Response
+    PokemonRepository $pokemonRepository, TranslatorInterface $translator): Response
     {
         $newTeamInfo = json_decode($request->getContent(), true);
   
@@ -48,7 +49,7 @@ class TeamController extends AbstractController
   
         $em->flush();
 
-        return $this->json('Equipe ' . $teamToAdd->getName() . ' enregistrée');
+        return $this->json($translator->trans('team-creation', ['team' => $teamToAdd->getName()], 'messages'));
         
     }
 
@@ -68,6 +69,7 @@ class TeamController extends AbstractController
      */
     public function show(Team $team, PokemonService $pokemonService): Response
     {
+       
         foreach ($team->getPokemon() as $pokemon){
             $pokemonService->calculateResistances($pokemon);
           }
@@ -80,9 +82,10 @@ class TeamController extends AbstractController
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"}, methods={"GET", "POST"})
      */
     public function edit(Request $request, EntityManagerInterface $em, TeamRepository $teamRepository,
-    PokemonRepository $pokemonRepository): Response
+    PokemonRepository $pokemonRepository, TranslatorInterface $translator): Response
     {
         $amendedTeamInfo = json_decode($request->getContent(), true);
+
         $teamToAmendId = $amendedTeamInfo['id'];
 
         $newTeamName = $amendedTeamInfo['name'];
@@ -111,20 +114,20 @@ class TeamController extends AbstractController
   
         $em->flush();
 
-        return $this->json('Equipe ' . $teamToAmend->getName() . ' modifiée');
+        return $this->json($translator->trans('team-edition', ['team' => $teamToAmend->getName()], 'messages'));
     }
 
     /**
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"GET", "POST"})
      */
-    public function delete(Request $request, Team $team, EntityManagerInterface $em): Response
+    public function delete(Request $request, Team $team, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
 
-            $em->remove($team);
-            $em->flush();
+        $em->remove($team);
+        $em->flush();
 
-            return $this->json('Equipe ' . $team->getName() . ' supprimée');
-        
+
+        return $this->json($translator->trans('team-deletion', ['team' => $team->getName()], 'messages'));    
 
     }
 

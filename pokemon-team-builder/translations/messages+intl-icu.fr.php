@@ -13,5 +13,9 @@ return [
   'wrong-username' => 'Utilisateur inconnu.',
   'user-creation' => 'Utilisateur {user} créé',
   'user-deletion' => 'Utilisateur {user} supprimé',
-  'user-edition' => 'Utilisateur {user} modifié'
+  'user-edition' => 'Utilisateur {user} modifié',
+  'wrong-team-name' => 'Equipe inconnue.',
+  'team-creation' => 'Equipe {team} créée',
+  'team-deletion' => 'Equipe {team} supprimée',
+  'team-edition' => 'Equipe {team} modifiée'
 ];
