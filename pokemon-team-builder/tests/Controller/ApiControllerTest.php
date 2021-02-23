@@ -22,6 +22,16 @@ class ApiControllerTest extends WebTestCase
         
     }
 
+    public function testPokemonLimit(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET',
+         'http://localhost/api/v1/pokemon/limit/50');
+
+        $this->assertEquals(50, count(json_decode($client->getResponse()->getContent())));
+        
+    }
+
     public function testPokemonId(): void
     {
         $client = static::createClient();
