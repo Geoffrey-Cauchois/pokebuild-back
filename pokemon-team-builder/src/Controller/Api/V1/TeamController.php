@@ -67,16 +67,40 @@ class TeamController extends AbstractController
     /**
      * @Route("/show/{id}", name="show_by_id", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function show(Team $team, PokemonService $pokemonService): Response
+    public function showById(Team $team, PokemonService $pokemonService, PokemonRepository $pokemonRepository): Response
     {
        
         foreach ($team->getPokemon() as $pokemon){
             $pokemonService->calculateResistances($pokemon);
+            $pokemonTeam[] = $pokemonRepository->find($pokemon);
           }
    
-        return $this->json($team);
+        return $this->json([
+            $team,
+            $pokemonTeam
+        ]);
 
     }
+
+    /**
+     * @Route("/show/{name}", name="show_by_name", requirements={"name"="\w+"}, methods={"GET"})
+     */
+    public function showByName(Team $team, PokemonService $pokemonService, $name, TeamRepository $teamRepository,
+    PokemonRepository $pokemonRepository): Response
+    {
+        $teamByName = $teamRepository->findOneBy(['name' => $name]);
+        foreach ($team->getPokemon() as $pokemon){
+            $pokemonService->calculateResistances($pokemon);
+            $pokemonTeam[] = $pokemonRepository->find($pokemon);
+          }
+   
+        return $this->json([
+            $teamByName,
+            $pokemonTeam
+        ]);
+
+    }
+
 
     /**
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"}, methods={"POST"})
