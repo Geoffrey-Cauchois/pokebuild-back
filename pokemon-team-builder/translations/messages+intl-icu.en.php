@@ -14,6 +14,8 @@ return [
   'user-creation' => 'User {user} created',
   'user-deletion' => 'User {user} deleted',
   'user-edition' => 'User {user} edited',
+
+  
   'wrong-team-name' => 'Please enter a valid team.',
   'team-creation' => 'Team {team} created',
   'team-deletion' => 'Team {team} deleted',
