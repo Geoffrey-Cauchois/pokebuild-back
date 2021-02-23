@@ -13,5 +13,7 @@ return [
   'wrong-username' => 'Please enter a valid username.',
   'user-creation' => 'User {user} created',
   'user-deletion' => 'User {user} deleted',
-  'user-edition' => 'User {user} edited'
+  'user-edition' => 'User {user} edited',
+  'existing-user' => 'This username already exists',
+  'wrong-email' => 'incorrect e-mail adress'
 ];

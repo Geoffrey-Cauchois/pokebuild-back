@@ -3,11 +3,15 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\User;
+use App\Repository\ApiUserRepository;
 use App\Repository\PokemonRepository;
 use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use App\Service\PokemonService;
+use ContainerXhs47g2\getLexikJwtAuthentication_EncoderService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +24,10 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
-
-
 
       $userToAdd = new User();
 
@@ -35,32 +37,35 @@ class UserController extends AbstractController
 
       $newUserInfo['password'] = null;
 
+      if(filter_var($newUserInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
+        return $this->json($translator->trans('wrong-email', [], 'messages'));
+      }
+      elseif(preg_match('~@yopmail~', $newUserInfo['email']) != false){
 
-      $userToAdd->setEmail($newUserInfo['email']);
+        return $this->json($translator->trans('wrong-email', [], 'messages'));
+      }
+      else{
 
-      //$em->persist($userToAdd);
+        $userToAdd->setEmail($newUserInfo['email']);
+      }
+      
 
-      //$em->flush();
+      $em->persist($userToAdd);
 
-      $jsonToSend = json_encode(["username" => $request->server->get('TOKEN_USER'),
-                                 "password" => $request->server->get('TOKEN_PASSWORD')]);
+      try {
+          $em->flush();
+          }
+      catch (UniqueConstraintViolationException $e) {
+        return $this->json($translator->trans('existing-user', [], 'messages'));
+      }
 
-      $opts = ['http' => [
-        'method' => 'POST',
-        'header' => 'Content-type: application/x-www-form-urlencoded',
-        'content' => $jsonToSend
-        ]];
-
-      $context = stream_context_create($opts);
-
-      $tokenData = file_get_contents(preg_replace('~\/v\d~', '', $request->server->get('API_BASE_URL')) . '/login_check', false, $context);
-
-      dd($tokenData);
+      $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
 
       $return = [
                   'message' => $translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'),
-                  'username' => $userToAdd->getUsername()
+                  'username' => $userToAdd->getUsername(),
+                  'token' => $token
                 ];
 
         return $this->json($return);

@@ -13,5 +13,7 @@ return [
   'wrong-username' => 'Utilisateur inconnu.',
   'user-creation' => 'Utilisateur {user} créé',
   'user-deletion' => 'Utilisateur {user} supprimé',
-  'user-edition' => 'Utilisateur {user} modifié'
+  'user-edition' => 'Utilisateur {user} modifié',
+  'existing-user' => 'Ce nom d\'utilisateur existe déjà',
+  'wrong-email' => 'Adresse e-mail incorrecte'
 ];
