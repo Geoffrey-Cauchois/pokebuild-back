@@ -20,5 +20,6 @@ return [
   'team-creation' => 'Team {team} created',
   'team-deletion' => 'Team {team} deleted',
   'team-edition' => 'Team {team} edited',
-  'non-matching-passwords' => 'Passwords do not match.'
+  'non-matching-passwords' => 'Passwords do not match.',
+  'login' => 'Connexion successful. Welcome {user}.'
 ];

@@ -8,7 +8,6 @@ use App\Repository\PokemonRepository;
 use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use App\Service\PokemonService;
-use ContainerXhs47g2\getLexikJwtAuthentication_EncoderService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -196,5 +195,39 @@ class UserController extends AbstractController
       
 
         
+    }
+
+    /**
+     * @Route("/api/v1/user/login", name="user-login", methods={"POST"})
+     */
+    public function login(JWTTokenManagerInterface $jwtManager, Request $request, TranslatorInterface $translator, UserRepository $userRepository, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository)
+    {
+      {
+        $userInfo = json_decode($request->getContent(), true);
+  
+        $user = $userRepository->findOneBy(['username' => $userInfo['username']]);       
+        
+        if($user == null){
+  
+          return $this->json($translator->trans('wrong-username', [], 'messages'));
+        }
+  
+        if($encoder->isPasswordValid($user, $userInfo['password'])){
+  
+          $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
+  
+          return $this->json([
+                              'message' => $translator->trans('login', ['user' => $user->getUsername()], 'messages'),
+                              'username' => $user->getUsername(),
+                              'token' => $token
+                             ]);
+        }
+        else{
+  
+          $userInfo['password'] = null;
+  
+          return $this->json($translator->trans('invalid-password', [], 'messages'));
+        }
+      }
     }
 }
