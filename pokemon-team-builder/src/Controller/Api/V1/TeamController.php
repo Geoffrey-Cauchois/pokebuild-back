@@ -79,7 +79,7 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"}, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"}, methods={"POST"})
      */
     public function edit(Request $request, EntityManagerInterface $em, TeamRepository $teamRepository,
     PokemonRepository $pokemonRepository, TranslatorInterface $translator): Response
@@ -118,7 +118,7 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"GET", "POST"})
+     * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"POST"})
      */
     public function delete(Request $request, Team $team, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
