@@ -15,5 +15,9 @@ return [
   'user-deletion' => 'Utilisateur {user} supprimé',
   'user-edition' => 'Utilisateur {user} modifié',
   'existing-user' => 'Ce nom d\'utilisateur existe déjà',
-  'wrong-email' => 'Adresse e-mail incorrecte'
+  'wrong-email' => 'Adresse e-mail incorrecte',
+  'wrong-team-name' => 'Equipe inconnue.',
+  'team-creation' => 'Equipe {team} créée',
+  'team-deletion' => 'Equipe {team} supprimée',
+  'team-edition' => 'Equipe {team} modifiée'
 ];
