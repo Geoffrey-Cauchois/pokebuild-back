@@ -33,9 +33,25 @@ class UserController extends AbstractController
 
       $userToAdd->setUsername($newUserInfo['username']);
 
-      $userToAdd->setPassword($encoder->encodePassword($userToAdd, $newUserInfo['password']));
+      if(isset($newUserInfo['passwordConfirm']) && $newUserInfo['passwordConfirm'] == $newUserInfo['password']){
 
-      $newUserInfo['password'] = null;
+        $userToAdd->setPassword($encoder->encodePassword($userToAdd, $newUserInfo['password']));
+        
+        $newUserInfo['password'] = null;
+
+        $newUserInfo['passwordConfirm'] = null;
+      }
+      else{
+
+        $newUserInfo['password'] = null;
+
+        $newUserInfo['passwordConfirm'] = null;
+
+        return $this->json($translator->trans('non-matching-passwords', [], 'messages'));
+      }
+      
+
+      
 
       if(filter_var($newUserInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
