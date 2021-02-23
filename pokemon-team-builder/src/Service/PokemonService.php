@@ -125,7 +125,7 @@ class PokemonService
     $team = new Team;
 
     foreach($chosenPokemonIds as $id){
-
+      //we cfind each pokemon with thei id, calculate their resistances and add them to a single team
       $pokemon = $this->pokemonRepository->find($id);
       
       $this->calculateResistances($pokemon);
@@ -138,11 +138,12 @@ class PokemonService
     foreach($this->typeRepository->findAll() as $type){
 
       $teamResistanceScore = 0;
-
+      //to get a full team's defensive coverage, we have to check each pokemon's resistances to all types (a poemon can have 1 or 2 types)
       foreach($team->getPokemon() as $teamPokemon){
-
+        
         $testedTypeMultiplier = $teamPokemon->getResistances()[$type->getName()]['damage_multiplier'];
-
+        // the team will be attributed a resistance score to each type (tested type)
+        // the score will go up 1 point if one pokemon resists to the tested type, or 2 if it is double resistant or immune
         if($testedTypeMultiplier == 0 || $testedTypeMultiplier == 0.25){
 
           $teamResistanceScore += 2;
@@ -152,7 +153,7 @@ class PokemonService
           $teamResistanceScore += 1;
         }
         elseif($testedTypeMultiplier == 2){
-
+        // the score will go down 1 point if one pokemon is vulnerable to the tested type, or 2 if it is double vulnerable
           $teamResistanceScore -= 1;
         }
         elseif($testedTypeMultiplier == 4){
@@ -161,33 +162,33 @@ class PokemonService
         }
 
       }
-
+      //the final score for each tested type will cumulate the gains and losses of points of all the team's pokemon, resulting in a single team score for each type
       if ($teamResistanceScore < -1){
-
+        //if the score is lower than one, it means the team has several vulnerabilities or at least one double vulnerability that are not compensated by resistances. The team is then considred vulnerable to the type
         $result = 'vulnerable';
 
         $message = $this->translator->trans('vulnerable', [], 'messages');
       }
       elseif($teamResistanceScore == -1){
-
+        // if the score is precisely -1, this means there is only one pokemon of the team that has a non-double vulnerbility to the type, or that there are more and/or greater vulnerabilities that are almost fully compenstaed by resistances. In those cases, the team is considered slightly vulnerable to the type
         $result = 'slightly-vulnerable';
 
         $message = $this->translator->trans('slightly-vulnerable', [], 'messages');
       }
       elseif($teamResistanceScore == 0){
-
+      // if the score is 0, either all pokemon of the team are neutral to the type, or all vulnetabilities are compensated by resistances. The team is considered neutral to the type
         $result = 'balanced';
 
         $message = $this->translator->trans('balanced', [], 'messages');
       }
       elseif($teamResistanceScore == 1){
-         
+         // if the score is precisely 1, this means there is only one pokemon of the team that has a non-double resistance to the type, or that there are more and/or greater resistances that are almost fully negated by resistances. In those cases, the team is considered slightly resistant to the type
         $result = 'slightly-resistant';
 
         $message = $this->translator->trans('slightly-resistant', [], 'messages');
       }
       elseif($teamResistanceScore > 1){
-
+        //if the score is greater than one, it means the team has several resistances or at least one double resistance or immunity that are not negated by vulnerabilities. The team is then considred resistant to the type
         $result = 'resistant';
 
         $message = $this->translator->trans('resistant', [], 'messages');

@@ -35,13 +35,35 @@ class UserController extends AbstractController
 
       $newUserInfo['password'] = null;
 
+
+
       $userToAdd->setEmail($newUserInfo['email']);
 
-      $em->persist($userToAdd);
+      //$em->persist($userToAdd);
 
-      $em->flush();
+      //$em->flush();
 
-        return $this->json($translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'));
+      $jsonToSend = json_encode(["username" => $request->server->get('TOKEN_USER'),
+                                 "password" => $request->server->get('TOKEN_PASSWORD')]);
+
+      $opts = ['http' => [
+        'method' => 'POST',
+        'header' => 'Content-type: application/x-www-form-urlencoded',
+        'content' => $jsonToSend
+        ]];
+
+      $context = stream_context_create($opts);
+
+      $tokenData = file_get_contents(preg_replace('~\/v\d~', '', $request->server->get('API_BASE_URL')) . '/login_check', false, $context);
+
+      dd($tokenData);
+
+      $return = [
+                  'message' => $translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'),
+                  'username' => $userToAdd->getUsername()
+                ];
+
+        return $this->json($return);
     }
 
     /**
