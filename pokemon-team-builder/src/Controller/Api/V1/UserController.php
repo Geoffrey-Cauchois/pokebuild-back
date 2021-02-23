@@ -3,11 +3,15 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\User;
+use App\Repository\ApiUserRepository;
 use App\Repository\PokemonRepository;
 use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use App\Service\PokemonService;
+use ContainerXhs47g2\getLexikJwtAuthentication_EncoderService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +24,10 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
-
-
 
       $userToAdd = new User();
 
@@ -35,13 +37,38 @@ class UserController extends AbstractController
 
       $newUserInfo['password'] = null;
 
-      $userToAdd->setEmail($newUserInfo['email']);
+      if(filter_var($newUserInfo['email'], FILTER_VALIDATE_EMAIL) == false){
+
+        return $this->json($translator->trans('wrong-email', [], 'messages'));
+      }
+      elseif(preg_match('~@yopmail~', $newUserInfo['email']) != false){
+
+        return $this->json($translator->trans('wrong-email', [], 'messages'));
+      }
+      else{
+
+        $userToAdd->setEmail($newUserInfo['email']);
+      }
+      
 
       $em->persist($userToAdd);
 
-      $em->flush();
+      try {
+          $em->flush();
+          }
+      catch (UniqueConstraintViolationException $e) {
+        return $this->json($translator->trans('existing-user', [], 'messages'));
+      }
 
-        return $this->json($translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'));
+      $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
+
+      $return = [
+                  'message' => $translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'),
+                  'username' => $userToAdd->getUsername(),
+                  'token' => $token
+                ];
+
+        return $this->json($return);
     }
 
     /**
