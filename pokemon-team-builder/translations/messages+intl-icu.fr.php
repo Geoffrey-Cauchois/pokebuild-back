@@ -20,5 +20,6 @@ return [
   'team-creation' => 'Equipe {team} créée',
   'team-deletion' => 'Equipe {team} supprimée',
   'team-edition' => 'Equipe {team} modifiée',
-  'non-matching-passwords' => 'Les deux mots de passe ne correspondent pas.'
+  'non-matching-passwords' => 'Les deux mots de passe ne correspondent pas.',
+  'login' => 'Connexion réussie. Bienvenue {user}.'
 ];
