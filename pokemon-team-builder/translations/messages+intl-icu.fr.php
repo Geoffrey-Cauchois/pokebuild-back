@@ -19,5 +19,6 @@ return [
   'wrong-team-name' => 'Equipe inconnue.',
   'team-creation' => 'Equipe {team} créée',
   'team-deletion' => 'Equipe {team} supprimée',
-  'team-edition' => 'Equipe {team} modifiée'
+  'team-edition' => 'Equipe {team} modifiée',
+  'non-matching-passwords' => 'Les deux mots de passe ne correspondent pas.'
 ];

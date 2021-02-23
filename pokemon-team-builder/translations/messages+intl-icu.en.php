@@ -19,5 +19,6 @@ return [
   'wrong-team-name' => 'Please enter a valid team.',
   'team-creation' => 'Team {team} created',
   'team-deletion' => 'Team {team} deleted',
-  'team-edition' => 'Team {team} edited'
+  'team-edition' => 'Team {team} edited',
+  'non-matching-passwords' => 'Passwords do not match.'
 ];
