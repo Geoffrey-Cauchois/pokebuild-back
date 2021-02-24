@@ -46,7 +46,7 @@ class UserController extends AbstractController
 
         $newUserInfo['passwordConfirm'] = null;
 
-        return $this->json($translator->trans('non-matching-passwords', [], 'messages'));
+        return $this->json($translator->trans('non-matching-passwords', [], 'messages'), 400);
       }
       
 
@@ -54,11 +54,11 @@ class UserController extends AbstractController
 
       if(filter_var($newUserInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
-        return $this->json($translator->trans('wrong-email', [], 'messages'));
+        return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
       }
       elseif(preg_match('~@yopmail~', $newUserInfo['email']) != false){
 
-        return $this->json($translator->trans('wrong-email', [], 'messages'));
+        return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
       }
       else{
 
@@ -72,7 +72,7 @@ class UserController extends AbstractController
           $em->flush();
           }
       catch (UniqueConstraintViolationException $e) {
-        return $this->json($translator->trans('existing-user', [], 'messages'));
+        return $this->json($translator->trans('existing-user', [], 'messages'), 400);
       }
 
       $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
@@ -97,7 +97,7 @@ class UserController extends AbstractController
       
       if($user == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'));
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
       }    
 
       foreach($user->getTeams() as $team){
@@ -114,7 +114,7 @@ class UserController extends AbstractController
 
         $userInfo['password'] = null;
 
-        return $this->json($translator->trans('invalid-password', [], 'messages'));
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
       }
 
     }
@@ -130,7 +130,7 @@ class UserController extends AbstractController
       
       if($user == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'));
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
       }
 
       if($encoder->isPasswordValid($user, $userInfo['password'])){
@@ -145,7 +145,7 @@ class UserController extends AbstractController
 
         $userInfo['password'] = null;
 
-        return $this->json($translator->trans('invalid-password', [], 'messages'));
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
       }
     }
 
@@ -161,7 +161,7 @@ class UserController extends AbstractController
 
       if($userToEdit == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'));
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
       }
 
       if($encoder->isPasswordValid($userToEdit, $userInfo['password'])){
@@ -190,7 +190,7 @@ class UserController extends AbstractController
 
         $userInfo['password'] = null;
 
-        return $this->json($translator->trans('invalid-password', [], 'messages'));
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
       }
       
 
@@ -209,7 +209,7 @@ class UserController extends AbstractController
         
         if($user == null){
   
-          return $this->json($translator->trans('wrong-username', [], 'messages'));
+          return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
         }
   
         if($encoder->isPasswordValid($user, $userInfo['password'])){
@@ -226,7 +226,7 @@ class UserController extends AbstractController
   
           $userInfo['password'] = null;
   
-          return $this->json($translator->trans('invalid-password', [], 'messages'));
+          return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
         }
       }
     }
