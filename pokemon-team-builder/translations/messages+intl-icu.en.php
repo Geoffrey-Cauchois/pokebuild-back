@@ -21,5 +21,6 @@ return [
   'team-deletion' => 'Team {team} deleted',
   'team-edition' => 'Team {team} edited',
   'non-matching-passwords' => 'Passwords do not match.',
-  'login' => 'Connexion successful. Welcome {user}.'
+  'login' => 'Connexion successful. Welcome {user}.',
+  'user-edition-null' => 'Request succesful for the {user}, but nothing was updated'
 ];

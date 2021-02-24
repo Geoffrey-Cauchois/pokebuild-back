@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
@@ -23,7 +26,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
@@ -32,7 +35,16 @@ class UserController extends AbstractController
 
       $userToAdd->setUsername($newUserInfo['username']);
 
-      if(isset($newUserInfo['passwordConfirm']) && $newUserInfo['passwordConfirm'] == $newUserInfo['password']){
+      if(isset($newUserInfo['passwordConfirm']) && isset($newUserInfo['password']) && $newUserInfo['passwordConfirm'] == $newUserInfo['password']){
+
+        $violations =    $validator->validate($newUserInfo['newPassword'], new Regex([
+          'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}/m'
+           ]));
+
+          if(!empty(strval($violations))){
+
+            return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
+          }
 
         $userToAdd->setPassword($encoder->encodePassword($userToAdd, $newUserInfo['password']));
         
@@ -136,7 +148,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/admin/user/edit", name="user-edit", methods={"POST"})
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator, UserRepository $userRepository): Response
+    public function edit(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator, UserRepository $userRepository, ValidatorInterface $validator): Response
     {
 
       $userInfo = json_decode($request->getContent(), true);
@@ -148,26 +160,55 @@ class UserController extends AbstractController
         return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
       }
 
-        $userToEdit->setUsername($userInfo['username']);
+      if($encoder->isPasswordValid($userToEdit, $userInfo['password']) == false){
 
-        if(isset($userInfo['newPasswordConfirm']) && $userInfo['newPasswordConfirm'] == $userInfo['newPassword']){
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
+      }
 
-          $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['newPassword']));
+      $modifiedPassword = false;
+
+      if(isset($userInfo['newPasswordConfirm']) && $userInfo['newPassword'] && $userInfo['newPasswordConfirm'] == $userInfo['newPassword']){
+
+        
+        $violations =    $validator->validate($userInfo['newPassword'], new Regex([
+                         'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}/m'
+                          ]));
+
+
+        if(!empty(strval($violations))){
+
+          return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
         }
 
-        $newUserInfo['newPassword'] = null;
-        $userToEdit['newPasswordConfirm'] = null;
+        $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['newPassword']));
+          
+        $userInfo['newPassword'] = null;
+        $userInfo['newPasswordConfirm'] = null;
 
-        if(isset($userInfo['email']) && !is_null($userInfo['email'])){
+        $modifiedPassword = true;
+      }
 
-          $userToEdit->setEmail($userInfo['email']);
-        }
+        
+
+      if(isset($userInfo['email']) && !is_null($userInfo['email'])){
+
+        $userToEdit->setEmail($userInfo['email']);
+      }
 
         $em->persist($userToEdit);
 
         $em->flush();
+
+        if(!isset($userInfo['email']) && $modifiedPassword == false){
+
+          return $this->json($translator->trans('user-edition-null', ['user' => $userToEdit->getUsername()], 'messages'));          
+        }
+        else{
+
+          return $this->json($translator->trans('user-edition', ['user' => $userToEdit->getUsername()], 'messages'));
+        }
         
-        return $this->json($translator->trans('user-edition', ['user' => $userToEdit->getUsername()], 'messages'));
+        
         
     }
 

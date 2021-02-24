@@ -21,5 +21,6 @@ return [
   'team-deletion' => 'Equipe {team} supprimée',
   'team-edition' => 'Equipe {team} modifiée',
   'non-matching-passwords' => 'Les deux mots de passe ne correspondent pas.',
-  'login' => 'Connexion réussie. Bienvenue {user}.'
+  'login' => 'Connexion réussie. Bienvenue {user}.',
+  'user-edition-null' => 'Requête réussie pour l\'utilisateur {user}, aucune donnée à modifier'
 ];
