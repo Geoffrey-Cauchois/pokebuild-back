@@ -6,8 +6,6 @@
 
 {% block body %}
 
-{% set newToken = csrf_token('validate-user') %}
-
 <div class="wrappper">
 
   <div id="mail__header">
@@ -22,7 +20,7 @@
     
     <p class="mail__message">{{ validationMessage }}</p>
 
-    <a href="{{ url('user-validate', {user: username, token: newToken}) }}">Validation</a>
+    <a href="{{ url('user-validate', {user: username}) ~ '?token=' ~ csrf_token('validate-user') }}">Validation</a>
 
   
   </div>

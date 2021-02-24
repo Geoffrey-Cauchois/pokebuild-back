@@ -252,13 +252,13 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("user/validate/{user}/{token}", name="user-validate", requirements={"user"="\w+"}, methods={"GET"})
+     * @Route("user/validate/{user}/", name="user-validate", requirements={"user"="\w+"}, methods={"GET"})
      */
-    public function validateUser(UserRepository  $userRepository,Request $request,EntityManagerInterface $em, $user, $token): Response
+    public function validateUser(UserRepository  $userRepository,Request $request,EntityManagerInterface $em, $user): Response
     {
       $userToValidate = $userRepository->findOneBy(['username' => $user]);
 
-      $token = $request->request->get('token');
+      $token = $request->query->get('token');
 
       if($this->isCsrfTokenValid('validate-user', $token)){
         $userToValidate->setIsActive(true);
