@@ -106,16 +106,8 @@ class UserController extends AbstractController
         }
       }
 
-      if($encoder->isPasswordValid($user, $userInfo['password'])){
 
         return $this->json($user);
-      }
-      else{
-
-        $userInfo['password'] = null;
-
-        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
-      }
 
     }
 
@@ -133,20 +125,12 @@ class UserController extends AbstractController
         return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
       }
 
-      if($encoder->isPasswordValid($user, $userInfo['password'])){
-
         $em->remove($user);
 
         $em->flush();
 
         return $this->json($translator->trans('user-deletion', ['user' => $user->getUsername()], 'messages'));
-      }
-      else{
-
-        $userInfo['password'] = null;
-
-        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
-      }
+    
     }
 
     /**
@@ -163,8 +147,6 @@ class UserController extends AbstractController
 
         return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
       }
-
-      if($encoder->isPasswordValid($userToEdit, $userInfo['password'])){
 
         $userToEdit->setUsername($userInfo['username']);
 
@@ -185,15 +167,6 @@ class UserController extends AbstractController
         $em->flush();
         
         return $this->json($translator->trans('user-edition', ['user' => $userToEdit->getUsername()], 'messages'));
-      }
-      else{
-
-        $userInfo['password'] = null;
-
-        return $this->json($translator->trans('invalid-password', [], 'messages'), 401);
-      }
-      
-
         
     }
 
