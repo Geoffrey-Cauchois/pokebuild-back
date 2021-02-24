@@ -11,9 +11,13 @@ use App\Service\PokemonService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Swift_Mailer;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,7 +27,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
@@ -76,6 +80,15 @@ class UserController extends AbstractController
       }
 
       $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
+
+      $email = (new TemplatedEmail())
+        ->from('pokebuild-noreply@gmail.com')
+        ->to($userToAdd->getEmail())
+        ->subject($translator->trans('welcome-email', [], 'email'))
+        ->htmlTemplate('emails/signup.html.twig')
+        ->context(['username' => $userToAdd->getUsername()]);
+
+      $mailer->send($email);
 
       $return = [
                   'message' => $translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'),
