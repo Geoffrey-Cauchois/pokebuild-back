@@ -8,9 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class RandomTeamController extends AbstractController
 {
-    
+
     /**
      * @Route("/api/v1/random/team", name="api_v1_random_team", methods={"GET"})
      */
@@ -18,7 +19,7 @@ class RandomTeamController extends AbstractController
     {
 
         $randomTeam = [];
-        for ($i = 0; $i < 7; $i ++) {
+        for ($i = 0; $i < 6; $i ++) {
             $randomPokemon = $pokemonRepository->find(rand(1,898));
                 if (!in_array($randomPokemon, $randomTeam)) {
                     
@@ -33,4 +34,34 @@ class RandomTeamController extends AbstractController
         return $this->json($randomTeam);
      
     }
+
+    /**
+     * @Route("/api/v1/random/team/suggest", name="api_v1_random_team_suggest", methods={"GET"})
+     */
+    public function randomAndSuggest(PokemonRepository $pokemonRepository, PokemonService $pokemonService): Response
+    {
+
+        $randomTeam = [];
+        for ($i = 0; $i < 3; $i ++) {
+            $randomPokemon = $pokemonRepository->find(rand(1,898));
+                if (!in_array($randomPokemon, $randomTeam)) {
+                    
+                    $randomTeam[] = $randomPokemon;
+                }         
+        }
+
+        foreach ($randomTeam as $pokemon){
+            $pokemonService->calculateResistances($pokemon);
+            $pokemonId[] = $pokemon->getId();
+        }
+     
+        $chosenPokemonIds = $pokemonId;
+
+        $suggestedPokemon = $pokemonService->suggestPokemon($chosenPokemonIds);
+        
+        return $this->json([$randomTeam, $suggestedPokemon]);
+
+     
+    }
 }
+
