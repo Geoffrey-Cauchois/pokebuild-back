@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RandomTeamController extends AbstractController
 {
+    
     /**
      * @Route("/api/v1/random/team", name="api_v1_random_team", methods={"GET"})
      */

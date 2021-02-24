@@ -33,5 +33,5 @@
 | api/v1/pokemon/type/double-resistance/{typeName} | GET    | liste des pokemons selon le nom du type auquel ils sont doublement résistants | Api           | api_v1_pokemon_by_double-resistance |
 | api/v1/pokemon/type/immunity/{typeName}          | GET    | liste des pokemons selon le nom du type auquel ils sont immunisés             | Api           | api_v1_pokemon_by_immunity          |
 | api/v1/pokemon/types                             | GET    | liste des types (sans les pokemons associés)                                  | Api           | api_v1_types                        |
-| api/v1/team/defensive-coverage                   | POST   | retourne une couerture défensive à parir d'un tableau d'ids                   | DataTreatment | api_v1_defensive_coverage           |
-| api/v1/team/suggestion                           | POST   | retourne une liste de pokemon suggéres en fonction du tableau d'ids enoyé     | DataTreatment | api_v1_pokemon_suggestion           |
+| api/v1/team/defensive-coverage                   | POST   | retourne une couverture défensive à partir d'un tableau d'ids                   | DataTreatment | api_v1_defensive_coverage           |
+| api/v1/team/suggestion                           | POST   | retourne une liste de pokemon suggérés en fonction du tableau d'ids envoyé     | DataTreatment | api_v1_pokemon_suggestion           |
