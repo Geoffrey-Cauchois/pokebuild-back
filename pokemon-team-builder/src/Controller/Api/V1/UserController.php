@@ -122,7 +122,7 @@ class UserController extends AbstractController
       
       if($user == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
       }
 
         $em->remove($user);
@@ -145,7 +145,7 @@ class UserController extends AbstractController
 
       if($userToEdit == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
       }
 
         $userToEdit->setUsername($userInfo['username']);
