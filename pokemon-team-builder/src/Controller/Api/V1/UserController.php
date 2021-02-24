@@ -150,12 +150,13 @@ class UserController extends AbstractController
 
         $userToEdit->setUsername($userInfo['username']);
 
-        if(isset($userInfo['new_password']) && !is_null($userInfo['new_password'])){
+        if(isset($userInfo['newPasswordConfirm']) && $userInfo['newPasswordConfirm'] == $userInfo['newPassword']){
 
-          $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['new_password']));
+          $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['newPassword']));
         }
 
-        $newUserInfo['password'] = null;
+        $newUserInfo['newPassword'] = null;
+        $userToEdit['newPasswordConfirm'] = null;
 
         if(isset($userInfo['email']) && !is_null($userInfo['email'])){
 
