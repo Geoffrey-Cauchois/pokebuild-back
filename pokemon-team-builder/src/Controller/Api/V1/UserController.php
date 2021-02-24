@@ -10,8 +10,8 @@ use App\Repository\UserRepository;
 use App\Service\PokemonService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Swift_Mailer;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +33,8 @@ class UserController extends AbstractController
       $newUserInfo = json_decode($request->getContent(), true);
 
       $userToAdd = new User();
+
+      $userToAdd->setIsActive(false);
 
       $userToAdd->setUsername($newUserInfo['username']);
 
@@ -82,11 +84,16 @@ class UserController extends AbstractController
       $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
 
       $email = (new TemplatedEmail())
-        ->from('pokebuild-noreply@gmail.com')
+        ->from('noreplyy@pokebuild.com')
         ->to($userToAdd->getEmail())
-        ->subject($translator->trans('welcome-email', [], 'email'))
+        ->subject($translator->trans('signup', [], 'emails') . ' !')
         ->htmlTemplate('emails/signup.html.twig')
-        ->context(['username' => $userToAdd->getUsername()]);
+        ->context([
+                  'username' => $userToAdd->getUsername(),
+                  'signup' => $translator->trans('signup', [], 'emails'),
+                  'validationMessage' => $translator->trans('validation-link', [], 'emails'),
+                  'noreplyMessage' => $translator->trans('mail-auto-message', [], 'emails')
+                  ]);
 
       $mailer->send($email);
 
@@ -242,5 +249,29 @@ class UserController extends AbstractController
           return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
         }
       }
+    }
+
+    /**
+     * @Route("user/validate/{user}/{token}", name="user-validate", requirements={"user"="\w+"}, methods={"GET"})
+     */
+    public function validateUser(UserRepository  $userRepository,Request $request,EntityManagerInterface $em, $user, $token): Response
+    {
+      $userToValidate = $userRepository->findOneBy(['username' => $user]);
+
+      $token = $request->request->get('token');
+
+      if($this->isCsrfTokenValid('validate-user', $token)){
+        $userToValidate->setIsActive(true);
+        
+        $em->flush();
+      }
+      else{
+
+        dump($token);
+
+        throw new Exception('invalid token');
+      }
+
+      return $this->redirectToRoute('home');
     }
 }

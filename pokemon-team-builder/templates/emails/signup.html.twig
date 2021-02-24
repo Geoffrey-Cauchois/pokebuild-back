@@ -6,6 +6,35 @@
 
 {% block body %}
 
-<h1>Bienvenue sur Pokebuild, {{ username }}</h1>
+{% set newToken = csrf_token('validate-user') %}
+
+<div class="wrappper">
+
+  <div id="mail__header">
+
+    <h1 class="mail__header__title">Pokebuild</h1>
+
+  </div>
+
+  <div id="mail__main">
+
+    <h2 class="mail__title">{{ signup }}, {{ username }}</h2>
+    
+    <p class="mail__message">{{ validationMessage }}</p>
+
+    <a href="{{ url('user-validate', {user: username, token: newToken}) }}">Validation</a>
+
+  
+  </div>
+
+  <hr>
+
+  <div id="noreply">
+
+    <p class="noreply__message">{{ noreplyMessage }}</p>
+
+  </div>
+
+</div>
 
 {% endblock %}
