@@ -97,7 +97,7 @@ class UserController extends AbstractController
       
       if($user == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'), 401);
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
       }    
 
       foreach($user->getTeams() as $team){
