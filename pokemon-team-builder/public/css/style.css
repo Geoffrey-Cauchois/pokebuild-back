@@ -83,6 +83,7 @@ form {
 }
 
 img.displayed {
+  margin-top: 5em;
   display: block;
   margin: auto;
 }
@@ -94,5 +95,17 @@ button {
 .generateur {
   font-weight: bold;
 }
+
+.generateur_random {
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+.title_404 {
+  margin-top: 1em;
+}
+
+
+
 
 

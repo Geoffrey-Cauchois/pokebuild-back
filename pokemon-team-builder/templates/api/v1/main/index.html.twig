@@ -33,70 +33,76 @@
    
     <p><strong> Liste des routes disponibles : </strong></p>
          <ul>
-            <li> Pour récupérer la liste de tous les Pokemon : api/v1/pokemon<br>
+            <li> Pour récupérer la liste de tous les Pokemon : <strong>api/v1/pokemon</strong><br>
             Attention il y en a 898 !! 
             <a href="{{ path('api_v1_pokemon') }}">Liste des Pokemon </a>
             </li>
-             <li> Si vous préférez récupérer un nombre limité de Pokemon : api/v1/pokemon/limit/100 => 
+             <li> Si vous préférez récupérer un nombre limité de Pokemon : <strong>api/v1/pokemon/limit/100</strong> => 
             cette route vous emmènera sur la liste des 100 premiers Pokemon
             <a href="{{ path('api_v1_pokemon_limit', {'number' : 100 }) }}">Pokemon en nombre limité </a>
             </li>
-            <li> Pour récupérer la liste de tous les types de Pokemon : api/v1/types
+            <li> Pour récupérer la liste de tous les types de Pokemon : <strong>api/v1/types</strong>
             <a href="{{ path('api_v1_types', {'typeName' : 'Spectre' }) }}">Liste des types  </a>
             </li>
-            <li> Pour récupérer un Pokemon selon son Id : api/v1/pokemon/850 => 
+            <li> Pour récupérer un Pokemon selon son Id : <strong>api/v1/pokemon/850</strong> => 
             cette route vous emmènera sur la fiche de Grillepattes, qui a l'id 850
             <a href="{{ path('api_v1_pokemon_by_id', {'id' : 850 }) }}">Pokemon par Id </a>
             </li>
-            <li> Pour récupérer un Pokemon selon son nom : api/v1/pokemon/Gruikui => 
+            <li> Pour récupérer un Pokemon selon son nom : <strong>api/v1/pokemon/Gruikui</strong> => 
             cette route vous emmènera sur la fiche de Gruikui 
             <a href="{{ path('api_v1_pokemon_by_name', {'name' : 'Gruikui' }) }}">Pokemon par nom </a>
             </li>
-            <li> Pour récupérer tous les Pokemon d'une certaine génération : api/v1/pokemon/generation/3 => 
+            <li> Pour récupérer tous les Pokemon d'une certaine génération : <strong>api/v1/pokemon/generation/3</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon de la génération 3
             <a href="{{ path('api_v1_pokemon_generation_by_id', {'id' : 3 }) }}">Pokemon par génération </a>
             </li>
-            <li> Pour récupérer tous les Pokemon d'un certain type : api/v1/pokemon/type/Eau => 
+            <li> Pour récupérer tous les Pokemon d'un certain type : <strong>api/v1/pokemon/type/Eau</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon de type Eau
             <a href="{{ path('api_v1_pokemon_by_type_name', {'name' : 'Eau' }) }}">Pokemon par type </a>
             </li>
-            <li> Pour récupérer tous les Pokemon de 2 certains types : api/v1/pokemon/types/Eau/Normal => 
+            <li> Pour récupérer tous les Pokemon de 2 certains types : <strong>api/v1/pokemon/types/Eau/Normal</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui ont le type Eau et le type Normal
             <a href="{{ path('api_v1_pokemon_by_double_type', {'typeName1' : 'Eau', 'typeName2' : 'Normal'}) }}">
             Pokemon par double type </a>
             </li>
             <li> Pour récupérer tous les Pokemon qui présentent une faiblesse à un certain type : 
-            api/v1/pokemon/type/weakness/Fée => 
+            <strong>api/v1/pokemon/type/weakness/Fée</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui présentent une faiblesse au type Fée
             <a href="{{ path('api_v1_pokemon_by_weakness', {'typeName' : 'Fée' }) }}">Pokemon par faiblesse à un type </a>
             </li>
             <li> Pour récupérer tous les Pokemon qui présentent une double faiblesse à un certain type : 
-            api/v1/pokemon/type/double-weakness/Feu => 
+            <strong>api/v1/pokemon/type/double-weakness/Feu</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui présentent une double faiblesse au type Feu
             <a href="{{ path('api_v1_pokemon_by_double_weakness', {'typeName' : 'Feu' }) }}">Pokemon par faiblesse à un type </a>
             </li>
             <li> Pour récupérer tous les Pokemon qui présentent une résistance à un certain type : 
-            api/v1/pokemon/type/resistance/Dragon => 
+            <strong>api/v1/pokemon/type/resistance/Dragon</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui présentent une résistance au type Dragon
             <a href="{{ path('api_v1_pokemon_by_resistance', {'typeName' : 'Dragon' }) }}">Pokemon par résistance à un type </a>
             </li>
             <li> Pour récupérer tous les Pokemon qui présentent une double résistance à un certain type : 
-            api/v1/pokemon/type/double-resistance/Glace => 
+            <strong>api/v1/pokemon/type/double-resistance/Glace</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui présentent une double résistance au type Glace
             <a href="{{ path('api_v1_pokemon_by_double_resistance', {'typeName' : 'Glace' }) }}">
             Pokemon par double résistance à un type </a>
             </li>
             <li> Pour récupérer tous les Pokemon qui sont immunisés contre un certain type : 
-            api/v1/pokemon/type/immunity/Spectre => 
+            <strong>api/v1/pokemon/type/immunity/Spectre</strong> => 
             cette route vous emmènera sur la liste de tous les Pokemon qui sont immunisés contre le type Spectre
             <a href="{{ path('api_v1_pokemon_by_immunity', {'typeName' : 'Spectre' }) }}">Pokemon par immunité à un type </a>
             </li>
             
-            <li class="generateur">Vous pouvez aussi tester notre générateur de couverture défensive et notre suggestion automatique de Pokémon ci-dessous ! :</li>
+            <li class="generateur">Vous pouvez aussi tester notre générateur de couverture défensive et notre suggestion automatique de Pokemon ci-dessous ! :</li>
             
             <a href="{{ path('defensive-cover-test') }}">Tester le générateur de couverture défensive</a>
             <br>
-            <a href="{{ path('suggestion-test') }}">Tester la suggestion automatique de Pokémon</a>
+            <a href="{{ path('suggestion-test') }}">Tester la suggestion automatique de Pokemon</a>
+
+            <li class="generateur_random">Si vous avez du mal à choisir, le hasard le fera pour vous ! :</li>
+            
+            <a href="{{ path('api_v1_random_team') }}">Tester le générateur aléatoire équipe complète</a>
+            <br>
+            <a href="{{ path('api_v1_random_team_suggest') }}">Tester le générateur aléatoire 3 pokemons + suggestion</a>
 </div>
 
 
