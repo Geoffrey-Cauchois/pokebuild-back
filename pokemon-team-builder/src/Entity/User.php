@@ -107,8 +107,9 @@ class User implements UserInterface
 
       foreach($this->getTeams() as $team){
 
-        $apiTeams[] = ['name' => $team->getName(),
-                       'pokemon' => $team->getPokemon()
+        $apiTeams[] = [ 'id' => $team->getId(),
+                        'name' => $team->getName(),
+                        'pokemon' => $team->getPokemon()
       ];
       }
 
