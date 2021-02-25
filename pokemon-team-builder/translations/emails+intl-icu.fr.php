@@ -7,5 +7,7 @@ return [
   'redirection-site' => 'Aller vers le site Pokebuild',
   'redirection-api' => 'Consulter l\'Api Pokebuild',
   'validation-success' => 'Validation réussie !',
-  'inactive-user' => 'Cet utilisateur est inactif.'
+  'inactive-user' => 'Cet utilisateur est inactif.',
+  'new-email' => 'Pokebuild : confirmation de votre nouvelle adresse mail',
+  'new-eamil-notice' => 'Cet e-mail vous confirme la modification de votre adresse mail. Si vous n\'êtes pas à l\'origine de cette modification, nous vous conseillons de modifier votre mot de passe.'
 ];

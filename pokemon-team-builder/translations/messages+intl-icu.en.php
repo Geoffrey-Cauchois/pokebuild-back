@@ -24,5 +24,6 @@ return [
   'non-matching-passwords' => 'Passwords do not match.',
   'login' => 'Connexion successful. Welcome {user}.',
   'wrong-pokemon' => 'Please enter a valid pokemon.',
-  'user-edition-null' => 'Request succesful for the {user}, but nothing was updated'
+  'user-edition-null' => 'Request succesful for the {user}, but nothing was updated',
+  'greetings' => 'Hello'
 ];

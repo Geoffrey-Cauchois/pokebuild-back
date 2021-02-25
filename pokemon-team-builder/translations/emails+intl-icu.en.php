@@ -7,5 +7,7 @@ return [
   'redirection-site' => 'Go to the Pokebuild site',
   'redirection-api' => 'Check the Pokebuild Api',
   'validation-success' => 'Validation successful !',
-  'inactive-user' => 'This user is not active.'
+  'inactive-user' => 'This user is not active.',
+  'new-email' => 'Pokebuild : confirmation of you new e-mail adress',
+  'new-eamil-notice' => 'This e-mail confirms your new e-mail adress. If this it not your doing, we recommend you to change your password.'
 ];
