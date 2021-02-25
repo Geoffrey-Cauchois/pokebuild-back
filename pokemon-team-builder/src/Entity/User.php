@@ -50,6 +50,11 @@ class User implements UserInterface
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $validationToken;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
@@ -175,6 +180,18 @@ class User implements UserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validationToken;
+    }
+
+    public function setValidationToken(?string $validationToken): self
+    {
+        $this->validationToken = $validationToken;
 
         return $this;
     }

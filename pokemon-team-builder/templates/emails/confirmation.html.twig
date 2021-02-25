@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/mail-style.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %} API Pokebuild {% endblock %}
+
+{% block body %}
+
+<div class="mail__wrapper">
+
+  <div id="mail__header">
+
+    <h1 class="mail__header__title">Pokebuild</h1>
+
+  </div>
+
+  <div id="mail__main">
+
+    <h2 class="mail__title">{{ validationSuccess }}</h2>
+
+    <a href="#" class="mail__link">{{ redirectionSite }}</a>
+    
+    <a href="{{ url('home') }}" class="mail__link">{{ redirectionApi }}</a>
+
+  </div>
+
+</div>
+
+{% endblock %}

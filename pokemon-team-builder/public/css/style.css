@@ -95,30 +95,4 @@ button {
   font-weight: bold;
 }
 
-/* css for emails */
-
-@font-face {
-  font-family: "Pokemon-Hollow";
-  src: url("../assets/Pokemon-Hollow.ttf");
- }
-
- #mail__header{
-   background-color: #C14040;
- }
-
- .mail__header__title{
-   font-family: "Pokemon-Hollow";
- }
-
- #mail__main{
-   background-color: #F3D9D9;
- }
-
- #noreply{
-   background-color: lightgrey;
- }
-
- .noreply__message{
-   font-size: 0.75rem;
- }
 

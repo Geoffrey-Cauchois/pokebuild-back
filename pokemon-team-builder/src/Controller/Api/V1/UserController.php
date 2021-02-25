@@ -16,10 +16,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
@@ -27,7 +31,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, MailerInterface $mailer): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, MailerInterface $mailer, CsrfTokenManagerInterface $csrf): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
@@ -70,7 +74,10 @@ class UserController extends AbstractController
 
         $userToAdd->setEmail($newUserInfo['email']);
       }
-      
+
+      $csrfToken = $csrf->getToken('token');
+
+      $userToAdd->setValidationToken($csrfToken);
 
       $em->persist($userToAdd);
 
@@ -82,9 +89,11 @@ class UserController extends AbstractController
       }
 
       $token = $jwtManager->create($apiUserRepository->findOneBy(['username' => $request->server->get('TOKEN_USER')]));
+      
+      
 
       $email = (new TemplatedEmail())
-        ->from('noreplyy@pokebuild.com')
+        ->from('chenipan@pokebuild.com')
         ->to($userToAdd->getEmail())
         ->subject($translator->trans('signup', [], 'emails') . ' !')
         ->htmlTemplate('emails/signup.html.twig')
@@ -92,10 +101,13 @@ class UserController extends AbstractController
                   'username' => $userToAdd->getUsername(),
                   'signup' => $translator->trans('signup', [], 'emails'),
                   'validationMessage' => $translator->trans('validation-link', [], 'emails'),
-                  'noreplyMessage' => $translator->trans('mail-auto-message', [], 'emails')
+                  'noreplyMessage' => $translator->trans('mail-auto-message', [], 'emails'),
+                  'token' => $csrfToken
                   ]);
 
       $mailer->send($email);
+
+      
 
       $return = [
                   'message' => $translator->trans('user-creation', ['user' => $userToAdd->getUsername()], 'messages'),
@@ -231,6 +243,11 @@ class UserController extends AbstractController
   
           return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
         }
+
+        if($user->getIsActive() == false){
+
+          return $this->json($translator->trans('inactive-user', [], 'emails'), 400);
+        }
   
         if($encoder->isPasswordValid($user, $userInfo['password'])){
   
@@ -254,24 +271,43 @@ class UserController extends AbstractController
     /**
      * @Route("user/validate/{user}/", name="user-validate", requirements={"user"="\w+"}, methods={"GET"})
      */
-    public function validateUser(UserRepository  $userRepository,Request $request,EntityManagerInterface $em, $user): Response
+    public function validateUser(UserRepository  $userRepository,Request $request,EntityManagerInterface $em, SessionInterface $session, TranslatorInterface $translator, $user): Response
     {
       $userToValidate = $userRepository->findOneBy(['username' => $user]);
 
+      if($userToValidate == null){
+
+        throw new Exception('user does not exist');
+      }
+
       $token = $request->query->get('token');
 
-      if($this->isCsrfTokenValid('validate-user', $token)){
+      if ($userToValidate->getIsActive() == true){
+
+        throw new Exception('user account is already activated');
+      }
+      else{
+
+        $tokenToVerify = $userToValidate->getValidationToken();
+      }
+
+      if($tokenToVerify === $token && !is_null($token) && !is_null($tokenToVerify)){
+
         $userToValidate->setIsActive(true);
+
+        $userToValidate->setValidationToken(null);
         
         $em->flush();
       }
       else{
 
-        dump($token);
-
         throw new Exception('invalid token');
       }
 
-      return $this->redirectToRoute('home');
+      return $this->render('emails/confirmation.html.twig', [
+                                                            'redirectionSite' => $translator->trans('redirection-site', [], 'emails'),
+                                                            'redirectionApi' => $translator->trans('redirection-api', [], 'emails'),
+                                                            'validationSuccess' => $translator->trans('validation-success', [], 'emails'),
+                                                            ]);
     }
 }
