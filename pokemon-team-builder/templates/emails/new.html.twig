@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block title %} API Pokebuild {% endblock %}
+
+{% block body %}
+
+{% apply inline_css(source('@css/reset.css'), source('@css/mail-style.css')) %}
+
+<div class="mail__wrapper">
+
+  <div id="mail__header">
+
+    <h1 class="mail__header__title">Pokebuild</h1>
+
+  </div>
+
+  <div id="mail__main">
+
+    <h2 class="mail__title">{{ greetings }}, {{ username }}.</h2>
+    
+    <p class="mail__message">{{ notice }}</p>
+
+    <a href="#" class="mail__link">{{ redirectionSite }}</a>
+    
+    <a href="{{ url('home') }}" class="mail__link">{{ redirectionApi }}</a>
+
+  
+  </div>
+
+  <div id="noreply">
+
+    <p class="noreply__message">{{ noreplyMessage }}</p>
+
+  </div>
+
+</div>
+
+{% endapply %}
+
+{% endblock %}

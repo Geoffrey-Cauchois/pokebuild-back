@@ -168,6 +168,18 @@ class UserController extends AbstractController
         return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
       }
 
+      if($encoder->isPasswordValid($user, $userInfo['password']) == false){
+
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
+      }
+
+        $teams = $user->getTeams();
+
+        foreach($teams as $team){
+
+          $em->remove($team);
+        }
+
         $em->remove($user);
 
         $em->flush();
@@ -179,7 +191,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/admin/user/edit", name="user-edit", methods={"POST"})
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator, UserRepository $userRepository, ValidatorInterface $validator): Response
+    public function edit(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, TranslatorInterface $translator, UserRepository $userRepository, ValidatorInterface $validator, MailerInterface $mailer): Response
     {
 
       $userInfo = json_decode($request->getContent(), true);
@@ -223,7 +235,32 @@ class UserController extends AbstractController
 
       if(isset($userInfo['email']) && !is_null($userInfo['email'])){
 
+        if(filter_var($userInfo['email'], FILTER_VALIDATE_EMAIL) == false){
+
+          return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
+        }
+        elseif(preg_match('~@yopmail~', $userInfo['email']) != false){
+  
+          return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
+        }
+
         $userToEdit->setEmail($userInfo['email']);
+
+        $email = (new TemplatedEmail())
+        ->from('pokebuild.noreply@gmail.com')
+        ->to($userInfo['email'])
+        ->subject($translator->trans('new-email', [], 'emails') . ' !')
+        ->htmlTemplate('emails/new.html.twig')
+        ->context([
+                  'username' => $userToEdit->getUsername(),
+                  'notice' => $translator->trans('new-eamil-notice', [], 'emails'),
+                  'greetings' => $translator->trans('greetings', [], 'messages'),
+                  'noreplyMessage' => $translator->trans('mail-auto-message', [], 'emails'),
+                  'redirectionSite' => $translator->trans('redirection-site', [], 'emails'),
+                  'redirectionApi' => $translator->trans('redirection-api', [], 'emails'),
+                  ]);
+
+        $mailer->send($email);
       }
 
         $em->persist($userToEdit);
