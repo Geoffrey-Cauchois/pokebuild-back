@@ -22,5 +22,6 @@ return [
   'team-edition' => 'Equipe {team} modifiée',
   'non-matching-passwords' => 'Les deux mots de passe ne correspondent pas.',
   'login' => 'Connexion réussie. Bienvenue {user}.',
+  'wrong-pokemon' => 'Pokemon inconnu.',
   'user-edition-null' => 'Requête réussie pour l\'utilisateur {user}, aucune donnée à modifier'
 ];
