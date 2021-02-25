@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -32,14 +33,36 @@ class TeamController extends AbstractController
   
         $teamToAdd->setName($newTeamInfo['name']);
         $userName = $newTeamInfo['username'];
+
         $user = $userRepository->findOneBy(['username' => $userName]);
+
+        if($user == null){
+
+            return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
+        }
+
         $teamToAdd->setUser($user);
+
         $pokemonList = $newTeamInfo['pokemon'];
+
+        if (count($pokemonList) < 6) {
+            return $this->json($translator->trans('too-few-pokemon', [], 'messages'), 400);
+        } 
+
+        elseif (count($pokemonList) > 6) {
+            return $this->json($translator->trans('too-much-pokemon', [], 'messages'), 400);
+        } 
+
         foreach ($pokemonList as $pokemon) {
-            
+
             $pokemonToAdd[] = $pokemonRepository->find($pokemon); 
 
             foreach ($pokemonToAdd as $pokemon) {
+
+                if ($pokemon == null){
+
+                    return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
+                }
 
                 $teamToAdd->addPokemon($pokemon);
             }
@@ -106,16 +129,14 @@ class TeamController extends AbstractController
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"}, methods={"POST"})
      */
     public function edit(Request $request, EntityManagerInterface $em, TeamRepository $teamRepository,
-    PokemonRepository $pokemonRepository, TranslatorInterface $translator): Response
+    PokemonRepository $pokemonRepository, TranslatorInterface $translator, Team $team): Response
     {
         $amendedTeamInfo = json_decode($request->getContent(), true);
 
-        $teamToAmendId = $amendedTeamInfo['id'];
+        $teamToAmend = $teamRepository->find($team);
 
         $newTeamName = $amendedTeamInfo['name'];
-        
-        $teamToAmend = $teamRepository->findOneWithPokemon($teamToAmendId);
-
+     
         $teamToAmend->setName($newTeamName);
 
         $pokemonToAmend = $teamToAmend->getPokemon();
@@ -126,11 +147,25 @@ class TeamController extends AbstractController
     
        
         $pokemonList = $amendedTeamInfo['pokemon'];
+
+        if (count($pokemonList) < 6) {
+            return $this->json($translator->trans('too-few-pokemon', [], 'messages'), 400);
+        } 
+
+        elseif (count($pokemonList) > 6) {
+            return $this->json($translator->trans('too-much-pokemon', [], 'messages'), 400);
+        } 
+
         foreach ($pokemonList as $pokemon) {
             
             $pokemonToAdd[] = $pokemonRepository->find($pokemon); 
 
             foreach ($pokemonToAdd as $pokemon) {
+
+                if ($pokemon == null){
+
+                    return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
+                }
 
                 $teamToAmend->addPokemon($pokemon);
             }
@@ -142,14 +177,13 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"POST"})
+     * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"}, methods={"GET", "POST"})
      */
     public function delete(Request $request, Team $team, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
-
+       
         $em->remove($team);
         $em->flush();
-
 
         return $this->json($translator->trans('team-deletion', ['team' => $team->getName()], 'messages'));    
 
