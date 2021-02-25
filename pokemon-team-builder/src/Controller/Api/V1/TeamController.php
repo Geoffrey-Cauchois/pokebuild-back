@@ -181,11 +181,12 @@ class TeamController extends AbstractController
      */
     public function delete(Request $request, Team $team, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
-       
+
         $em->remove($team);
         $em->flush();
-
-        return $this->json($translator->trans('team-deletion', ['team' => $team->getName()], 'messages'));    
+    
+        return $this->json($translator->trans('team-deletion', ['team' => $team->getName()], 'messages')); 
+             
 
     }
 
