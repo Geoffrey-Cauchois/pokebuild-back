@@ -1,0 +1,52 @@
+/* css for emails */
+
+@font-face {
+  font-family: 'Pokemon-Hollow';
+  src: url('../assets/Pokemon-Hollow.ttf');
+}
+
+.mail__wrapper { 
+  margin: 1em auto;
+  max-width: 800px; 
+  width: 95%; 
+  font: 18px/1.5 sans-serif;
+  background-color: #F3D9D9;
+}
+
+#mail__header{
+   background-color: #C14040;
+   padding: 1rem;
+}
+
+.mail__header__title{
+   font-family: Pokemon-Hollow, sans-serif;
+   font-size: 2rem;
+   font-weight: bold;
+   text-align: center;
+}
+
+.mail__title{
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+#mail__main{
+   background-color: #F3D9D9;
+   padding: 1.5rem;
+}
+
+#noreply{
+   background-color: lightgrey;
+   padding: 1.5rem;
+   border-top: 1px black solid;
+}
+
+.noreply__message{
+   font-size: 0.75rem;
+}
+
+.mail__link{
+  color: #C14040;
+  display: block;
+}
+
