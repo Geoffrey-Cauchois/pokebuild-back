@@ -33,7 +33,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/v1/user/create", name="user-create", methods={"POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, MailerInterface $mailer, CsrfTokenManagerInterface $csrf): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, ApiUserRepository $apiUserRepository, TranslatorInterface $translator, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $em, MailerInterface $mailer, CsrfTokenManagerInterface $csrf, ValidatorInterface $validator): Response
     {
 
       $newUserInfo = json_decode($request->getContent(), true);
