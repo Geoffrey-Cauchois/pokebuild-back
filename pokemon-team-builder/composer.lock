@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be12443e25cc611eef75ad7ffc5e3308",
+    "content-hash": "3faf304871be01533587c126ab9aefc8",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -5593,6 +5593,54 @@
             "time": "2021-01-28T22:06:19+00:00"
         },
         {
+            "name": "symfony/sendgrid-mailer",
+            "version": "v5.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/sendgrid-mailer.git",
+                "reference": "f523791455b51545ccfe67398994af33e91e8a3a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/sendgrid-mailer/zipball/f523791455b51545ccfe67398994af33e91e8a3a",
+                "reference": "f523791455b51545ccfe67398994af33e91e8a3a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/mailer": "^4.4|^5.0"
+            },
+            "require-dev": {
+                "symfony/http-client": "^4.4|^5.0"
+            },
+            "type": "symfony-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Sendgrid Mailer Bridge",
+            "homepage": "https://symfony.com",
+            "time": "2021-01-01T09:25:51+00:00"
+        },
+        {
             "name": "symfony/serializer",
             "version": "v5.2.3",
             "source": {
@@ -7074,16 +7122,16 @@
         },
         {
             "name": "nelmio/alice",
-            "version": "v3.8.0",
+            "version": "v3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/alice.git",
-                "reference": "c019cf4b3c92f987d33ebc5d01b81f51a8973774"
+                "reference": "183961dba8726fe5115238c15b177ab2c74a67a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/alice/zipball/c019cf4b3c92f987d33ebc5d01b81f51a8973774",
-                "reference": "c019cf4b3c92f987d33ebc5d01b81f51a8973774",
+                "url": "https://api.github.com/repos/nelmio/alice/zipball/183961dba8726fe5115238c15b177ab2c74a67a0",
+                "reference": "183961dba8726fe5115238c15b177ab2c74a67a0",
                 "shasum": ""
             },
             "require": {
@@ -7150,7 +7198,7 @@
                 "faker",
                 "test"
             ],
-            "time": "2021-01-13T11:40:59+00:00"
+            "time": "2021-02-23T20:58:35+00:00"
         },
         {
             "name": "nikic/php-parser",

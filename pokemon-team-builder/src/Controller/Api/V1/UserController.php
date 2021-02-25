@@ -46,7 +46,7 @@ class UserController extends AbstractController
 
       if(isset($newUserInfo['passwordConfirm']) && isset($newUserInfo['password']) && $newUserInfo['passwordConfirm'] == $newUserInfo['password']){
 
-        $violations =    $validator->validate($newUserInfo['newPassword'], new Regex([
+        $violations =    $validator->validate($newUserInfo['password'], new Regex([
           'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}/m'
            ]));
 
@@ -104,7 +104,7 @@ class UserController extends AbstractController
       
 
       $email = (new TemplatedEmail())
-        ->from('chenipan@pokebuild.com')
+        ->from('pokebuild.noreply@gmail.com')
         ->to($userToAdd->getEmail())
         ->subject($translator->trans('signup', [], 'emails') . ' !')
         ->htmlTemplate('emails/signup.html.twig')
