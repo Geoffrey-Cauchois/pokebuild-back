@@ -68,6 +68,11 @@ class MainController extends AbstractController
 
         $decodedProcessedCoverage = json_decode($processedCoverage);
 
+        if (isset($decodedProcessedCoverage[0]->summary)){
+
+          unset($decodedProcessedCoverage[0]->summary);
+        }
+
         return $this->json($decodedProcessedCoverage);
       }
 
@@ -106,11 +111,11 @@ class MainController extends AbstractController
 
         $context = stream_context_create($opts);
 
-        $processedCoverage = file_get_contents($request->server->get('API_BASE_URL') . '/team/suggestion', false, $context);
+        $processedSuggestion = file_get_contents($request->server->get('API_BASE_URL') . '/team/suggestion', false, $context);
 
-        $decodedProcessedCoverage = json_decode($processedCoverage);
+        $decodedProcessedSuggestion = json_decode($processedSuggestion);
 
-        return $this->json($decodedProcessedCoverage);
+        return $this->json($decodedProcessedSuggestion);
       }
 
       return $this->render('api/v1/main/defensiveCoverage.html.twig', [
