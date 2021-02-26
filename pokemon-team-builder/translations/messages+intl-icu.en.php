@@ -25,5 +25,9 @@ return [
   'login' => 'Connexion successful. Welcome {user}.',
   'wrong-pokemon' => 'Please enter a valid pokemon.',
   'user-edition-null' => 'Request succesful for the {user}, but nothing was updated',
-  'greetings' => 'Hello'
+  'greetings' => 'Hello',
+  'more-vulnerabilities' => 'Your team as more vulnerabilities than weaknesses, be careful.',
+  'equal-resistances' => 'Your team as as many vulnerabilities as weaknesses.',
+  'low-vulnerabilities' => 'Your team has few or no vulnerabilities and some resistances, well done.',
+  'more-resistances' => 'Your team has more resistances than weaknesses.'
 ];

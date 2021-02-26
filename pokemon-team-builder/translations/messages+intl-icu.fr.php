@@ -25,5 +25,9 @@ return [
   'login' => 'Connexion réussie. Bienvenue {user}.',
   'wrong-pokemon' => 'Pokemon inconnu.',
   'user-edition-null' => 'Requête réussie pour l\'utilisateur {user}, aucune donnée à modifier',
-  'greetings' => 'Bonjour'
+  'greetings' => 'Bonjour',
+  'more-vulnerabilities' => 'Votre équipe a plus de vulnerabilités que de résistances',
+  'equal-resistances' => 'Votre équipe à autant de résistances que de faiblesses.',
+  'low-vulnerabilities' => 'Votre équipe a peu de vulnérabilités et plus de resistantces, bien joué.',
+  'more-resistances' => 'Votre équipe à plus de résistances que de faiblesses.'
 ];
