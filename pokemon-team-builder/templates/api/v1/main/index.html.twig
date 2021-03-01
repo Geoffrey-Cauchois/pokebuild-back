@@ -12,7 +12,7 @@
         <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner">
             {% for pokemon in pokemons %}
-            <div class="carousel-item {% if pokemon.id == random(pokemon.id) %}active{% endif %}">
+            <div class="carousel-item {% if loop.index == carouselStart %}active{% endif %}">
             <img class="d-block w-50" src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ pokemon.name }}</h5>

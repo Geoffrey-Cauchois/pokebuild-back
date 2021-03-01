@@ -21,9 +21,11 @@ class MainController extends AbstractController
         $allPokemon = $pokemonRepository->findAll();
         $testPokemon = $pokemonRepository->find(250);
         $slugger->sluggifyPokemon($testPokemon);
+        $carouselStart = rand(1,898);
 
         return $this->render('api/v1/main/index.html.twig', [
-            'pokemons' => $allPokemon
+            'pokemons' => $allPokemon,
+            'carouselStart' => $carouselStart
         ]);
     }
     /**
