@@ -23,7 +23,7 @@ class MainController extends AbstractController
         $slugger->sluggifyPokemon($testPokemon);
 
         return $this->render('api/v1/main/index.html.twig', [
-            'pokemons' => $allPokemon,
+            'pokemons' => $allPokemon
         ]);
     }
     /**
