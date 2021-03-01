@@ -1,5 +1,5 @@
 body {
-  background-color: aliceblue;
+  background-color: #F3D9D9;
 }
 
 .wrapper { 
@@ -120,6 +120,48 @@ button {
 .hidden {
   display: none;
 }
+
+.card {
+  background-color:  #F3D9D9;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1em;
+
+}
+
+.btn-card {
+  background-color:  #C14040;
+  color: white;
+}
+
+.btn-card:hover {
+  background-color: #F3D9D9;
+  color: #C14040;
+}
+
+.img_card {
+  width: 3em;
+  height: 3em;
+  align-self: flex-end;
+  margin-left: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+
+.images {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  margin-left: 2em;
+}
+
+
+
+
+
 
 
 
