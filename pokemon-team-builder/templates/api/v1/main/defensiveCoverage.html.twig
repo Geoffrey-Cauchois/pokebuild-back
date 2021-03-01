@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}{% endblock %}
+{% block stylesheets %}    <link href="{{ asset('css/form-style.css') }}" rel="stylesheet">{% endblock %}
 
 {% block title %} API Pokebuild {% endblock %}
 
@@ -12,11 +12,16 @@
 {{ form_errors(form.pokemon) }}
 <div class="form__pokemon-label"><a href="{{ path('home') }}" class="home_link">Retour à l'accueil </a>
 {{ form_label(form.pokemon) }}
+<div class="form__header">
+  <p class="for__header-notice">Rechercher par numéro ou par nom</p>
+</div>
 </div>
 <div class="form__pokemon-checkbox">
 {{ form_widget(form.pokemon) }}
 </div>
 {{ form_end(form) }}
+
+<p class="route__notice">{{ noticeStart ~ ' '}} <strong>{{ noticeUrl }}</strong> {{' ' ~ noticeEnd }}</p>
 
 </div>
 

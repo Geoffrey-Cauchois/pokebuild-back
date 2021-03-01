@@ -46,7 +46,7 @@ h1, h2 {
 }
 
 .form__pokemon-checkbox {
-  height: 80vh;
+  height: 65vh;
   display: flex;
   justify-content: space-between;
   width: 130%;
@@ -60,7 +60,7 @@ h1, h2 {
 }
 
 .form__pokemon-checkbox > *{
-  height: 80vh;
+  height: 65vh;
   overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
@@ -69,7 +69,7 @@ h1, h2 {
 }
 
 .form__pokemon-checkbox > * > *{
-  width: 16.65%;
+  width: 25%;
 }
 
 #team_pokemon{
@@ -77,13 +77,10 @@ h1, h2 {
 }
 
 
-#team_pokemon > input.form__search{
+.form__search{
   width: 30%;
-  max-height: 1.5rem;
   margin: auto;
-  position: absolute;
-  top: 0%;
-  left: 35%
+  display: inline-block;
 }
 
 form {

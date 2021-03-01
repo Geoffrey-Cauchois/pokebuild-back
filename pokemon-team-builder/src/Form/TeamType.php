@@ -27,7 +27,9 @@ class TeamType extends AbstractType
                            'maxMessage' => 'A team cannot have more than 6 pokemon'])
               ]
             ])
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, [
+              'label' => 'Calculer'
+            ])
         ;
     }
 
