@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Slugger;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MainController extends AbstractController
 {
@@ -39,11 +40,17 @@ class MainController extends AbstractController
     /**
      * @Route("/defensiveCoverTest", name="defensive-cover-test")
      */
-    public function defensiveCoverageTest(Request $request)
+    public function defensiveCoverageTest(Request $request, TranslatorInterface $translator)
     {
       $form = $this->createForm(TeamType::class);
 
       $form->handleRequest($request);
+      
+      $noticeStart = $translator->trans('coverage-notice-start', [], 'messages');
+
+      $noticeUrl = $translator->trans('coverage-notice-url', [], 'messages');
+
+      $noticeEnd = $translator->trans('coverage-notice-end', [], 'messages');
 
       if($form->isSubmitted() && $form->isValid()){
 
@@ -57,6 +64,8 @@ class MainController extends AbstractController
         }
 
         $chosenPokemonIds = json_encode($chosenPokemonIds);
+
+        
 
         $opts = ['http' => [
                             'method' => 'POST',
@@ -79,18 +88,27 @@ class MainController extends AbstractController
       }
 
       return $this->render('api/v1/main/defensiveCoverage.html.twig', [
-        'form' => $form->createView()
+        'form' => $form->createView(),
+        'noticeStart' => $noticeStart,
+        'noticeUrl' => $noticeUrl,
+        'noticeEnd' => $noticeEnd
     ]);
     }
 
     /**
      * @Route("/suggestionTest", name="suggestion-test")
      */
-    public function suggestionTest(Request $request)
+    public function suggestionTest(Request $request, TranslatorInterface $translator)
     {
       $form = $this->createForm(TeamType::class);
 
       $form->handleRequest($request);
+
+      $noticeStart = $translator->trans('suggestion-notice-start', [], 'messages');
+
+      $noticeUrl = $translator->trans('suggestion-notice-url', [], 'messages');
+
+      $noticeEnd = $translator->trans('suggestion-notice-end', [], 'messages');
 
       if($form->isSubmitted() && $form->isValid()){
 
@@ -121,7 +139,10 @@ class MainController extends AbstractController
       }
 
       return $this->render('api/v1/main/defensiveCoverage.html.twig', [
-        'form' => $form->createView()
+        'form' => $form->createView(),
+        'noticeStart' => $noticeStart,
+        'noticeUrl' => $noticeUrl,
+        'noticeEnd' => $noticeEnd
     ]);
     }
 }

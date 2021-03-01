@@ -29,5 +29,11 @@ return [
   'more-vulnerabilities' => 'Your team as more vulnerabilities than weaknesses, be careful.',
   'equal-resistances' => 'Your team as as many vulnerabilities as weaknesses.',
   'low-vulnerabilities' => 'Your team has few or no vulnerabilities and some resistances, well done.',
-  'more-resistances' => 'Your team has more resistances than weaknesses.'
+  'more-resistances' => 'Your team has more resistances than weaknesses.',
+  'coverage-notice-start' => 'To use this route, use the',
+  'coverage-notice-url' => '/api/v1/team/defensive-coverage',
+  'coverage-notice-end' => 'url in a POST request sending the id of all the chosen Pokemon in an array, without keys. Exemple: [3, 6, 9]',
+  'suggestion-notice-start' => 'To use this route, use the',
+  'suggestion-notice-url' => '/api/v1/team/suggestion',
+  'suggestion-notice-end' => 'url in a POST request sending the id of all the chosen Pokemon in an array, without keys. Exemple: [3, 6, 9]'
 ];

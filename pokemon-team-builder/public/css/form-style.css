@@ -1,0 +1,41 @@
+.form__header{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.form__pokemon-checkbox{
+  margin-bottom: 1rem;
+}
+
+#team_submit{
+  background-color: #C14040;
+  border-color: #C14040;
+}
+
+@media (max-width: 1100px){
+  .wrapper{
+    max-width: 600px;
+  }
+  .form__pokemon-checkbox > * > * {
+    width: 50%;
+  }
+}
+
+@media (max-width: 500px){
+  .form__pokemon-checkbox > * > * {
+  width: 75%;
+  }
+  .form__pokemon-checkbox{
+    justify-content: space-evenly;
+  }
+  .form-check{
+    margin: auto;
+  }
+  .form__pokemon-checkbox{
+    height: 55vh;
+  }
+  .form__pokemon-checkbox > *{
+    height: 55vh;
+  }
+}
