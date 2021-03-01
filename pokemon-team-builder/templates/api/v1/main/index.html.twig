@@ -12,13 +12,13 @@
         <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner">
             {% for pokemon in pokemons %}
-            <div class="carousel-item {% if pokemon.id == 1 %}active{% endif %}">
+            <div class="carousel-item {% if loop.index == carouselStart %}active{% endif %}">
             <img class="d-block w-50" src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ pokemon.name }}</h5>
             </div>
             </div>
-             {% endfor %}
+            {% endfor %}
         </div>
             <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon"></span>

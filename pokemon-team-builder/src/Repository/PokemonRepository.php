@@ -55,7 +55,6 @@ class PokemonRepository extends ServiceEntityRepository
                   ->setParameter('type2', $type2)
                   ->getQuery()
                   ->getResult();
-
     }
 
 
