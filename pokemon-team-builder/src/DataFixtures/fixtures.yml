@@ -3,6 +3,7 @@ App\Entity\User:
         username (unique): '<name()>' 
         password: '<password()>'
         email (unique): '<email()>'
+        is_active: '<boolean(true)>'
         
 
 App\Entity\Team:
