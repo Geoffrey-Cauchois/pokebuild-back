@@ -47,11 +47,11 @@ h1 {
 
 .form__pokemon-checkbox {
   height: 80vh;
-  overflow-y: scroll;
   display: flex;
   justify-content: space-between;
   width: 130%;
   margin: auto;
+  position: relative;
 }
 
 .form__pokemon-label {
@@ -61,14 +61,29 @@ h1 {
 
 .form__pokemon-checkbox > *{
   height: 80vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   margin-top: 2em;
+  
 }
 
 .form__pokemon-checkbox > * > *{
   width: 16.65%;
+}
+
+#team_pokemon{
+  width: 100%;
+}
+
+
+#team_pokemon > input.form__search{
+  width: 30%;
+  max-height: 1.5rem;
+  margin: auto;
+  position: absolute;
+  top: 0%;
+  left: 35%
 }
 
 form {
@@ -105,7 +120,9 @@ button {
   margin-top: 1em;
 }
 
-
+.hidden {
+  display: none;
+}
 
 
 
