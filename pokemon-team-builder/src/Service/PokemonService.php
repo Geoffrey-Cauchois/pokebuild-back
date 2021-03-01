@@ -246,25 +246,25 @@ class PokemonService
           $suggestionScore = 0;
         
         foreach ($teamVulnerabilities as $vulnerableType) {
-          //the main objective is to suggest pokemon that reduce or compensate the team's vulnerabilities. pokemon that have double resistances or immunities to a team vulnerability will gain 4 points, pokemon that resist to a team vulnerability will gein 2 points
+          //the main objective is to suggest pokemon that reduce or compensate the team's vulnerabilities. pokemon that have double resistances or immunities to a team vulnerability will gain 4 points, pokemon that resist to a team vulnerability will gain 3 points
           if ($pokemon->getResistances()[$vulnerableType]['damage_multiplier'] < 0.5) {
 
             $suggestionScore += 4;
           }
           elseif ($pokemon->getResistances()[$vulnerableType]['damage_multiplier'] < 1) {
 
-            $suggestionScore += 2;
+            $suggestionScore += 3;
           }
         }
         foreach ($teamSlightVulnerabilities as $sligthlyVulnerableType) {
-          // although it can be good to also compensate slight vulnerabilities, it is not the priority, therefore pokemon that have resitances, double resistances or immunoties to a yteam slight vulnerability will gain 1 point
+          // although it can be good to also compensate slight vulnerabilities, it is not the priority, but it has to be done if the are no bigger vulnerabilities left, therefore pokemon that have resitances, double resistances or immunities to a team slight vulnerability will gain 2 points
           if ($pokemon->getResistances()[$sligthlyVulnerableType]['damage_multiplier'] < 1) {
 
-            $suggestionScore += 1;               
+            $suggestionScore += 2;               
           }
         }
         foreach ($teamNeutralities as $neutralType) {
-          // created new vulnerabilies to a team is case we want to avoid, it would not be the bast suggestion to compensate a vulnerability if we create another one in the process, therefore, pokemon that are vulnerable to a team neutrality will lose 2 points, or 4 points in case of a double vulnerability
+          // creating new vulnerabilies to a team is a case we want to avoid, it would not be the bast suggestion to compensate a vulnerability if we create another one in the process, therefore, pokemon that are vulnerable to a team neutrality will lose 2 points, or 4 points in case of a double vulnerability
           if ($pokemon->getResistances()[$neutralType]['damage_multiplier'] > 1) {
 
             $suggestionScore -= 2;
@@ -275,10 +275,10 @@ class PokemonService
           }
         }                                   
         foreach ($teamSlightResistances as $slightlyResistantType) {
-          //a pokemon that have a double vulnerability to a team slight resistance will transform it into a slight vulnerability. This is not the best case scenario but it can be accepted if it is needed to compensated the vulnerabilities. In this case, a double vulnerable pokemon will lose 1 point
+          //a pokemon that have a double vulnerability to a team slight resistance will transform it into a slight vulnerability. This is not the best case scenario but it can be accepted, as a last resort, if it is needed to compensated bigger vulnerabilities. In this case, a double vulnerable pokemon will lose 2 points
           if ($pokemon->getResistances()[$slightlyResistantType]['damage_multiplier'] > 2) {
 
-            $suggestionScore -= 1;
+            $suggestionScore -= 2;
           }
         }
           //transforming a resistance or a slight resistance into a neutrality is acceptable, and often needed to balance a team's resistances. A pokemon will not lose points as long as its vulnerabilities do not cerate a team new vulnerability or slight vulnerability
