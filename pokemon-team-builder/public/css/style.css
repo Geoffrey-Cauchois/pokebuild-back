@@ -24,7 +24,6 @@ li {
 
 .active {
   object-fit: cover;
-  width: auto;
 }
 
 .d-block {
