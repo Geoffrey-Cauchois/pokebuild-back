@@ -57,27 +57,37 @@ class DataTreatmentController extends AbstractController
 
           if(count($teamVulnerabilities) + count($teamSlightVulnerabilities) > count($teamSlightResistances) + count($teamResistances)){
 
-            $summary = 'more-vulnerabilities';
+            $summary = $translator->trans('more-vulnerabilities', [], 'messages');
+
+            $class = 'more-vulnerabilities';
           }
           elseif(count($teamVulnerabilities) + count($teamSlightVulnerabilities) == count($teamSlightResistances) + count($teamResistances)){
 
-            $summary = 'balanced';
+            $summary = $translator->trans('equal-resistances', [], 'messages');
+
+            $class = 'equal-resistances';
           }
           else{
             
             if(count($teamVulnerabilities) + count($teamSlightVulnerabilities) < 2){
 
-              $summary = 'strong';
+              $summary = $translator->trans('low-vulnerabilities', [], 'messages');
+
+              $class = 'low-vulnerabilities';
             }
             else{
 
-              $summary = 'more-resistances';
+              $summary = $translator->trans('more-resistances', [], 'messages');
+
+              $class = 'more-resistances';
             }
           }
 
         $coverToreturn = $team->getDefensiveCoverForApi();
 
         $coverToreturn[0]['summary'] = $summary;
+
+        $coverToreturn[0]['class'] = $class;
 
         return $this->json($coverToreturn);
         } 
