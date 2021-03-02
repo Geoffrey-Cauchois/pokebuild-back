@@ -22,6 +22,15 @@ li {
   margin: auto;
 }
 
+.active {
+  object-fit: cover;
+  width: auto;
+}
+
+.d-block {
+  max-height: 30vh;
+  width: auto;
+}
 
 .carousel-caption {
   color: black;
@@ -126,12 +135,14 @@ button {
   display: flex;
   flex-direction: row;
   margin-bottom: 1em;
+  width: 47%;
 
 }
 
 .btn-card {
   background-color:  #C14040;
   color: white;
+  font-size: 0.8rem;
 }
 
 .btn-card:hover {
@@ -143,19 +154,33 @@ button {
   width: 3em;
   height: 3em;
   align-self: flex-end;
-  margin-left: 1em;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
+  margin: auto;
+  height: 35px;
+  width: auto;
+}  
 
 
 .images {
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .card-body {
-  margin-left: 2em;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+}
+
+.card-title {
+  font-size: 1rem;
+}
+
+.card__box {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 
