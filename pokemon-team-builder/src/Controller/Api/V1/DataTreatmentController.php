@@ -57,21 +57,21 @@ class DataTreatmentController extends AbstractController
 
           if(count($teamVulnerabilities) + count($teamSlightVulnerabilities) > count($teamSlightResistances) + count($teamResistances)){
 
-            $summary = $translator->trans('more-vulnerabilities', [], 'messages');
+            $summary = 'more-vulnerabilities';
           }
           elseif(count($teamVulnerabilities) + count($teamSlightVulnerabilities) == count($teamSlightResistances) + count($teamResistances)){
 
-            $summary = $translator->trans('equal-resistances', [], 'messages');
+            $summary = 'balanced';
           }
           else{
             
             if(count($teamVulnerabilities) + count($teamSlightVulnerabilities) < 2){
 
-              $summary = $translator->trans('low-vulnerabilities', [], 'messages');
+              $summary = 'strong';
             }
             else{
 
-              $summary = $translator->trans('more-resistances', [], 'messages');
+              $summary = 'more-resistances';
             }
           }
 
