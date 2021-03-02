@@ -37,7 +37,7 @@ class TeamControllerTest extends WebTestCase
 
         $this->client->request(
         'POST',
-        '/api/login_check',
+        '/api/v1/login_check',
         array(),
         array(),
         array('CONTENT_TYPE' => 'application/json'),
@@ -63,7 +63,7 @@ class TeamControllerTest extends WebTestCase
     {
 
         $client = $this->createAuthenticatedClient();
-        $client->request('GET', 'http://localhost/api/v1/admin/team/show/BestTeam');
+        $client->request('GET', 'http://localhost/api/v1/admin/team/show/myTeam');
 
         $this->assertResponseIsSuccessful();
     
