@@ -33,7 +33,9 @@
    
     <p><strong> Liste des routes disponibles : </strong></p>
 
-        <div class="card" style="width: 50rem;">
+      <div class="card__box">
+
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon417.image) }}" class="img_card" alt="{{ pokemon417.name }}">
                 <img src="{{ asset(pokemon92.image) }}" class="img_card" alt="{{ pokemon92.name }}">
@@ -46,7 +48,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
              <div class="images">
                 <img src="{{ asset(pokemon10.image) }}" class="img_card" alt="{{ pokemon10.name }}">
                 <img src="{{ asset(pokemon197.image) }}" class="img_card" alt="{{ pokemon197.name }}">
@@ -59,7 +61,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(type4.image) }}" class="img_card" alt="{{ type4.name }}">
                 <img src="{{ asset(type10.image) }}" class="img_card" alt="{{ type10.name }}">
@@ -72,7 +74,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon850.image) }}" class="img_card" alt="{{ pokemon850.name }}">
             </div>
@@ -84,7 +86,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon498.image) }}" class="img_card" alt="{{ pokemon498.name }}">
             </div>
@@ -96,7 +98,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon300.image) }}" class="img_card" alt="{{ pokemon300.name }}">
                 <img src="{{ asset(pokemon301.image) }}" class="img_card" alt="{{ pokemon301.name }}">
@@ -110,7 +112,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon7.image) }}" class="img_card" alt="{{ pokemon7.name }}">
                 <img src="{{ asset(pokemon54.image) }}" class="img_card" alt="{{ pokemon54.name }}">
@@ -124,7 +126,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon400.image) }}" class="img_card" alt="{{ pokemon400.name }}">
             </div>
@@ -137,7 +139,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon56.image) }}" class="img_card" alt="{{ pokemon56.name }}">
                 <img src="{{ asset(pokemon57.image) }}" class="img_card" alt="{{ pokemon57.name }}">
@@ -151,7 +153,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon46.image) }}" class="img_card" alt="{{ pokemon46.name }}">
                 <img src="{{ asset(pokemon205.image) }}" class="img_card" alt="{{ pokemon205.name }}">
@@ -165,7 +167,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon81.image) }}" class="img_card" alt="{{ pokemon81.name }}">
                 <img src="{{ asset(pokemon395.image) }}" class="img_card" alt="{{ pokemon395.name }}">
@@ -179,7 +181,7 @@
             </div>
         </div>
 
-         <div class="card" style="width: 50rem;">
+         <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon131.image) }}" class="img_card" alt="{{ pokemon131.name }}">
                 <img src="{{ asset(pokemon485.image) }}" class="img_card" alt="{{ pokemon485.name }}">
@@ -193,7 +195,7 @@
             </div>
         </div>
 
-        <div class="card" style="width: 50rem;">
+        <div class="card" >
             <div class="images">
                 <img src="{{ asset(pokemon16.image) }}" class="img_card" alt="{{ pokemon16.name }}">
                 <img src="{{ asset(pokemon446.image) }}" class="img_card" alt="{{ pokemon446.name }}">
@@ -207,19 +209,75 @@
                 class="btn btn-card">Pokémon par immunité à un type   </a>
             </div>
         </div>
-         <ul>
-            
+      </div>      
             <li class="generateur">Vous pouvez aussi tester notre générateur de couverture défensive et notre suggestion automatique de Pokemon ci-dessous ! :</li>
-            
-            <a href="{{ path('defensive-cover-test') }}">Tester le générateur de couverture défensive</a>
-            <br>
-            <a href="{{ path('suggestion-test') }}">Tester la suggestion automatique de Pokemon</a>
+
+              <div class="card__box">
+
+                <div class="card">
+                    <div class="images">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2019/11/27/14/06/pokemon-4657023__480.png') }}" class="img_card" alt="{{ pokemon16.name }}">
+                        <img src="{{ asset(type10.image) }}" class="img_card" alt="{{ pokemon446.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2019/11/27/14/06/pokemon-4657023__480.png') }}" class="img_card" alt="{{ pokemon463.name }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pour obtenir un résumé des résistances et faiblesses de votre équipe : </h5>
+                        <p class="card-text"> <strong>api/v1/team/defensive-coverage</strong> => 
+                        envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
+                        <a href="{{ path('defensive-cover-test') }}" 
+                        class="btn btn-card">Tester le générateur de couverture défensive</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="images">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2019/11/27/14/06/pokemon-4657023__480.png') }}" class="img_card" alt="{{ pokemon16.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2012/04/23/17/21/cross-39253__480.png') }}" class="img_card" alt="{{ pokemon446.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2014/05/21/19/16/the-question-mark-350169__480.png') }}" class="img_card" alt="{{ pokemon463.name }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pour obtenir une suggestion de Pokémon qui complète votre équipe selon ses résistances: </h5>
+                        <p class="card-text"> <strong>api/v1/team/suggestion</strong> => 
+                        envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
+                        <a href="{{ path('suggestion-test') }}" 
+                        class="btn btn-card">Tester la suggestion automatique de Pokemon</a>
+                    </div>
+                </div>
+              
+              </div>
 
             <li class="generateur_random">Si vous avez du mal à choisir, le hasard le fera pour vous ! :</li>
-            
-            <a href="{{ path('api_v1_random_team') }}">Tester le générateur aléatoire équipe complète</a>
-            <br>
-            <a href="{{ path('api_v1_random_team_suggest') }}">Tester le générateur aléatoire 3 pokemons + suggestion</a>
+              <div class="card__box">
+                <div class="card" >
+                    <div class="images">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2014/05/21/19/16/the-question-mark-350169__480.png') }}" class="img_card" alt="{{ pokemon463.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2019/11/27/14/06/pokemon-4657023__480.png') }}" class="img_card" alt="{{ pokemon16.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2014/05/21/19/16/the-question-mark-350169__480.png') }}" class="img_card" alt="{{ pokemon463.name }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pour obtenir une équipe aléatoire: </h5>
+                        <p class="card-text"> <strong>api/v1/random/team</strong> => 
+                        cette route génère une liste de 6 Pokémon aléatoires</p>
+                        <a href="{{ path('api_v1_random_team') }}" 
+                        class="btn btn-card">Tester le générateur d'équipe aléatoire</a>
+                    </div>
+                </div>
+
+                <div class="card" >
+                    <div class="images">
+                        <img src="{{ asset(type4.image) }}" class="img_card" alt="{{ type14.name }}">
+                        <img src="{{ asset('https://cdn.pixabay.com/photo/2014/05/21/19/16/the-question-mark-350169__480.png') }}" class="img_card" alt="{{ pokemon463.name }}">
+                        <img src="{{ asset(type14.image) }}" class="img_card" alt="{{ type4.name }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pour obtenir une équipe aléatoire aux resistances équilibrées: </h5>
+                        <p class="card-text"> <strong>api/v1/random/team/suggest</strong> => 
+                        cette route génère une liste de 3 Pokémon aléatoires puis la complète avec 3 autres Pokémon pour obtenir une équipe aux résistances équilibrées</p>
+                        <a href="{{ path('api_v1_random_team') }}" 
+                        class="btn btn-card">Tester le générateur d'équipe équilibrée aléatoire</a>
+                    </div>
+                </div>
+              </div>
 </div>
 
 
