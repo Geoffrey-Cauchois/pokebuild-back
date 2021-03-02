@@ -142,6 +142,11 @@ class MainController extends AbstractController
           unset($decodedProcessedCoverage[0]->summary);
         }
 
+        if (isset($decodedProcessedCoverage[0]->class)){
+
+          unset($decodedProcessedCoverage[0]->class);
+        }
+
         return $this->json($decodedProcessedCoverage);
       }
 
