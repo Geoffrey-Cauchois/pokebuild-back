@@ -200,7 +200,7 @@ class UserController extends AbstractController
 
       if($userToEdit == null){
 
-        return $this->json($translator->trans('wrong-username', [], 'messages'), 400);
+        return $this->json($translator->trans('wrong-username', [], 'messages'), 418);
       }
 
       if($encoder->isPasswordValid($userToEdit, $userInfo['password']) == false){
