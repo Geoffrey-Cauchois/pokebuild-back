@@ -23,7 +23,7 @@ li {
 }
 
 .active {
-  object-fit: inherit;
+  object-fit: cover;
 }
 
 .d-block {
