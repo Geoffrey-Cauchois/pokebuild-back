@@ -135,10 +135,18 @@ button {
 
 }
 
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .btn-card {
   background-color:  #C14040;
   color: white;
   font-size: 0.8rem;
+  align-self: baseline;
+  
 }
 
 .btn-card:hover {
