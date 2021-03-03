@@ -17,7 +17,7 @@ return [
   'user-edition' => 'Utilisateur {user} modifié',
   'existing-user' => 'Ce nom d\'utilisateur existe déjà',
   'wrong-email' => 'Adresse e-mail incorrecte',
-  'wrong-team-name' => 'Equipe inconnue.',
+  'wrong-team-name' => 'Merci de donner un nom à votre équipe.',
   'team-creation' => 'Equipe {team} créée',
   'team-deletion' => 'Equipe {team} supprimée',
   'team-edition' => 'Equipe {team} modifiée',

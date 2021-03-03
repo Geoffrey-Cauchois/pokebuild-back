@@ -9,8 +9,15 @@
 }
 
 #team_submit{
-  background-color: #C14040;
+  background-color:  #C14040;
+  color: white;
   border-color: #C14040;
+}
+
+#team_submit:hover {
+  background-color: #F3D9D9;
+  color: #C14040;
+  border-color:  #F3D9D9;
 }
 
 @media (max-width: 1100px){
