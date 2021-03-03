@@ -16,19 +16,16 @@ li {
 .carousel-item {
   transition-duration: 0s;
   transition-delay: 0s;
+  max-height: 30vh;
 }
 
 .d-block {
   margin: auto;
 }
 
-.active {
-  object-fit: cover;
-}
-
 .d-block {
   max-height: 30vh;
-  width: auto;
+  max-width: 30vh;
 }
 
 .carousel-caption {
