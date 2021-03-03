@@ -24,7 +24,6 @@ li {
 
 .active {
   object-fit: inherit;
-  width: auto;
 }
 
 .d-block {
