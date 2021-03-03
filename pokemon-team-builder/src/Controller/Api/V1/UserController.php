@@ -205,7 +205,7 @@ class UserController extends AbstractController
 
       if($encoder->isPasswordValid($userToEdit, $userInfo['password']) == false){
 
-        return $this->json($translator->trans('invalid-password', [], 'messages'), 418);
+        return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
       }
 
       $modifiedPassword = false;
@@ -220,7 +220,7 @@ class UserController extends AbstractController
 
         if(!empty(strval($violations))){
 
-          return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
+          return $this->json($translator->trans('invalid-password', [], 'messages'), 418);
         }
 
         $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['newPassword']));
