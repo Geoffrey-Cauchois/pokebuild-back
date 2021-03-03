@@ -63,7 +63,7 @@ class TeamControllerTest extends WebTestCase
     {
 
         $client = $this->createAuthenticatedClient();
-        $client->request('GET', 'http://localhost/api/v1/admin/team/show/myTeam');
+        $client->request('GET', 'http://localhost/api/v1/admin/team/show/quia');
 
         $this->assertResponseIsSuccessful();
     
