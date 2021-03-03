@@ -225,7 +225,7 @@
                         <p class="card-text"> <strong>api/v1/team/defensive-coverage</strong> => 
                         envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
                         <a href="{{ path('defensive-cover-test') }}" 
-                        class="btn btn-card">Tester le générateur de couverture défensive</a>
+                        class="btn btn-card">Générer une couverture défensive</a>
                     </div>
                 </div>
 
@@ -240,7 +240,7 @@
                         <p class="card-text"> <strong>api/v1/team/suggestion</strong> => 
                         envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
                         <a href="{{ path('suggestion-test') }}" 
-                        class="btn btn-card">Tester la suggestion automatique de Pokemon</a>
+                        class="btn btn-card">Tester la suggestion de Pokemon</a>
                     </div>
                 </div>
               
@@ -259,7 +259,7 @@
                         <p class="card-text"> <strong>api/v1/random/team</strong> => 
                         cette route génère une liste de 6 Pokémon aléatoires</p>
                         <a href="{{ path('api_v1_random_team') }}" 
-                        class="btn btn-card">Tester le générateur d'équipe aléatoire</a>
+                        class="btn btn-card">Générer une équipe aléatoire</a>
                     </div>
                 </div>
 
@@ -273,8 +273,8 @@
                         <h5 class="card-title">Pour obtenir une équipe aléatoire aux resistances équilibrées: </h5>
                         <p class="card-text"> <strong>api/v1/random/team/suggest</strong> => 
                         cette route génère une liste de 3 Pokémon aléatoires puis la complète avec 3 autres Pokémon pour obtenir une équipe aux résistances équilibrées</p>
-                        <a href="{{ path('api_v1_random_team') }}" 
-                        class="btn btn-card">Tester le générateur d'équipe équilibrée aléatoire</a>
+                        <a href="{{ path('api_v1_random_team_suggest') }}" 
+                        class="btn btn-card">Générer une équipe équilibrée aléatoire</a>
                     </div>
                 </div>
               </div>
