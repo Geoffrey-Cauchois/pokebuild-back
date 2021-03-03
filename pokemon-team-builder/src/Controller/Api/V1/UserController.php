@@ -237,7 +237,7 @@ class UserController extends AbstractController
 
         if(filter_var($userInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
-          return $this->json($translator->trans('wrong-email', [], 'messages'), 418);
+          return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
         }
         elseif(preg_match('~@yopmail~', $userInfo['email']) != false){
   
