@@ -233,7 +233,7 @@ class UserController extends AbstractController
 
         
 
-      if(isset($userInfo['email']) && !is_null($userInfo['email'])){
+      if(isset($userInfo['email']) && !is_null($userInfo['email']) && !empty($userInfo['email'])){
 
         if(filter_var($userInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
