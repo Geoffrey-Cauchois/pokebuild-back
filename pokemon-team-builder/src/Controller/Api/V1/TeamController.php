@@ -30,8 +30,14 @@ class TeamController extends AbstractController
         $newTeamInfo = json_decode($request->getContent(), true);
   
         $teamToAdd = new Team();
+
+        if ($newTeamInfo['name'] == null) {
+            return $this->json($translator->trans('wrong-team-name', [], 'messages'), 400);
+        }
   
         $teamToAdd->setName($newTeamInfo['name']);
+        
+
         $userName = $newTeamInfo['username'];
 
         $user = $userRepository->findOneBy(['username' => $userName]);

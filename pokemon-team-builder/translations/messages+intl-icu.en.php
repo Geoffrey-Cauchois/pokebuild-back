@@ -17,7 +17,7 @@ return [
   'user-edition' => 'User {user} edited',
   'existing-user' => 'This username already exists',
   'wrong-email' => 'incorrect e-mail adress',
-  'wrong-team-name' => 'Please enter a valid team.',
+  'wrong-team-name' => 'Please enter a valid team name.',
   'team-creation' => 'Team {team} created',
   'team-deletion' => 'Team {team} deleted',
   'team-edition' => 'Team {team} edited',
