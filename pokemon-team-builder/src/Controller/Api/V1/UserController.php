@@ -220,7 +220,7 @@ class UserController extends AbstractController
 
         if(!empty(strval($violations))){
 
-          return $this->json($translator->trans('invalid-password', [], 'messages'), 418);
+          return $this->json($translator->trans('invalid-password', [], 'messages'), 400);
         }
 
         $userToEdit->setPassword($encoder->encodePassword($userToEdit, $userInfo['newPassword']));
@@ -237,7 +237,7 @@ class UserController extends AbstractController
 
         if(filter_var($userInfo['email'], FILTER_VALIDATE_EMAIL) == false){
 
-          return $this->json($translator->trans('wrong-email', [], 'messages'), 400);
+          return $this->json($translator->trans('wrong-email', [], 'messages'), 418);
         }
         elseif(preg_match('~@yopmail~', $userInfo['email']) != false){
   
