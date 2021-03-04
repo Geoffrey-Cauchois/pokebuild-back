@@ -44,7 +44,7 @@
             <div class="card-body">
                 <h5 class="card-title">Pour récupérer la liste de tous les Pokémon (attention, il y en a 898 !) :</h5>
                 <p class="card-text"><strong>api/v1/pokemon</strong></p>
-                <a href="{{ path('api_v1_pokemon') }}" class="btn btn-card">Liste des Pokémon</a>
+                <a href="{{ path('api_v1_pokemon') }}" class="btn btn-card" target="_blank">Liste des Pokémon</a>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
                 <h5 class="card-title">Si vous préférez récupérer un nombre limité de Pokémon :</h5>
                 <p class="card-text"><strong>api/v1/pokemon/limit/100</strong> => 
                 cette route vous emmènera sur la liste des 100 premiers Pokémon</p>
-                <a href="{{ path('api_v1_pokemon_limit', {'number' : 100 }) }}" class="btn btn-card">Pokémon en nombre limité </a>
+                <a href="{{ path('api_v1_pokemon_limit', {'number' : 100 }) }}" class="btn btn-card" target="_blank">Pokémon en nombre limité </a>
             </div>
         </div>
 
@@ -70,7 +70,7 @@
             <div class="card-body">
                 <h5 class="card-title">Pour récupérer la liste de tous les types de Pokémon :</h5>
                 <p class="card-text"><strong>api/v1/types</strong></p>
-                <a href="{{ path('api_v1_types') }}" class="btn btn-card">Liste des types</a>
+                <a href="{{ path('api_v1_types') }}" class="btn btn-card" target="_blank">Liste des types</a>
             </div>
         </div>
 
@@ -82,7 +82,7 @@
                 <h5 class="card-title">Pour récupérer un Pokémon selon son Id :</h5>
                 <p class="card-text"><strong>api/v1/pokemon/850</strong> => 
                 cette route vous emmènera sur la fiche de Grillepattes, qui a l'id 850</p>
-                <a href="{{ path('api_v1_pokemon_by_id', {'id' : 850 }) }}" class="btn btn-card">Pokémon par Id</a>
+                <a href="{{ path('api_v1_pokemon_by_id', {'id' : 850 }) }}" class="btn btn-card" target="_blank">Pokémon par Id</a>
             </div>
         </div>
 
@@ -94,7 +94,7 @@
                 <h5 class="card-title">Pour récupérer un Pokémon selon son nom :</h5>
                 <p class="card-text"><strong>api/v1/pokemon/Gruikui</strong> => 
                 cette route vous emmènera sur la fiche de Gruikui</p>
-                <a href="{{ path('api_v1_pokemon_by_name', {'name' : 'Gruikui' }) }}" class="btn btn-card">Pokémon par nom</a>
+                <a href="{{ path('api_v1_pokemon_by_name', {'name' : 'Gruikui' }) }}" class="btn btn-card" target="_blank">Pokémon par nom</a>
             </div>
         </div>
 
@@ -108,7 +108,7 @@
                 <h5 class="card-title">Pour récupérer tous les Pokémon d'une certaine génération :</h5>
                 <p class="card-text"><strong>api/v1/pokemon/generation/3</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon de la génération 3</p>
-                <a href="{{ path('api_v1_pokemon_generation_by_id', {'id' : 3 }) }}" class="btn btn-card">Pokémon par génération</a>
+                <a href="{{ path('api_v1_pokemon_generation_by_id', {'id' : 3 }) }}" class="btn btn-card" target="_blank">Pokémon par génération</a>
             </div>
         </div>
 
@@ -122,7 +122,7 @@
                 <h5 class="card-title">Pour récupérer tous les Pokémon d'un certain type :</h5>
                 <p class="card-text"><strong>api/v1/pokemon/type/Eau</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon de type Eau</p>
-                <a href="{{ path('api_v1_pokemon_by_type_name', {'name' : 'Eau' }) }}" class="btn btn-card">Pokémon par type</a>
+                <a href="{{ path('api_v1_pokemon_by_type_name', {'name' : 'Eau' }) }}" class="btn btn-card" target="_blank">Pokémon par type</a>
             </div>
         </div>
 
@@ -135,7 +135,7 @@
                 <p class="card-text"><strong>api/v1/pokemon/types/Eau/Normal</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokemon qui ont le type Eau et le type Normal</p>
                 <a href="{{ path('api_v1_pokemon_by_double_type', {'typeName1' : 'Eau', 'typeName2' : 'Normal'}) }}" 
-                class="btn btn-card">Pokémon par double type</a>
+                class="btn btn-card" target="_blank">Pokémon par double type</a>
             </div>
         </div>
 
@@ -149,7 +149,7 @@
                 <p class="card-text"><strong>api/v1/pokemon/type/weakness/Fée</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon qui présentent une faiblesse au type Fée</p>
                 <a href="{{ path('api_v1_pokemon_by_weakness', {'typeName' : 'Fée' }) }}" 
-                class="btn btn-card">Pokémon par faiblesse à un type </a>
+                class="btn btn-card" target="_blank">Pokémon par faiblesse à un type </a>
             </div>
         </div>
 
@@ -163,7 +163,7 @@
                 <p class="card-text"><strong>api/v1/pokemon/type/double-weakness/Feu</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon qui présentent une double faiblesse au type Feu</p>
                 <a href="{{ path('api_v1_pokemon_by_double_weakness', {'typeName' : 'Feu' }) }}" 
-                class="btn btn-card">Pokémon par double faiblesse à un type </a>
+                class="btn btn-card" target="_blank">Pokémon par double faiblesse à un type </a>
             </div>
         </div>
 
@@ -177,7 +177,7 @@
                 <p class="card-text"><strong>api/v1/pokemon/type/resistance/Dragon</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon qui présentent une résistance au type Dragon</p>
                 <a href="{{ path('api_v1_pokemon_by_resistance', {'typeName' : 'Dragon' }) }}" 
-                class="btn btn-card">Pokémon par résistance à un type  </a>
+                class="btn btn-card" target="_blank">Pokémon par résistance à un type  </a>
             </div>
         </div>
 
@@ -191,7 +191,7 @@
                 <p class="card-text"><strong>api/v1/pokemon/type/double-resistance/Glace</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon qui présentent une double résistance au type Glace</p>
                 <a href="{{ path('api_v1_pokemon_by_double_resistance', {'typeName' : 'Glace' }) }}" 
-                class="btn btn-card">Pokémon par double résistance à un type </a>
+                class="btn btn-card" target="_blank">Pokémon par double résistance à un type </a>
             </div>
         </div>
 
@@ -206,7 +206,7 @@
                 <p class="card-text"> <strong>api/v1/pokemon/type/immunity/Spectre</strong> => 
                 cette route vous emmènera sur la liste de tous les Pokémon qui sont immunisés contre le type Spectre</p>
                 <a href="{{ path('api_v1_pokemon_by_immunity', {'typeName' : 'Spectre' }) }}" 
-                class="btn btn-card">Pokémon par immunité à un type   </a>
+                class="btn btn-card" target="_blank">Pokémon par immunité à un type   </a>
             </div>
         </div>
       </div>      
@@ -225,7 +225,7 @@
                         <p class="card-text"> <strong>api/v1/team/defensive-coverage</strong> => 
                         envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
                         <a href="{{ path('defensive-cover-test') }}" 
-                        class="btn btn-card">Générer une couverture défensive</a>
+                        class="btn btn-card" target="_blank">Générer une couverture défensive</a>
                     </div>
                 </div>
 
@@ -240,7 +240,7 @@
                         <p class="card-text"> <strong>api/v1/team/suggestion</strong> => 
                         envoyez en POST sur cette route l'id (numéro identifiant national) de chaque Pokémon dans un tableau</p>
                         <a href="{{ path('suggestion-test') }}" 
-                        class="btn btn-card">Tester la suggestion de Pokemon</a>
+                        class="btn btn-card" target="_blank">Tester la suggestion de Pokemon</a>
                     </div>
                 </div>
               
@@ -259,7 +259,7 @@
                         <p class="card-text"> <strong>api/v1/random/team</strong> => 
                         cette route génère une liste de 6 Pokémon aléatoires</p>
                         <a href="{{ path('api_v1_random_team') }}" 
-                        class="btn btn-card">Générer une équipe aléatoire</a>
+                        class="btn btn-card" target="_blank">Générer une équipe aléatoire</a>
                     </div>
                 </div>
 
@@ -274,10 +274,11 @@
                         <p class="card-text"> <strong>api/v1/random/team/suggest</strong> => 
                         cette route génère une liste de 3 Pokémon aléatoires puis la complète avec 3 autres Pokémon pour obtenir une équipe aux résistances équilibrées</p>
                         <a href="{{ path('api_v1_random_team_suggest') }}" 
-                        class="btn btn-card">Générer une équipe équilibrée aléatoire</a>
+                        class="btn btn-card" target="_blank">Générer une équipe équilibrée aléatoire</a>
                     </div>
                 </div>
               </div>
+              <a href="http://pokebuild.xyz" class="site__link">Aller sur le site Pokébuild</a>
 </div>
 
 
