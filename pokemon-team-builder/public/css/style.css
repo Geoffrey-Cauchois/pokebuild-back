@@ -146,12 +146,14 @@ button {
   color: white;
   font-size: 0.8rem;
   align-self: baseline;
+  border: 1px solid #C14040;
   
 }
 
 .btn-card:hover {
   background-color: #F3D9D9;
   color: #C14040;
+  border: 1px solid #C14040;
 }
 
 .img_card {
@@ -185,6 +187,14 @@ button {
   width: 100%;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+
+.site__link{
+  color: #C14040;
+}
+
+.home_link{
+  color: #C14040;
 }
 
 @media (max-width: 820px){
