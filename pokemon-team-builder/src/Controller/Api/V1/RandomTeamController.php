@@ -24,6 +24,10 @@ class RandomTeamController extends AbstractController
                 if (!in_array($randomPokemon, $randomTeam)) {
                     
                     $randomTeam[] = $randomPokemon;
+                }
+                else{
+                  
+                  $i -= 1;
                 }         
         }
 
@@ -47,6 +51,10 @@ class RandomTeamController extends AbstractController
                 if (!in_array($randomPokemon, $randomTeam)) {
                     
                     $randomTeam[] = $randomPokemon;
+                }
+                else{
+
+                  $i -= 1;
                 }         
         }
 
@@ -54,12 +62,21 @@ class RandomTeamController extends AbstractController
             $pokemonService->calculateResistances($pokemon);
             $pokemonId[] = $pokemon->getId();
         }
-     
-        $chosenPokemonIds = $pokemonId;
 
-        $suggestedPokemon = $pokemonService->suggestPokemon($chosenPokemonIds);
+          for($i = 0; $i <3; $i ++){
+
+            $suggestedPokemon = $pokemonService->suggestPokemon($pokemonId);
+
+            $chosenSuggestion = $suggestedPokemon[array_rand($suggestedPokemon, 1)];
+
+            array_push($randomTeam, $chosenSuggestion);
+
+            array_push($pokemonId, $chosenSuggestion->getId());
+          }
+
         
-        return $this->json([$randomTeam, $suggestedPokemon]);
+        
+        return $this->json([$randomTeam]);
 
      
     }

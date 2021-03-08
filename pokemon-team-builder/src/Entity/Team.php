@@ -30,19 +30,25 @@ class Team
      * @Ignore()
      */
     private $user;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Pokemon::class, mappedBy="team")
-     * @Ignore()
-     */
-    private $pokemon;
     
     private $defensiveCover;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TeamAppartenance::class, mappedBy="team", orphanRemoval=true)
+     * @Ignore()
+     */
+    private $teamAppartenances;
+
+    /**
+     * @Ignore()
+     */
+    private $pokemon;
+
     public function __construct()
     {
-        $this->pokemon = new ArrayCollection();
         $this->defensiveCover = [];
+        $this->teamAppartenances = new ArrayCollection();
+        $this->pokemon = [];
     }
 
     public function getId(): ?int
@@ -85,49 +91,6 @@ class Team
     }
 
     /**
-     * @return Collection|Pokemon[]
-     */
-    public function getPokemon(): Collection
-    {
-        return $this->pokemon;
-    }
-
-    /**
-     * @return array
-     */
-    public function getApiPokemon(): array
-    {
-        // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
-        $pokemonForApi = [];
-
-        foreach($this->pokemon as $pokemon)
-        {
-            $pokemonForApi[] = $pokemon->getName();
-        
-        }
-        return $pokemonForApi;
-    }
-
-    public function addPokemon(Pokemon $pokemon): self
-    {
-        if (!$this->pokemon->contains($pokemon)) {
-            $this->pokemon[] = $pokemon;
-            $pokemon->addTeam($this);
-        }
-
-        return $this;
-    }
-
-    public function removePokemon(Pokemon $pokemon): self
-    {
-        if ($this->pokemon->removeElement($pokemon)) {
-            $pokemon->removeTeam($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Get the value of defensiveCover
      * @Ignore()
      */ 
@@ -162,5 +125,60 @@ class Team
         $this->defensiveCover = $defensiveCover;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|TeamAppartenance[]
+     */
+    public function getTeamAppartenances(): Collection
+    {
+        return $this->teamAppartenances;
+    }
+
+    public function addTeamAppartenance(TeamAppartenance $teamAppartenance): self
+    {
+        if (!$this->teamAppartenances->contains($teamAppartenance)) {
+            $this->teamAppartenances[] = $teamAppartenance;
+            $teamAppartenance->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamAppartenance(TeamAppartenance $teamAppartenance): self
+    {
+        if ($this->teamAppartenances->removeElement($teamAppartenance)) {
+            // set the owning side to null (unless already changed)
+            if ($teamAppartenance->getTeam() === $this) {
+                $teamAppartenance->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of pokemon
+     */ 
+    public function getPokemon()
+    {
+        return $this->pokemon;
+    }
+
+    /**
+     * Set the value of pokemon
+     *
+     * @return  self
+     */ 
+    public function setPokemon($pokemon)
+    {
+        $this->pokemon = $pokemon;
+
+        return $this;
+    }
+
+    public function addPokemon(Pokemon $pokemonToAdd)
+    {
+        $this->pokemon[] = $pokemonToAdd;
     }
 }

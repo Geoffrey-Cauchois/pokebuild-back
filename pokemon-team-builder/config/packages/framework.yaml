@@ -16,4 +16,4 @@ framework:
     php_errors:
         log: true
 
-    error_controller: App\Controller\Api\V1\ErrorController::error404
+    #error_controller: App\Controller\Api\V1\ErrorController::error404
