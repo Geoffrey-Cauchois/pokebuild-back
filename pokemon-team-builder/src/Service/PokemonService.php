@@ -4,8 +4,10 @@ namespace App\Service;
 
 use App\Entity\Pokemon;
 use App\Entity\Team;
+use App\Entity\TeamAppartenance;
 use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PokemonService
@@ -13,12 +15,14 @@ class PokemonService
   private $typeRepository;
   private $pokemonRepository;
   private $translator;
+  private $em;
 
-  public function __construct(TypeRepository $typeRepository, PokemonRepository $pokemonRepository, TranslatorInterface $translator)
+  public function __construct(TypeRepository $typeRepository, PokemonRepository $pokemonRepository, TranslatorInterface $translator, EntityManagerInterface $em)
   {
     $this->typeRepository = $typeRepository;
     $this->pokemonRepository = $pokemonRepository;
     $this->translator = $translator;
+    $this->em = $em;
   }
   /**
    * Calculate the resistances of the pokemon and fills its 'resistances' atrributes with data contained its relation ith each type
@@ -212,7 +216,6 @@ class PokemonService
    */
   public function suggestPokemon(array $chosenPokemonIds): array
   {
-      
       //first, we need to calculate the team's defensive coverage, the team will then have a resistance status for each type
       $team = $this->calculateDefensiveCoverage($chosenPokemonIds);
 

@@ -85,12 +85,6 @@ class Pokemon
     private $types;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Team::class, inversedBy="pokemon")
-     * @Ignore()
-     */
-    private $team;
-
-    /**
      * @Ignore()
      */
     private $resistances;
@@ -100,11 +94,18 @@ class Pokemon
      */
     private $slug;
 
+    /**
+     * @Ignore()
+     * @ORM\OneToMany(targetEntity=TeamAppartenance::class, mappedBy="pokemon", orphanRemoval=true)
+     */
+    private $teamAppartenances;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
         $this->team = new ArrayCollection();
         $this->resistances = [];
+        $this->teamAppartenances = new ArrayCollection();
     }
 
     public function __toString()
@@ -332,30 +333,6 @@ class Pokemon
     }
 
     /**
-     * @return Collection|Team[]
-     */
-    public function getTeam(): Collection
-    {
-        return $this->team;
-    }
-
-    public function addTeam(Team $team): self
-    {
-        if (!$this->team->contains($team)) {
-            $this->team[] = $team;
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): self
-    {
-        $this->team->removeElement($team);
-
-        return $this;
-    }
-
-    /**
      * Get the value of resistances
      */ 
     public function getResistances()
@@ -383,6 +360,37 @@ class Pokemon
     public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TeamAppartenance[]
+     * @Ignore()
+     */
+    public function getTeamAppartenances(): Collection
+    {
+        return $this->teamAppartenances;
+    }
+
+    public function addTeamAppartenance(TeamAppartenance $teamAppartenance): self
+    {
+        if (!$this->teamAppartenances->contains($teamAppartenance)) {
+            $this->teamAppartenances[] = $teamAppartenance;
+            $teamAppartenance->setPokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamAppartenance(TeamAppartenance $teamAppartenance): self
+    {
+        if ($this->teamAppartenances->removeElement($teamAppartenance)) {
+            // set the owning side to null (unless already changed)
+            if ($teamAppartenance->getPokemon() === $this) {
+                $teamAppartenance->setPokemon(null);
+            }
+        }
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\Team;
+use App\Entity\TeamAppartenance;
 use App\Repository\PokemonRepository;
 use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
@@ -61,17 +62,20 @@ class TeamController extends AbstractController
 
         foreach ($pokemonList as $pokemon) {
 
-            $pokemonToAdd[] = $pokemonRepository->find($pokemon); 
+            $pokemonToAdd = $pokemonRepository->find($pokemon); 
 
-            foreach ($pokemonToAdd as $pokemon) {
+            if ($pokemonToAdd == null){
 
-                if ($pokemon == null){
-
-                    return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
-                }
-
-                $teamToAdd->addPokemon($pokemon);
+              return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
             }
+            
+            $appartenance = new TeamAppartenance;
+
+            $appartenance->setTeam($teamToAdd);
+
+            $appartenance->setPokemon($pokemonToAdd);
+
+            $em->persist($appartenance);
         }
   
         $em->persist($teamToAdd);
@@ -98,11 +102,15 @@ class TeamController extends AbstractController
      */
     public function showById(Team $team, PokemonService $pokemonService, PokemonRepository $pokemonRepository): Response
     {
+      $appartenances = $team->getTeamAppartenances();
        
-        foreach ($team->getPokemon() as $pokemon){
+        foreach ($appartenances as $appartenance){
+
+            $pokemon = $appartenance->getPokemon();
+
             $pokemonService->calculateResistances($pokemon);
             $pokemonTeam[] = $pokemonRepository->find($pokemon);
-          }
+        }
    
         return $this->json([
             $team,
@@ -117,11 +125,15 @@ class TeamController extends AbstractController
     public function showByName(Team $team, PokemonService $pokemonService, $name, TeamRepository $teamRepository,
     PokemonRepository $pokemonRepository): Response
     {
+      $appartenances = $team->getTeamAppartenances();
+
         $teamByName = $teamRepository->findOneBy(['name' => $name]);
-        foreach ($team->getPokemon() as $pokemon){
+        foreach ($appartenances as $appartenance){
+            $pokemon = $appartenance->getPokemon();
+
             $pokemonService->calculateResistances($pokemon);
             $pokemonTeam[] = $pokemonRepository->find($pokemon);
-          }
+        }
    
         return $this->json([
             $teamByName,
@@ -141,14 +153,14 @@ class TeamController extends AbstractController
 
         $teamToAmend = $teamRepository->find($team);
 
+        $appartenancesToAmend = $teamToAmend->getTeamAppartenances();
+
         $newTeamName = $amendedTeamInfo['name'];
      
         $teamToAmend->setName($newTeamName);
 
-        $pokemonToAmend = $teamToAmend->getPokemon();
-
-        foreach ($pokemonToAmend as $pokemon) {
-            $teamToAmend->removePokemon($pokemon);
+        foreach ($appartenancesToAmend as $appartenance) {
+            $em->remove($appartenance);
         }
     
        
@@ -164,17 +176,21 @@ class TeamController extends AbstractController
 
         foreach ($pokemonList as $pokemon) {
             
-            $pokemonToAdd[] = $pokemonRepository->find($pokemon); 
+            $pokemonToAdd = $pokemonRepository->find($pokemon); 
 
-            foreach ($pokemonToAdd as $pokemon) {
+              if ($pokemon == null){
 
-                if ($pokemon == null){
+                return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
+              }
 
-                    return $this->json($translator->trans('wrong-pokemon', [], 'messages'), 400);
-                }
+                $newAppartenance = new TeamAppartenance;
 
-                $teamToAmend->addPokemon($pokemon);
-            }
+                $newAppartenance->setPokemon($pokemonToAdd);
+
+                $newAppartenance->setTeam($teamToAmend);
+
+                $em->persist($newAppartenance);
+            
         }
   
         $em->flush();
@@ -187,7 +203,9 @@ class TeamController extends AbstractController
      */
     public function delete(Request $request, Team $team, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
-
+        foreach($team->getTeamAppartenances() as $appartenance){
+          $em->remove($appartenance);
+        }
         $em->remove($team);
         $em->flush();
     

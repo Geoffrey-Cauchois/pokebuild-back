@@ -114,15 +114,23 @@ class User implements UserInterface
     public function getApiTeams()
     {
       $apiTeams = [];
+      
+      $pokemon = [];
 
       foreach($this->getTeams() as $team){
 
+        $appartenances = $team->getTeamAppartenances();
+
+        foreach ($appartenances as $appartenance){
+          $pokemon[] = $appartenance->getPokemon();
+        }
+
         $apiTeams[] = [ 'id' => $team->getId(),
                         'name' => $team->getName(),
-                        'pokemon' => $team->getPokemon()
-      ];
+                        'pokemon' => $pokemon
+        ];
       }
-
+      //dd($apiTeams);
       return $apiTeams;
     }
 
