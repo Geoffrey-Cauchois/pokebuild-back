@@ -110,6 +110,12 @@ class Type
      */
     private $english_name;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ResistanceModifyingAbility::class, mappedBy="modifiedType")
+     * @Ignore()
+     */
+    private $resistanceModifyingAbility;
+
 
 
     public function __construct()
@@ -123,6 +129,7 @@ class Type
         $this->neutrality = new ArrayCollection();
         $this->immune_to = new ArrayCollection();
         $this->immunity = new ArrayCollection();
+        $this->resistanceModifyingAbility = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -394,6 +401,33 @@ class Type
     public function setEnglishName(string $english_name): self
     {
         $this->english_name = $english_name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ResistanceModifyingAbility[]
+     */
+    public function getResistanceModifyingAbility(): Collection
+    {
+        return $this->resistanceModifyingAbility;
+    }
+
+    public function addResistanceModifyingAbility(ResistanceModifyingAbility $resistanceModifyingAbility): self
+    {
+        if (!$this->resistanceModifyingAbility->contains($resistanceModifyingAbility)) {
+            $this->resistanceModifyingAbility[] = $resistanceModifyingAbility;
+            $resistanceModifyingAbility->addModifiedType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResistanceModifyingAbility(ResistanceModifyingAbility $resistanceModifyingAbility): self
+    {
+        if ($this->resistanceModifyingAbility->removeElement($resistanceModifyingAbility)) {
+            $resistanceModifyingAbility->removeModifiedType($this);
+        }
 
         return $this;
     }

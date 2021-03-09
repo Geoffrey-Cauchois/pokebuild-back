@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Generation;
 use App\Entity\Pokemon;
+use App\Entity\ResistanceModifyingAbility;
 use App\Entity\Type;
 use App\Repository\GenerationRepository;
 use App\Repository\PokemonRepository;
@@ -369,6 +370,92 @@ class TestController extends AbstractController
       dump($types);
 
       return $this->json($test);
+    }
+
+    /**
+     * @Route("/test/ab", name="test-ab")
+     */
+    public function testAbility(Request $request, EntityManagerInterface $em, TypeRepository $typeRepository, PokemonRepository $pokemonRepository): Response
+    {
+      if($request->server->get('APP_ENV') == 'prod'){
+
+        throw $this->createNotFoundException('cette route de l\'api n\'existe pas');
+      }
+
+      $abilitiesData = ['water-absorb' => ['modifiedTypes' => ['Eau'],
+                                           'multiplier' => 0],
+                        'volt-absorb' => ['modifiedTypes' => ['Électrik'],
+                                          'multiplier' => 0],
+                        'levitate' => ['modifiedTypes' => ['Sol'],
+                                       'multiplier' => 0],
+                        'dry-skin' => ['modifiedTypes' => ['Eau'],
+                                       'multiplier' => 0],
+                        'flash-fire' => ['modifiedTypes' => ['Feu'],
+                                         'multiplier' => 0],
+                        'heatproof' => ['modifiedTypes' => ['Feu'],
+                                        'multiplier' => 0.5],
+                        'motor-drive' => ['modifiedTypes' => ['Électrik'],
+                                          'multiplier' => 0],
+                        'thick-fat' => ['modifiedTypes' => ['Feu', 'Glace'],
+                                       'multiplier' => 0.5],
+                        'fluffy' => ['modifiedTypes' => ['Feu'],
+                                     'multiplier' => 2],
+                        'sap-sipper' => ['modifiedTypes' => ['Plante'],
+                                         'multiplier' => 0],
+                        'wonder-guard' => ['modifiedTypes' => [],
+                                           'multiplier' => 0],
+                        'storm-drain' => ['modifiedTypes' => ['Eau'],
+                                           'multiplier' => 0],
+                        'lightning-rod' => ['modifiedTypes' => ['Électrik'],
+                                            'multiplier' => 0]
+                       ];
+      
+      $apiAbilitiesUrl = 'https://pokeapi.co/api/v2/ability/';
+
+      foreach ($abilitiesData as $name => $abilityInfo){
+
+        $ability = new ResistanceModifyingAbility;
+
+        $abilityData = file_get_contents($apiAbilitiesUrl . $name);
+
+        $decodedAbilityData = json_decode($abilityData);
+
+        $frName = $decodedAbilityData->names[3]->name;
+
+        $ability->setName($frName);
+
+        $modifiedTypes = $abilityInfo['modifiedTypes'];
+
+        foreach ($modifiedTypes as $typeName){
+          
+          $associatedType = $typeRepository->findOneBy(['name' => $typeName]);
+
+          $ability->addModifiedType($associatedType);
+        }
+
+        $multiplier = $abilityInfo['multiplier'];
+
+        $ability->setMultiplier($multiplier);
+
+        foreach($decodedAbilityData->pokemon as $pokemonData){
+
+          preg_match('~/\d+~', $pokemonData->pokemon->url, $matches);
+
+          $pokemonId = substr($matches[0], 1);
+
+          if($pokemonId <= 898){
+
+            $pokemonThatCanHaveTheAbility = $pokemonRepository->find($pokemonId);
+
+            $ability->addPokemon($pokemonThatCanHaveTheAbility);
+          }
+        }
+        $em->persist($ability);
+      }
+
+      $em->flush();
+
+      return $this->render('base.html.twig');
     }
 }
 

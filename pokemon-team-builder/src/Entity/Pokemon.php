@@ -100,12 +100,19 @@ class Pokemon
      */
     private $teamAppartenances;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ResistanceModifyingAbility::class, mappedBy="pokemon")
+     * @Ignore()
+     */
+    private $resistanceModifyingAbility;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
         $this->team = new ArrayCollection();
         $this->resistances = [];
         $this->teamAppartenances = new ArrayCollection();
+        $this->resistanceModifyingAbility = new ArrayCollection();
     }
 
     public function __toString()
@@ -299,7 +306,7 @@ class Pokemon
     }
 
     /**
-     * @return int
+     * @return array
      */
     public function getApiResistances(): array
     {
@@ -309,6 +316,18 @@ class Pokemon
           $resistancesForApi[] = $apiResistanceData;
         }
         return $resistancesForApi;
+    }
+    /**
+     * @return array
+     */
+    public function getResistanceModifyingAbilitiesForApi()
+    {
+      // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
+      $resistanceModifyingAbilitiesForApi = [];
+      foreach ($this->getResistanceModifyingAbility() as $ability){
+        $resistanceModifyingAbilitiesForApi[] = $ability->getName();
+      }
+      return $resistanceModifyingAbilitiesForApi;
     }
 
 
@@ -390,6 +409,33 @@ class Pokemon
             if ($teamAppartenance->getPokemon() === $this) {
                 $teamAppartenance->setPokemon(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ResistanceModifyingAbility[]
+     */
+    public function getResistanceModifyingAbility(): Collection
+    {
+        return $this->resistanceModifyingAbility;
+    }
+
+    public function addResistanceModifyingAbility(ResistanceModifyingAbility $resistanceModifyingAbility): self
+    {
+        if (!$this->resistanceModifyingAbility->contains($resistanceModifyingAbility)) {
+            $this->resistanceModifyingAbility[] = $resistanceModifyingAbility;
+            $resistanceModifyingAbility->addPokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResistanceModifyingAbility(ResistanceModifyingAbility $resistanceModifyingAbility): self
+    {
+        if ($this->resistanceModifyingAbility->removeElement($resistanceModifyingAbility)) {
+            $resistanceModifyingAbility->removePokemon($this);
         }
 
         return $this;
