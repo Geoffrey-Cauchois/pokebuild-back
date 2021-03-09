@@ -2613,43 +2613,47 @@ class DatabaseFillCommand extends Command
 
           foreach ($abilitiesData as $name => $abilityInfo){
 
-          $ability = new ResistanceModifyingAbility;
+            $ability = new ResistanceModifyingAbility;
 
-          $abilityData = file_get_contents($apiAbilitiesUrl . $name);
+            $abilityData = file_get_contents($apiAbilitiesUrl . $name);
 
-          $decodedAbilityData = json_decode($abilityData);
+            $decodedAbilityData = json_decode($abilityData);
 
-          $frName = $decodedAbilityData->names[3]->name;
+            $frName = $decodedAbilityData->names[3]->name;
 
-          $ability->setName($frName);
+            $ability->setName($frName);
 
-          $modifiedTypes = $abilityInfo['modifiedTypes'];
+            $slug = $this->slugger->sluggify($frName);
 
-          foreach ($modifiedTypes as $typeName){
+            $ability->setSlug($slug);
 
-          $associatedType = $this->typeRepository->findOneBy(['name' => $typeName]);
+            $modifiedTypes = $abilityInfo['modifiedTypes'];
 
-          $ability->addModifiedType($associatedType);
-          }
+            foreach ($modifiedTypes as $typeName){
 
-          $multiplier = $abilityInfo['multiplier'];
+              $associatedType = $this->typeRepository->findOneBy(['name' => $typeName]);
 
-          $ability->setMultiplier($multiplier);
+              $ability->addModifiedType($associatedType);
+            }
 
-          foreach($decodedAbilityData->pokemon as $pokemonData){
+            $multiplier = $abilityInfo['multiplier'];
 
-          preg_match('~/\d+~', $pokemonData->pokemon->url, $matches);
+            $ability->setMultiplier($multiplier);
 
-          $pokemonId = substr($matches[0], 1);
+            foreach($decodedAbilityData->pokemon as $pokemonData){
 
-          if($pokemonId <= 898){
+              preg_match('~/\d+~', $pokemonData->pokemon->url, $matches);
 
-          $pokemonThatCanHaveTheAbility = $this->pokemonRepository->find($pokemonId);
+              $pokemonId = substr($matches[0], 1);
 
-          $ability->addPokemon($pokemonThatCanHaveTheAbility);
-          }
-          }
-          $this->em->persist($ability);
+              if($pokemonId <= 898){
+
+                $pokemonThatCanHaveTheAbility = $this->pokemonRepository->find($pokemonId);
+
+                $ability->addPokemon($pokemonThatCanHaveTheAbility);
+              }
+            }
+            $this->em->persist($ability);
           }
 
           $this->em->flush();

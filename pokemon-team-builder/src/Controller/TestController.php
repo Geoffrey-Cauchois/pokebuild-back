@@ -8,6 +8,7 @@ use App\Entity\ResistanceModifyingAbility;
 use App\Entity\Type;
 use App\Repository\GenerationRepository;
 use App\Repository\PokemonRepository;
+use App\Repository\ResistanceModifyingAbilitiesRepository;
 use App\Repository\TypeRepository;
 use App\Service\PokemonService;
 use Doctrine\DBAL\Schema\Schema;
@@ -23,7 +24,7 @@ class TestController extends AbstractController
     /**
      * @Route("/test/res", name="test-res")
      */
-    public function testResistances(PokemonRepository $pokemonRepository, PokemonService $service, Request $request)
+    public function testResistances(PokemonRepository $pokemonRepository, PokemonService $service, Request $request, ResistanceModifyingAbilitiesRepository $resistanceModifyingAbilitiesRepository)
     {
       if($request->server->get('APP_ENV') == 'prod'){
 
@@ -34,7 +35,9 @@ class TestController extends AbstractController
 
       $pokemon = $pokemonRepository->find(rand(1, 898));
 
-      $service->calculateResistances($pokemon);
+      $ability = $resistanceModifyingAbilitiesRepository->findOneBy(['name' => 'Absorbe-Eau']);
+
+      $service->calculateResistances($pokemon, $ability);
 
       return $this->json($pokemon);
 

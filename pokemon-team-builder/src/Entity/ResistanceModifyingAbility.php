@@ -39,6 +39,11 @@ class ResistanceModifyingAbility
      */
     private $pokemon;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->modifiedType = new ArrayCollection();
@@ -118,6 +123,18 @@ class ResistanceModifyingAbility
     public function removePokemon(Pokemon $pokemon): self
     {
         $this->pokemon->removeElement($pokemon);
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
