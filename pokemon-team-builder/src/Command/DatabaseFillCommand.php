@@ -3,9 +3,11 @@
 namespace App\Command;
 
 use App\Entity\Generation;
+use App\Entity\ResistanceModifyingAbility;
 use App\Entity\Type;
 use App\Repository\GenerationRepository;
 use App\Repository\PokemonRepository;
+use App\Repository\ResistanceModifyingAbilitiesRepository;
 use App\Repository\TypeRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,9 +32,10 @@ class DatabaseFillCommand extends Command
     private $pokemonRepository;
     private $connection;
     private $slugger;
+    private $resistanceModifyingAbilitiesRepository;
 
     public function __construct(EntityManagerInterface $em, TypeRepository $typeRepository, GenerationRepository $generationRepository, 
-    PokemonRepository $pokemonRepository, Connection $connection, Slugger $slugger)
+    PokemonRepository $pokemonRepository, Connection $connection, Slugger $slugger, ResistanceModifyingAbilitiesRepository $resistanceModifyingAbilitiesRepository)
     {
       parent::__construct();
       $this->em = $em;
@@ -41,6 +44,7 @@ class DatabaseFillCommand extends Command
       $this->pokemonRepository = $pokemonRepository;
       $this->connection = $connection;
       $this->slugger = $slugger;
+      $this->resistanceModifyingAbilitiesRepository = $resistanceModifyingAbilitiesRepository;
     }
 
     protected function configure()
@@ -2573,6 +2577,102 @@ class DatabaseFillCommand extends Command
             $io->error('Your pokemon table already has data, and this data is incorrect, please purge the table and try again');
 
           }
+        }
+
+        if(empty($this->resistanceModifyingAbilitiesRepository->findAll())){
+          //if the resistanceModifyingAbility table is empty, we add them
+          $abilitiesData = ['water-absorb' => ['modifiedTypes' => ['Eau'],
+                                               'multiplier' => 0],
+                            'volt-absorb' => ['modifiedTypes' => ['Électrik'],
+                                              'multiplier' => 0],
+                            'levitate' => ['modifiedTypes' => ['Sol'],
+                                           'multiplier' => 0],
+                            'dry-skin' => ['modifiedTypes' => ['Eau'],
+                                           'multiplier' => 0],
+                            'flash-fire' => ['modifiedTypes' => ['Feu'],
+                                             'multiplier' => 0],
+                            'heatproof' => ['modifiedTypes' => ['Feu'],
+                                            'multiplier' => 0.5],
+                            'motor-drive' => ['modifiedTypes' => ['Électrik'],
+                                              'multiplier' => 0],
+                            'thick-fat' => ['modifiedTypes' => ['Feu', 'Glace'],
+                                            'multiplier' => 0.5],
+                            'fluffy' => ['modifiedTypes' => ['Feu'],
+                                         'multiplier' => 2],
+                            'sap-sipper' => ['modifiedTypes' => ['Plante'],
+                                             'multiplier' => 0],
+                            'wonder-guard' => ['modifiedTypes' => [],
+                                               'multiplier' => 0],
+                            'storm-drain' => ['modifiedTypes' => ['Eau'],
+                                              'multiplier' => 0],
+                            'lightning-rod' => ['modifiedTypes' => ['Électrik'],
+                                                'multiplier' => 0]
+                            ];
+
+          $apiAbilitiesUrl = 'https://pokeapi.co/api/v2/ability/';
+
+          foreach ($abilitiesData as $name => $abilityInfo){
+
+            $ability = new ResistanceModifyingAbility;
+
+            $abilityData = file_get_contents($apiAbilitiesUrl . $name);
+
+            $decodedAbilityData = json_decode($abilityData);
+
+            $frName = $decodedAbilityData->names[3]->name;
+
+            $ability->setName($frName);
+
+            $slug = $this->slugger->sluggify($frName);
+
+            $ability->setSlug($slug);
+
+            $modifiedTypes = $abilityInfo['modifiedTypes'];
+
+            foreach ($modifiedTypes as $typeName){
+
+              $associatedType = $this->typeRepository->findOneBy(['name' => $typeName]);
+
+              $ability->addModifiedType($associatedType);
+            }
+
+            $multiplier = $abilityInfo['multiplier'];
+
+            $ability->setMultiplier($multiplier);
+
+            foreach($decodedAbilityData->pokemon as $pokemonData){
+
+              preg_match('~/\d+~', $pokemonData->pokemon->url, $matches);
+
+              $pokemonId = substr($matches[0], 1);
+
+              if($pokemonId <= 898){
+
+                $pokemonThatCanHaveTheAbility = $this->pokemonRepository->find($pokemonId);
+
+                $ability->addPokemon($pokemonThatCanHaveTheAbility);
+              }
+            }
+            $this->em->persist($ability);
+          }
+
+          $this->em->flush();
+
+          $io->success('Resistance modifying abilities have been added');
+        }
+        else{
+          //if the table is not empty, we check the number of abilities
+          if(count($this->resistanceModifyingAbilitiesRepository->findAll()) == 13){
+            //there are 13 abilities that changes resistances, if we have the current number in the database, we just notify the user
+            $io->note('Resistance modifying abilities already are present in the database, no resistance modifying abilities added');
+
+          }
+          else{
+            //if the number is incorrect, we notify that the table must be emptied
+            $io->error('Your resistance modifying abilities table already has data, and this data is incorrect, please purge the table and try again');
+
+          }
+          
         }
 
         return Command::SUCCESS;

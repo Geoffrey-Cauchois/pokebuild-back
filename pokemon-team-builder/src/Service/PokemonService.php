@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Entity\Pokemon;
+use App\Entity\ResistanceModifyingAbility;
 use App\Entity\Team;
 use App\Entity\TeamAppartenance;
 use App\Repository\PokemonRepository;
+use App\Repository\ResistanceModifyingAbilitiesRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -16,21 +18,24 @@ class PokemonService
   private $pokemonRepository;
   private $translator;
   private $em;
+  private $resistanceModifyingAbilitiesRepository;
 
-  public function __construct(TypeRepository $typeRepository, PokemonRepository $pokemonRepository, TranslatorInterface $translator, EntityManagerInterface $em)
+  public function __construct(TypeRepository $typeRepository, PokemonRepository $pokemonRepository, TranslatorInterface $translator, EntityManagerInterface $em, ResistanceModifyingAbilitiesRepository $resistanceModifyingAbilitiesRepository)
   {
     $this->typeRepository = $typeRepository;
     $this->pokemonRepository = $pokemonRepository;
     $this->translator = $translator;
     $this->em = $em;
+    $this->resistanceModifyingAbilitiesRepository = $resistanceModifyingAbilitiesRepository;
   }
   /**
    * Calculate the resistances of the pokemon and fills its 'resistances' atrributes with data contained its relation ith each type
    *
    * @param Pokemon $pokemon
+   * @param null|ResistanceMdifyingAbility $resistanceModifyingAbility null if no ability selected, null by default
    * @return void
    */
-  public function calculateResistances(Pokemon $pokemon)
+  public function calculateResistances(Pokemon $pokemon, ResistanceModifyingAbility $resistanceModifyingAbility = null)
   { 
     //first, we get all the pokemon's types (1 or 2)
     $pokemonTypes = $pokemon->getTypes();
@@ -77,7 +82,7 @@ class PokemonService
               // damage is nullified if a type is immune to another. In the case of a pokemon with two types, the other, non-immune, type is ignored
               $damageMultiplier = 0;
           }
-      }
+      
 
         //the result oh this operation generates, for each type, a damage multiplier that takes into consideration the resistances the one or both types the pokemon has. We list each different possible scenario and provide a description for it.
         if($damageMultiplier == 1){
@@ -110,9 +115,64 @@ class PokemonService
                             'damage_multiplier' => $damageMultiplier,
                             'damage_relation' => $damage_relation
                           ];
-        
+
         $allResistances[$testedType->getName()] = $typeResistance;
+      }
+      
     }
+
+        
+
+        if(!is_null($resistanceModifyingAbility) && !empty($resistanceModifyingAbility) && $resistanceModifyingAbility != false){
+        //null, false or an empty value means no ability is selected, no ulterior modifications are required in that case
+          if($resistanceModifyingAbility->getName() == 'Garde Mystik'){
+          //Garde Mystik converts all resistances, double resistances and neutralities into immunities
+              foreach($allResistances as $type => $resistanceData){
+                
+                if($resistanceData['damage_multiplier'] <= 1){
+
+                  $allResistances[$type]['damage_multiplier'] = 0;
+                  $allResistances[$type]['damage_relation'] = 'immune';
+                }
+              }
+          }
+          else{
+            //other skills mofifies the pokemon's resistances to one or several specific type(s), and through a specific multiplier that is determined by the skill
+
+            foreach($resistanceModifyingAbility->getModifiedType() as $modifiedType){
+
+              $allResistances[$modifiedType->getName()]['damage_multiplier'] *= $resistanceModifyingAbility->getMultiplier();
+
+              $damageMultiplier = $allResistances[$modifiedType->getName()]['damage_multiplier'];
+
+              if($damageMultiplier == 1){
+
+                $allResistances[$modifiedType->getName()]['damage_relation']= 'neutral';
+              }
+              elseif($damageMultiplier == 2){
+      
+                $allResistances[$modifiedType->getName()]['damage_relation'] = 'vulnerable';
+              }
+              elseif($damageMultiplier >= 4){
+      
+                $allResistances[$modifiedType->getName()]['damage_relation'] = 'twice_vulnerable';
+              }
+              elseif($damageMultiplier == 0.5){
+      
+                $allResistances[$modifiedType->getName()]['damage_relation'] = 'resistant';
+              }
+              elseif($damageMultiplier <= 0.25 && $damageMultiplier != 0){
+      
+                $allResistances[$modifiedType->getName()]['damage_relation'] = 'twice_resistant';
+              }
+              elseif($damageMultiplier == 0){
+      
+                $allResistances[$modifiedType->getName()]['damage_relation'] = 'immune';
+              }
+            }
+          }
+        
+        }
 
     $pokemon->setResistances($allResistances);
   }
@@ -123,16 +183,25 @@ class PokemonService
    * @param array $chosenPokemonIds array of integers each one corresponding to the id of one of the team's pokemon
    * @return Team
    */
-  public function calculateDefensiveCoverage(array $chosenPokemonIds): Team
+  public function calculateDefensiveCoverage(array $chosenPokemonIds, array $chosenSkills = [null, null, null, null, null, null]): Team
   {
     $team = new Team;
 
-    foreach($chosenPokemonIds as $id){
+    foreach($chosenPokemonIds as $key => $id){
       //we cfind each pokemon with their id, calculate their resistances and add them to a single team
       $pokemon = $this->pokemonRepository->find($id);
-      
-      $this->calculateResistances($pokemon);
+      //skills must be setted at the same place the pokemon id is in the skills array (the second skill is the skill selected for the second pokemon, for example)
+      //if a skill is setted for the pokemon, we transfer it to the calculate resistances function, if the value is null (by default), empty or false, no skill is setted
+      if(!is_null($chosenSkills[$key]) && !empty($chosenSkills[$key]) && $chosenSkills[$key] != false){
+        $skill = $this->resistanceModifyingAbilitiesRepository->findOneBy(['slug' => $chosenSkills[$key]]);
 
+        $this->calculateResistances($pokemon, $skill);
+      }
+      else{
+        //if no skill is selected, we calculate the resistances without a skill
+        $this->calculateResistances($pokemon);
+      }
+      
       $team->addPokemon($pokemon);
     }
 
@@ -212,12 +281,14 @@ class PokemonService
    /**
    * Return a suggested pokemon
    * @param array $chosenPokemonIds array of integers each one corresponding to the id of one of the team's pokemon
+   * @param array $chosenSkills array of strings, each corresponding to a skill name
    * @return array
    */
-  public function suggestPokemon(array $chosenPokemonIds): array
+  public function suggestPokemon(array $chosenPokemonIds, array $chosenSkills = [null, null, null, null, null, null]): array
   {
       //first, we need to calculate the team's defensive coverage, the team will then have a resistance status for each type
-      $team = $this->calculateDefensiveCoverage($chosenPokemonIds);
+      //skills can be provided if needed, thay have to be placed at the same key as the pokemon id it is associated to in its array
+      $team = $this->calculateDefensiveCoverage($chosenPokemonIds, $chosenSkills);
 
       $defensiveCoverage = $team->getDefensiveCover();
       //we store all types in separates arrays depending on how the team is resistant to them

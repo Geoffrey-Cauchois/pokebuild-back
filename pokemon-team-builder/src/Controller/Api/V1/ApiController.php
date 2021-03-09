@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\Pokemon;
 use App\Repository\PokemonRepository;
+use App\Repository\ResistanceModifyingAbilitiesRepository;
 use App\Repository\TypeRepository;
 use App\Service\PokemonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -333,5 +334,40 @@ class ApiController extends AbstractController
         return $this->json($types);
     }
 
+    /**
+     * @Route("/pokemon/{id}/ability/{abilityName}", name="pokemon_by_id_with_ability", requirements={"id"="\d+"}, methods={"GET"})
+     */
+
+    // route to send the details of a pokemon by Its Id
+
+    public function showPokemonByIdWithAbility(Pokemon $pokemon, PokemonService $pokemonService, $abilityName, ResistanceModifyingAbilitiesRepository $resistanceModifyingAbilitiesRepository): Response
+    {   
+        //we get the ability
+        $ability = $resistanceModifyingAbilitiesRepository->findOneBy(['slug' => $abilityName]);
+        // the paramConverter is findind the pokemon with the {id}, then we use the service "calculateResistances"
+        $pokemonService->calculateResistances($pokemon, $ability);
+
+        // we send json with the Pokemons details + resistances
+        return $this->json($pokemon);
+    }
+
+    /**
+     * @Route("/pokemon/{name}/ability/{abilityName}", name="pokemon_by_name_with_ability", requirements={"name"="\w+"}, methods={"GET"})
+     */
+
+    // route to send the details of a pokemon by Its name
+
+    public function showPokemonByNameWithAbility(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService, $abilityName, ResistanceModifyingAbilitiesRepository $resistanceModifyingAbilitiesRepository): Response
+    {
+        // we find the pokemon by Its name with the repository
+        $pokemonByName = $pokemonRepository->findOneBy(['name' => $name]);
+        //same for the ability
+        $ability = $resistanceModifyingAbilitiesRepository->findOneBy(['slug' => $abilityName]);
+        // we use the service "calculateResistances" to be able to display also the resistances 
+        $pokemonService->calculateResistances($pokemonByName, $ability);
+
+        // we send json with the Pokemons details + resistances
+        return $this->json($pokemonByName);
+    }
 
 }
