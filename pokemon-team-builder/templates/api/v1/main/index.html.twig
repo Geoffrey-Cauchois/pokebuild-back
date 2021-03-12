@@ -100,6 +100,27 @@
 
         <div class="card" >
             <div class="images">
+                <img src="{{ asset(pokemon110.image) }}" class="img_card" alt="{{ pokemon110.name }}">
+                <img src="{{ asset(sol.image) }}" class="img_card" alt="{{ sol.name }}">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Pour récupérer un seul Pokémon avec ses résistances modifiées par une capacité :</h5>
+                <p class="card-text"><strong>api/v1/pokemon/Smogogo/ability/Levitation</strong> => 
+                cette route vous emmènera sur la fiche de Smogogo avec sa résistance au sol modifiée par léviation</p>
+                <p data-toggle="tooltip" data-placement="top" data-html="true" title="
+                                                                                    <ul>
+                                                                                    {% for skill in skills %}
+                                                                                    {{'<li>/' ~ skill.slug ~ '</li>'}}
+                                                                                    {% endfor %}
+                                                                                    </ul>
+                                                                                    ">
+                  Pointez votre souris ici pour voir les capacités renseignables.</p>
+                <a href="{{ path('api_v1_pokemon_by_name_with_ability', {'name' : pokemon110.slug , 'abilityName' : 'Levitation' }) }}" class="btn btn-card" target="_blank">Pokémon par nom ou Id avec capacité</a>
+            </div>
+        </div>
+
+        <div class="card" >
+            <div class="images">
                 <img src="{{ asset(pokemon300.image) }}" class="img_card" alt="{{ pokemon300.name }}">
                 <img src="{{ asset(pokemon301.image) }}" class="img_card" alt="{{ pokemon301.name }}">
                 <img src="{{ asset(pokemon302.image) }}" class="img_card" alt="{{ pokemon302.name }}">
@@ -283,4 +304,12 @@
 
 
 
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
 {% endblock %}
