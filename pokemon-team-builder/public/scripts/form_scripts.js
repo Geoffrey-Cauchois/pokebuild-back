@@ -79,10 +79,12 @@ var app = {
             label.textContent = 'Choisissez une capacité pour ' + selectedPokemon
             let defaultOption = document.createElement('option');
             for(let ability in abilities){
-              let abilityOption = defaultOption.cloneNode();
-              abilityOption.value = abilities[ability];
-              abilityOption.textContent = abilities[ability];
-              select.appendChild(abilityOption);
+              if(ability == 'slug'){
+                let abilityOption = defaultOption.cloneNode();
+                abilityOption.value = abilities[ability];
+                abilityOption.textContent = abilities[ability];
+                select.appendChild(abilityOption);
+              }
             }
             defaultOption.value = null;
             defaultOption.textContent = 'Aucune capacité';
