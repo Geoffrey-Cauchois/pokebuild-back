@@ -31,9 +31,19 @@ return [
   'low-vulnerabilities' => 'Votre équipe a peu de vulnérabilités et plus de résistances, bien joué.',
   'more-resistances' => 'Votre équipe a plus de résistances que de faiblesses.',
   'coverage-notice-start' => 'Pour utiliser cette route, utilisez l\'url',
-  'coverage-notice-url' => '/api/v1/team/defensive-coverage',
-  'coverage-notice-end' => 'en POST en envoyant, dans un tableau, l\'id des pokemon choisis, sans clé. Exemple : [3, 6, 9]',
+  'coverage-notice-url' => '/api/v1/team/defensive-coverage/v2',
+  'coverage-notice-end' => 'en POST en envoyant, en json, un objet qui indique l\id des Pokémons choisis en clé et leur capacité (sans accents et avec des - au lieu des espaces) (mettre une châine de caractères vide, null ou false si pas de capacité pour le Pokémon). Exemple : {
+                                                                                                                  3: null,
+                                                                                                                  110: "Levitation",
+                                                                                                                  6: "",
+                                                                                                                  292: "Garde-Mystik"
+                                                                                                               }',
   'suggestion-notice-start' => 'Pour utiliser cette route, utilisez l\'url',
-  'suggestion-notice-url' => '/api/v1/team/suggestion',
-  'suggestion-notice-end' => 'en POST en envoyant, dans un tableau, l\'id des pokemon choisis, sans clé. Exemple : [3, 6, 9]'
+  'suggestion-notice-url' => '/api/v1/team/suggestion/v2',
+  'suggestion-notice-end' => 'en POST en envoyant, en json, un objet qui indique l\id des Pokémons choisis en clé et leur capacité (sans accents et avec des - au lieu des espaces) (mettre une châine de caractères vide, null ou false si pas de capacité pour le Pokémon). Exemple : {
+                                                                                                                  3: null,
+                                                                                                                  110: "Levitation",
+                                                                                                                  6: "",
+                                                                                                                  292: "Garde-Mystik"
+                                                                                                               }'
 ];
