@@ -325,7 +325,8 @@ class Pokemon
       // cette méthode permet d'éviter que le serializer ne tombe dans une référence circulaire
       $resistanceModifyingAbilitiesForApi = [];
       foreach ($this->getResistanceModifyingAbility() as $ability){
-        $resistanceModifyingAbilitiesForApi[] = $ability->getName();
+        $resistanceModifyingAbilitiesForApi['name'] = $ability->getName();
+        $resistanceModifyingAbilitiesForApi['slug'] = $ability->getSlug();
       }
       return $resistanceModifyingAbilitiesForApi;
     }

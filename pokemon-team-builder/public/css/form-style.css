@@ -28,6 +28,26 @@
   border: 1px solid #C14040;
 }
 
+.form__skills{
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.form__skill{
+  width: 15%;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.7rem;
+  margin-right: 0.75rem;
+}
+
+.form__skill > select{
+  width: 100%;
+  min-height: 1.5rem;
+  max-height: 1.5rem;
+}
+
 @media (max-width: 1100px){
   .wrapper{
     max-width: 600px;
