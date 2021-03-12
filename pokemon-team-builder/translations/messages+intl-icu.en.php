@@ -31,9 +31,19 @@ return [
   'low-vulnerabilities' => 'Your team has few or no vulnerabilities and some resistances, well done.',
   'more-resistances' => 'Your team has more resistances than weaknesses.',
   'coverage-notice-start' => 'To use this route, use the',
-  'coverage-notice-url' => '/api/v1/team/defensive-coverage',
-  'coverage-notice-end' => 'url in a POST request sending the id of all the chosen Pokemon in an array, without keys. Exemple: [3, 6, 9]',
+  'coverage-notice-url' => '/api/v1/team/defensive-coverage/v2',
+  'coverage-notice-end' => 'url, in a POST request, sendinq a json object with the chosen pokemon ids as keys and the corresponding selected skills as values (french name without accents, with - instead of scpaces) (put as value en empty string, false or null for pokemon with no selected skills). Example : {
+                                                                                                                                              3: null,
+                                                                                                                                              110: "Levitation",
+                                                                                                                                              6: "",
+                                                                                                                                              292: "Garde-Mystik"
+                                                                                                                                           }',
   'suggestion-notice-start' => 'To use this route, use the',
-  'suggestion-notice-url' => '/api/v1/team/suggestion',
-  'suggestion-notice-end' => 'url in a POST request sending the id of all the chosen Pokemon in an array, without keys. Exemple: [3, 6, 9]'
+  'suggestion-notice-url' => '/api/v1/team/suggestion/v2',
+  'suggestion-notice-end' => 'url, in a POST request, sendinq a json object with the chosen pokemon ids as keys and the corresponding selected skills as values (french name without accents, with - instead of scpaces) (put as value en empty string, false or null for pokemon with no selected skills). Example : {
+                                                                                                                                              3: null,
+                                                                                                                                              110: "Levitation",
+                                                                                                                                              6: "",
+                                                                                                                                              292: "Garde-Mystik"
+                                                                                                                                           }'
 ];
