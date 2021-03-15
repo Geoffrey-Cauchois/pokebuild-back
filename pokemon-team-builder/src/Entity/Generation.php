@@ -35,6 +35,7 @@ class Generation
     public function __construct()
     {
         $this->pokemon = new ArrayCollection();
+        $this->additinalForms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,4 +84,5 @@ class Generation
 
         return $this;
     }
+
 }
