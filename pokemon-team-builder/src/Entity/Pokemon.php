@@ -106,6 +106,31 @@ class Pokemon
      */
     private $resistanceModifyingAbility;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pokedexId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="additionalForms")
+     */
+    private $originalForm;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pokemon::class, mappedBy="originalForm")
+     */
+    private $additionalForms;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="evolutions")
+     */
+    private $evolvedFrom;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pokemon::class, mappedBy="evolvedFrom")
+     */
+    private $evolutions;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
@@ -113,6 +138,8 @@ class Pokemon
         $this->resistances = [];
         $this->teamAppartenances = new ArrayCollection();
         $this->resistanceModifyingAbility = new ArrayCollection();
+        $this->additionalForms = new ArrayCollection();
+        $this->evolutions = new ArrayCollection();
     }
 
     public function __toString()
@@ -437,6 +464,102 @@ class Pokemon
     {
         if ($this->resistanceModifyingAbility->removeElement($resistanceModifyingAbility)) {
             $resistanceModifyingAbility->removePokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function getPokedexId(): ?int
+    {
+        return $this->pokedexId;
+    }
+
+    public function setPokedexId(int $pokedexId): self
+    {
+        $this->pokedexId = $pokedexId;
+
+        return $this;
+    }
+
+    public function getOriginalForm(): ?self
+    {
+        return $this->originalForm;
+    }
+
+    public function setOriginalForm(?self $originalForm): self
+    {
+        $this->originalForm = $originalForm;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getAdditionalForms(): Collection
+    {
+        return $this->additionalForms;
+    }
+
+    public function addAdditionalForm(self $additionalForm): self
+    {
+        if (!$this->additionalForms->contains($additionalForm)) {
+            $this->additionalForms[] = $additionalForm;
+            $additionalForm->setOriginalForm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdditionalForm(self $additionalForm): self
+    {
+        if ($this->additionalForms->removeElement($additionalForm)) {
+            // set the owning side to null (unless already changed)
+            if ($additionalForm->getOriginalForm() === $this) {
+                $additionalForm->setOriginalForm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEvolvedFrom(): ?self
+    {
+        return $this->evolvedFrom;
+    }
+
+    public function setEvolvedFrom(?self $evolvedFrom): self
+    {
+        $this->evolvedFrom = $evolvedFrom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getEvolutions(): Collection
+    {
+        return $this->evolutions;
+    }
+
+    public function addEvolution(self $evolution): self
+    {
+        if (!$this->evolutions->contains($evolution)) {
+            $this->evolutions[] = $evolution;
+            $evolution->setEvolvedFrom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvolution(self $evolution): self
+    {
+        if ($this->evolutions->removeElement($evolution)) {
+            // set the owning side to null (unless already changed)
+            if ($evolution->getEvolvedFrom() === $this) {
+                $evolution->setEvolvedFrom(null);
+            }
         }
 
         return $this;
