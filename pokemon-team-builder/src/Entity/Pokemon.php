@@ -18,7 +18,12 @@ class Pokemon
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $id;    
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pokedexId;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -107,27 +112,26 @@ class Pokemon
     private $resistanceModifyingAbility;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $pokedexId;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="additionalForms")
+     * @Ignore()
      */
     private $originalForm;
 
     /**
      * @ORM\OneToMany(targetEntity=Pokemon::class, mappedBy="originalForm")
+     * @Ignore()
      */
     private $additionalForms;
 
     /**
      * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="evolutions")
+     * @Ignore()
      */
     private $evolvedFrom;
 
     /**
      * @ORM\OneToMany(targetEntity=Pokemon::class, mappedBy="evolvedFrom")
+     * @Ignore()
      */
     private $evolutions;
 
@@ -356,6 +360,48 @@ class Pokemon
         $resistanceModifyingAbilitiesForApi['slug'] = $ability->getSlug();
       }
       return $resistanceModifyingAbilitiesForApi;
+    }
+
+    /**
+     * @return str|array
+     */
+    public function getApiEvolutions()
+    {
+      
+
+      if(!is_null($this->getEvolutions())){
+
+        $evolutionsForApi = [];
+        foreach($this->getEvolutions() as $evolution){
+          
+          $evolutionData = [];
+          $evolutionData['name'] = $evolution->getName();
+          $evolutionData['pokedexId'] = $evolution->getPokedexId();
+          array_push($evolutionsForApi, $evolutionData);
+        }
+      }
+      else{
+         $evolutionsForApi = 'none';
+      }
+
+      return $evolutionsForApi;
+    }
+
+    /**
+     * @return void
+     */
+    public function getApiPreEvolution()
+    {
+      if(!is_null($this->getEvolvedFrom())){
+        $preEvolutionForApi = [];
+        $preEvolutionForApi['name'] = $this->getEvolvedFrom()->getName();
+        $preEvolutionForApi['pokedexIdd'] = $this->getEvolvedFrom()->getPokedexId();
+      }
+      else{
+        $preEvolutionForApi = 'none';
+      }
+
+      return $preEvolutionForApi;
     }
 
 

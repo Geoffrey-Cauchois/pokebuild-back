@@ -60,7 +60,7 @@ class TestController extends AbstractController
     /**
      * @Route("/test/{id}", name="test", requirements={"id"="\d+"})
      */
-    public function fillDatabase101Pokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id, Request $request): Response
+    /* public function fillDatabasePokemon(EntityManagerInterface $em, GenerationRepository $generationRepository, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, $id, Request $request): Response
     {
       if($request->server->get('APP_ENV') == 'prod'){
 
@@ -129,7 +129,7 @@ class TestController extends AbstractController
 
         $types = $typeRepository->findAll();
 
-        dump($types);
+        //dump($types);
 
         foreach ($types as $type){
           
@@ -256,106 +256,107 @@ class TestController extends AbstractController
         $em->flush();
       }
 
-      if($pokemonRepository->findOneBy(['name' => 'Bulbizarre']) == null){
+      if($id > 10000){
 
       
-        for ($i = $id; $i <= $id +100; $i ++){
+        for ($i = $id; $i < $id +55; $i ++){
 
           $pokemonToAdd = new Pokemon;
           
-          $pokemonDataFr = file_get_contents($apiUrlFr . $i);
-
-          $decodedPokemonDataFr = json_decode($pokemonDataFr);
-
-          //dump($decodedPokemonDataFr);
-
-          if($decodedPokemonDataFr->id < 495){
-            $nameFr = $decodedPokemonDataFr->names[4]->name;
-          }
-          else{
-            $nameFr = $decodedPokemonDataFr->names[3]->name;
-          }
-
-          
-
-          $pokemonToAdd->setName($nameFr);
-
-          $generationId = substr($decodedPokemonDataFr->generation->url, -2, 1);
-
-          $generation = $generationRepository->findOneBy(['number' => $generationId]);
-
-          $pokemonToAdd->setGeneration($generation);
-
           $pokemonData = file_get_contents($apiUrl . $i);
-
-          $decodedPokemonData = json_decode($pokemonData);
-
-          //dump($decodedPokemonData);
-
-          $images = $decodedPokemonData->sprites->other;
           
-          $j = 0;
-          foreach ($images as $imagedata){
+          $decodedPokemonData = json_decode($pokemonData);
+          
+          //dd($decodedPokemonData);
+          
+          $name = $decodedPokemonData->name;
 
-            if($j = 1){
-              $imageUrl = $imagedata->front_default;
+          //dd($decodedPokemonData);
+
+          if(preg_match('~-mega~', $name) == 0){
+            $pokemonToAdd->setName($name);
+
+            $pokemonDataFr = file_get_contents($decodedPokemonData->species->url);
+
+            $decodedPokemonDataFr = json_decode($pokemonDataFr);
+
+            $pokedexId = $decodedPokemonDataFr->id;
+
+            $pokemonToAdd->setPokedexId($pokedexId);
+
+            $generationId = substr($decodedPokemonDataFr->generation->url, -2, 1);
+
+            $generation = $generationRepository->findOneBy(['number' => $generationId]);
+
+            $pokemonToAdd->setGeneration($generation);
+
+            $images = $decodedPokemonData->sprites->other;
+            
+            $j = 0;
+            foreach ($images as $imagedata){
+
+              if($j = 1){
+                $imageUrl = $imagedata->front_default;
+              }
+
+              $j += 1;
             }
 
-            $j += 1;
+            $pokemonToAdd->setImage($imageUrl);
+
+            $spriteUrl = $decodedPokemonData->sprites->front_default;
+
+            $pokemonToAdd->setSprite($spriteUrl);
+
+            $HP = $decodedPokemonData->stats[0]->base_stat;
+
+            $pokemonToAdd->setHP($HP);
+
+            $attack = $decodedPokemonData->stats[1]->base_stat;
+
+            $pokemonToAdd->setAttack($attack);
+
+            $defense = $decodedPokemonData->stats[2]->base_stat;
+
+            $pokemonToAdd->setDefense($defense);
+
+            $special_attack = $decodedPokemonData->stats[3]->base_stat;
+
+            $pokemonToAdd->setSpecialAttack($special_attack);
+
+            $special_defense = $decodedPokemonData->stats[4]->base_stat;
+
+            $pokemonToAdd->setSpecialDefense($special_defense);
+
+            $speed = $decodedPokemonData->stats[5]->base_stat;
+
+            $pokemonToAdd->setSpeed($speed);
+
+            $types = $decodedPokemonData->types;
+
+            foreach ($types as $type){
+
+              $typeName = $type->type->name;
+
+              $typeToAttribute = $typeRepository->findOneBy(['english_name' => $typeName]);
+
+              $pokemonToAdd->addType($typeToAttribute);
+            }
+
+            $em->persist($pokemonToAdd);
           }
 
-          $pokemonToAdd->setImage($imageUrl);
-
-          $spriteUrl = $decodedPokemonData->sprites->front_default;
-
-          $pokemonToAdd->setSprite($spriteUrl);
-
-          $HP = $decodedPokemonData->stats[0]->base_stat;
-
-          $pokemonToAdd->setHP($HP);
-
-          $attack = $decodedPokemonData->stats[1]->base_stat;
-
-          $pokemonToAdd->setAttack($attack);
-
-          $defense = $decodedPokemonData->stats[2]->base_stat;
-
-          $pokemonToAdd->setDefense($defense);
-
-          $special_attack = $decodedPokemonData->stats[3]->base_stat;
-
-          $pokemonToAdd->setSpecialAttack($special_attack);
-
-          $special_defense = $decodedPokemonData->stats[4]->base_stat;
-
-          $pokemonToAdd->setSpecialDefense($special_defense);
-
-          $speed = $decodedPokemonData->stats[5]->base_stat;
-
-          $pokemonToAdd->setSpeed($speed);
-
-          $types = $decodedPokemonData->types;
-
-          foreach ($types as $type){
-
-            $typeName = $type->type->name;
-
-            $typeToAttribute = $typeRepository->findOneBy(['english_name' => $typeName]);
-
-            $pokemonToAdd->addType($typeToAttribute);
-          }
-
-          $em->persist($pokemonToAdd);
+          
         }
 
         $em->flush();
       }
 
-        return $this->json($pokemonRepository->findOneBy(['name' => 'Florizarre']));
-    }    
+        return $this->json('test terminé');
+    } */    
     
     /**
-     * @Route("/test", name="test")
+     * @Route("/test", name="test-json")
      */
     public function test(PokemonRepository $pokemonRepository, PokemonService $service, Request $request){
 
@@ -370,7 +371,7 @@ class TestController extends AbstractController
       
       $types = $test->getTypes();
 
-      dump($types);
+      //dump($types);
 
       return $this->json($test);
     }
