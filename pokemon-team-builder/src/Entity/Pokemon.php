@@ -112,7 +112,7 @@ class Pokemon
     private $resistanceModifyingAbility;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="additionalForms")
+     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="additionalForms", fetch="EAGER")
      * @Ignore()
      */
     private $originalForm;
@@ -124,7 +124,7 @@ class Pokemon
     private $additionalForms;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="evolutions")
+     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="evolutions", fetch="EAGER")
      * @Ignore()
      */
     private $evolvedFrom;
