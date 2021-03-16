@@ -21,7 +21,7 @@ class MainControllerTest extends WebTestCase
       $client = static::createClient();
       $crawler = $client->request('GET', '/api/v1');
 
-      $this->assertSelectorTextContains('div.card:nth-child(10) > div:nth-child(2) > p:nth-child(2) > strong:nth-child(1)', 'double-weakness');
+      $this->assertSelectorTextContains('div.card:nth-child(11) > div:nth-child(2) > p:nth-child(2) > strong:nth-child(1)', 'double-weakness');
     } 
 }
 
