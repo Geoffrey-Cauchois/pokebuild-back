@@ -89,4 +89,15 @@ class ApiControllerTest extends WebTestCase
         $this->assertStringContainsString('Roucool', $client->getResponse()->getContent());
         
     }
+
+    public function testAbility(): void
+    {
+      $client = static::createClient();
+      $crawler = $client->request('GET', 'http://localhost/api/v1/pokemon/Smogogo/ability/Levitation');
+
+      $apiResponse = json_decode($client->getResponse()->getContent());
+      //La résistance au sol doit être une immunité grâce à lévitation
+      $this->assertEquals($apiResponse->apiResistances[4]->damage_multiplier, 0);
+      $this->assertEquals($apiResponse->apiPreEvolution->name, 'Smogo');
+    }
 }
