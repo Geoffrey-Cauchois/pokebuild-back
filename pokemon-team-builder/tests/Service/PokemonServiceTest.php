@@ -57,12 +57,31 @@ class PokemonServiceTest extends KernelTestCase
 
       $testedSuggestions = $this->pokemonService->suggestPokemon($pokemonToTestIds);
 
+      //suggestions should compensate the team major vulnerabilities and create new ones
+
       foreach($testedSuggestions as $suggestedPokemon){
         $this->assertContains($suggestedPokemon->getResistances()['Vol']['damage_multiplier'], [0, 0.25, 0.5]);
         $this->assertContains($suggestedPokemon->getResistances()['Psy']['damage_multiplier'], [0, 0.25, 0.5]);
         $this->assertNotContains($suggestedPokemon->getResistances()['Glace']['damage_multiplier'], [4]);
         $this->assertNotContains($suggestedPokemon->getResistances()['Poison']['damage_multiplier'], [2, 4]);
       }
+    }
+
+    public function testWithAbilities()
+    {
+
+      $pokemonToTestIds = [110, 60];
+      $pokemonToTestAbilities = ["Levitation", "Absorbe-Eau"];
+
+      //we verify if the team resistances change accordingly when its pokemon have abilities that makes them immune to a type
+
+      $testedTeamWithAbilities = $this->pokemonService->calculateDefensiveCoverage($pokemonToTestIds, $pokemonToTestAbilities);
+      $testedTeamWithoutAbilities = $this->pokemonService->calculateDefensiveCoverage($pokemonToTestIds);
+      
+      $this->assertEquals($testedTeamWithoutAbilities->getDefensiveCover()['Sol']['result'], 'slightly-vulnerable');
+      $this->assertEquals($testedTeamWithAbilities->getDefensiveCover()['Sol']['result'], 'resistant');
+      $this->assertEquals($testedTeamWithoutAbilities->getDefensiveCover()['Eau']['result'], 'slightly-resistant');
+      $this->assertEquals($testedTeamWithAbilities->getDefensiveCover()['Eau']['result'], 'resistant');
     }
 
 }
