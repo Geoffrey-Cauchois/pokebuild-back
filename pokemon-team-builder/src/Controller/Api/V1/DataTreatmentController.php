@@ -134,10 +134,12 @@ class DataTreatmentController extends AbstractController
           return $this->json($translator->trans('too-much-pokemon', [], 'messages'), 400);
         }
 
-        foreach($chosenPokemonData as $id => $skillName){
+        foreach($chosenPokemonData as $pokemonData){
 
-          $chosenPokemonIds[] = $id;
+          foreach($pokemonData as $id => $skillName){
+            $chosenPokemonIds[] = $id;
           $chosenSkillsNames[] = $skillName;
+          }
         }
 
         $team = $pokemonService->calculateDefensiveCoverage($chosenPokemonIds, $chosenSkillsNames);
@@ -225,10 +227,12 @@ class DataTreatmentController extends AbstractController
         return $this->json($translator->trans('full-team', [], 'messages'), 400);
       }
 
-      foreach($chosenPokemonData as $id => $skillName){
+      foreach($chosenPokemonData as $pokemonData){
 
-        $chosenPokemonIds[] = $id;
+        foreach($pokemonData as $id => $skillName){
+          $chosenPokemonIds[] = $id;
         $chosenSkillsNames[] = $skillName;
+        }
       }
 
       $suggestedPokemon = $pokemonService->suggestPokemon($chosenPokemonIds, $chosenSkillsNames);

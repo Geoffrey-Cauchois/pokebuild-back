@@ -122,6 +122,8 @@ class MainController extends AbstractController
 
         $chosenPokemon = $team->getPokemon();
 
+        $chosenPokemonData = [];
+
         foreach($chosenPokemon as $pokemon){
 
           if($request->request->get(strtolower($pokemon->getName()) . 'Ability') != null && $request->request->get(strtolower($pokemon->getName()) . 'Ability') != 'null'){
@@ -133,12 +135,14 @@ class MainController extends AbstractController
             $chosenSkill = null;
           }
 
-          $chosenPokemonData[$pokemon->getId()] = $chosenSkill;
+          $pokemonData = [$pokemon->getId() => $chosenSkill];
+
+          array_push($chosenPokemonData, $pokemonData);
 
         }
 
         $chosenPokemonData = json_encode($chosenPokemonData);
-
+        
         $opts = ['http' => [
                             'method' => 'POST',
                             'header' => 'Content-type: application/x-www-form-urlencoded',
@@ -193,6 +197,8 @@ class MainController extends AbstractController
 
         $chosenPokemon = $team->getPokemon();
 
+        $chosenPokemonData = [];
+
         foreach($chosenPokemon as $pokemon){
 
           if($request->request->get(strtolower($pokemon->getName()) . 'Ability') != null && $request->request->get(strtolower($pokemon->getName()) . 'Ability') != 'null'){
@@ -204,7 +210,9 @@ class MainController extends AbstractController
             $chosenSkill = null;
           }
 
-          $chosenPokemonData[$pokemon->getId()] = $chosenSkill;
+          $pokemonData = [$pokemon->getId() => $chosenSkill];
+
+          array_push($chosenPokemonData, $pokemonData);
         }
 
         $chosenPokemonData = json_encode($chosenPokemonData);
