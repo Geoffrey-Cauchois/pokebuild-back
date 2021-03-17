@@ -32,6 +32,8 @@ class ApiController extends AbstractController
         foreach($pokemons as $pokemon){
 
           $pokemonService->calculateResistances($pokemon);
+          //additional resistance data with abilities are needed for the front
+          $pokemonService->calculateResistancesWithAbilities($pokemon);
         }
 
 
