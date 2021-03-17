@@ -391,16 +391,19 @@ class PokemonService
 
     $originalResistances = $pokemon->getResistances();
 
-    foreach($pokemon->getResistanceModifyingAbility() as $ability){
-      //currently, Pokémon cannot have more than one resistance modifying ability, we use foreach to go into the Collection but only one item will be in it
+    if(count($pokemon->getResistanceModifyingAbility()) != 0){
 
-      $this->calculateResistances($pokemon, $ability);
+      foreach($pokemon->getResistanceModifyingAbility() as $ability){
 
-      $ResistancesModifiedByAbility = $pokemon->getResistances();
+        //currently, Pokémon cannot have more than one resistance modifying ability, we use foreach to go into the Collection but only one item will be in it
 
+        $this->calculateResistances($pokemon, $ability);
+
+        $resistancesModifiedByAbility = $pokemon->getResistances();
+      }
+      
+      $pokemon->setResistancesWithAbilities($resistancesModifiedByAbility);
     }
-
-    $pokemon->setResistancesWithAbilities($ResistancesModifiedByAbility);
 
     $pokemon->setResistances($originalResistances);
   }

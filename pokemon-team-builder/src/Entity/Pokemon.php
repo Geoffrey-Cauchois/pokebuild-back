@@ -77,7 +77,7 @@ class Pokemon
     private $speed;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon")
+     * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      * @Ignore()
      */
@@ -417,9 +417,12 @@ class Pokemon
     {
       $resistanceWithAbilityForApi = [];
 
-      foreach($this->resistancesWithAbilities as $resistanceData){
+      if(!is_null($this->getResistancesWithAbilities())){
 
-        $resistanceWithAbilityForApi[] = $resistanceData;
+        foreach($this->getResistancesWithAbilities() as $resistanceData){
+
+          $resistanceWithAbilityForApi[] = $resistanceData;
+        }
       }
 
       return $resistanceWithAbilityForApi;

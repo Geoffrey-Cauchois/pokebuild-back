@@ -18,7 +18,7 @@ class TeamAppartenance
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="teamAppartenances")
+     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="teamAppartenances", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $team;

@@ -30,12 +30,12 @@ class ResistanceModifyingAbility
     private $multiplier;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistanceModifyingAbility")
+     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistanceModifyingAbility", fetch="EAGER")
      */
     private $modifiedType;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="resistanceModifyingAbility")
+     * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="resistanceModifyingAbility", fetch="EAGER")
      */
     private $pokemon;
 

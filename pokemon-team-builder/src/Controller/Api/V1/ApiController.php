@@ -52,6 +52,7 @@ class ApiController extends AbstractController
 
         // the paramConverter is findind the pokemon with the {id}, then we use the service "calculateResistances"
         $pokemonService->calculateResistances($pokemon);
+        $pokemonService->calculateResistancesWithAbilities($pokemon);
 
         // we send json with the Pokemons details + resistances
         return $this->json($pokemon);
@@ -70,6 +71,7 @@ class ApiController extends AbstractController
 
         // we use the service "calculateResistances" to be able to display also the resistances 
         $pokemonService->calculateResistances($pokemonByName);
+        $pokemonService->calculateResistancesWithAbilities($pokemonByName);
 
         // we send json with the Pokemons details + resistances
         return $this->json($pokemonByName);
@@ -81,10 +83,15 @@ class ApiController extends AbstractController
 
     // route to send the list of pokemons by type
 
-    public function showPokemonByType(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService): Response
+    public function showPokemonByType(PokemonRepository $pokemonRepository, $name, PokemonService $pokemonService, TypeRepository $typeRepository): Response
     {
-        // we find the pokemons by type with the repository (custom request)
-        $pokemonsByType = $pokemonRepository->findByType($name);
+      $pokemonsByType = [];
+        // we find the pokemons by type
+        foreach($pokemonRepository->findAll() as $pokemon){
+          if(in_array($typeRepository->findOneBy(['name' => $name]), $pokemon->getTypes()->getValues())){
+            $pokemonsByType[] = $pokemon;
+          }
+        }
 
         // for each pokemon we use the service "calculateResistances" to be able to display also the resistances 
         foreach($pokemonsByType as $pokemon){
@@ -147,10 +154,15 @@ class ApiController extends AbstractController
 
     // route to send the list of pokemons by their 2 types
 
-    public function showPokemonByDoubleType(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName1, $typeName2): Response
+    public function showPokemonByDoubleType(PokemonRepository $pokemonRepository, PokemonService $pokemonService, $typeName1, $typeName2, TypeRepository $typeRepository): Response
     {
-        // we find the pokemons by their 2 types with the repository (custom request)
-        $pokemonByTypes = $pokemonRepository->findByTypes($typeName1, $typeName2);
+      $pokemonByTypes = [];
+        // we find the pokemons by their 2 types 
+        foreach($pokemonRepository->findAll() as $pokemon){
+          if(in_array($typeRepository->findOneBy(['name' => $typeName1]), $pokemon->getTypes()->getValues()) && in_array($typeRepository->findOneBy(['name' => $typeName2]), $pokemon->getTypes()->getValues())){
+            $pokemonByTypes[] = $pokemon;
+          }
+        }
 
         // for each pokemon we use the service "calculateResistances" to be able to display also the resistances
         foreach($pokemonByTypes as $pokemon){

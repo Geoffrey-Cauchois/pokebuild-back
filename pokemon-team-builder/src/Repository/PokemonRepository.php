@@ -19,13 +19,14 @@ class PokemonRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokemon::class);
     }
 
-    public function findByType($type)
+    public function findByType($typeName)
     {
         // query to find the pokemons which have the type of (value of $type)
         return $this->createQueryBuilder('p')
+            ->select('p')
             ->innerJoin('p.types', 't')
-            ->where('t.name = :type')
-            ->setParameter('type', $type)
+            ->andWhere('t.name = :type')
+            ->setParameter('type', $typeName)
             ->getQuery()
             ->getResult();
    
@@ -47,6 +48,7 @@ class PokemonRepository extends ServiceEntityRepository
     {
         // query to find the pokemons which have the types of  (value of $type1 and $type2)
         return $this->createQueryBuilder('p')
+                  ->select('p')
                   ->innerJoin('p.types', 't1')
                   ->innerJoin('p.types', 't2')
                   ->andWhere('t1.name = :type1')

@@ -34,14 +34,14 @@ class Type
     private $image;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="types")
+     * @ORM\ManyToMany(targetEntity=Pokemon::class, inversedBy="types", fetch="EAGER")
      * @Ignore()
      */
     private $pokemon;
 
 
     /**
-     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="vulnerability")
+     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="vulnerability", fetch="EAGER")
      * @JoinTable(name="vulnerable_to",
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
@@ -57,7 +57,7 @@ class Type
     private $vulnerability;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistance")
+     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="resistance", fetch="EAGER")
      * @JoinTable(name="resistant_to",
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
@@ -73,7 +73,7 @@ class Type
     private $resistance;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="neutrality")
+     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="neutrality", fetch="EAGER")
      * @JoinTable(name="neutral_to",
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
@@ -89,7 +89,7 @@ class Type
     private $neutrality;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="immunity")
+     * @ORM\ManyToMany(targetEntity=Type::class, inversedBy="immunity", fetch="EAGER")
      * @JoinTable(name="immune_to",
      *      joinColumns={@JoinColumn(name="attacked_type", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="attacking_type", referencedColumnName="id")}
