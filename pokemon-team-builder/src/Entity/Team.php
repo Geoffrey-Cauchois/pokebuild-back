@@ -26,7 +26,7 @@ class Team
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="teams")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="teams", fetch="EAGER")
      * @Ignore()
      */
     private $user;
