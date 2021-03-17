@@ -93,6 +93,11 @@ class Pokemon
      * @Ignore()
      */
     private $resistances;
+    
+    /**
+     * @Ignore
+     */
+    private $resistancesWithAbilities;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -144,6 +149,7 @@ class Pokemon
         $this->resistanceModifyingAbility = new ArrayCollection();
         $this->additionalForms = new ArrayCollection();
         $this->evolutions = new ArrayCollection();
+        $this->resistancesWithAbilities = [];
     }
 
     public function __toString()
@@ -404,6 +410,21 @@ class Pokemon
       return $preEvolutionForApi;
     }
 
+    /**
+     * @return array
+     */
+    public function getApiResistancesWithAbilities(): array
+    {
+      $resistanceWithAbilityForApi = [];
+
+      foreach($this->resistancesWithAbilities as $resistanceData){
+
+        $resistanceWithAbilityForApi[] = $resistanceData;
+      }
+
+      return $resistanceWithAbilityForApi;
+    }
+
 
     public function addType(Type $type): self
     {
@@ -607,6 +628,26 @@ class Pokemon
                 $evolution->setEvolvedFrom(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of resistancesWithAbilities
+     */ 
+    public function getResistancesWithAbilities()
+    {
+        return $this->resistancesWithAbilities;
+    }
+
+    /**
+     * Set the value of resistancesWithAbilities
+     *
+     * @return  self
+     */ 
+    public function setResistancesWithAbilities($resistancesWithAbilities)
+    {
+        $this->resistancesWithAbilities = $resistancesWithAbilities;
 
         return $this;
     }

@@ -35,7 +35,7 @@ class PokemonService
    * @param null|ResistanceMdifyingAbility $resistanceModifyingAbility null if no ability selected, null by default
    * @return void
    */
-  public function calculateResistances(Pokemon $pokemon, ResistanceModifyingAbility $resistanceModifyingAbility = null)
+  public function calculateResistances(Pokemon $pokemon, ResistanceModifyingAbility $resistanceModifyingAbility = null): void
   { 
     //first, we get all the pokemon's types (1 or 2)
     $pokemonTypes = $pokemon->getTypes();
@@ -384,5 +384,24 @@ class PokemonService
         }
         
         return $suggestedPokemon;
+  }
+
+  public function calculateResistancesWithAbilities(Pokemon $pokemon)
+  { 
+
+    $originalResistances = $pokemon->getResistances();
+
+    foreach($pokemon->getResistanceModifyingAbility() as $ability){
+      //currently, Pokémon cannot have more than one resistance modifying ability, we use foreach to go into the Collection but only one item will be in it
+
+      $this->calculateResistances($pokemon, $ability);
+
+      $ResistancesModifiedByAbility = $pokemon->getResistances();
+
+    }
+
+    $pokemon->setResistancesWithAbilities($ResistancesModifiedByAbility);
+
+    $pokemon->setResistances($originalResistances);
   }
 }
