@@ -129,6 +129,8 @@ class User implements UserInterface
                         'name' => $team->getName(),
                         'pokemon' => $pokemon
         ];
+
+        $pokemon = [];
       }
       //dd($apiTeams);
       return $apiTeams;
