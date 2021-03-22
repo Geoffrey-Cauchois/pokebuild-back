@@ -1,6 +1,6 @@
 var app = {
 
-  apiBaseUrl: 'http://ec2-54-209-63-59.compute-1.amazonaws.com/api/v1/',
+  apiBaseUrl: 'https://pokebuildapi.fr/api/v1/',
 
   init: function() {
     let searchInput = document.createElement('input');
