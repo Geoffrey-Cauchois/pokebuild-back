@@ -158,7 +158,7 @@ class DatabaseFillCommand extends Command
               $type->addVulnerableTo($vulnerability);
             }
 
-            //then, same process for resistances ans immunities
+            //then, same process for resistances and immunities
   
             $resistances = $decodedTypeData->damage_relations->half_damage_from;
   
