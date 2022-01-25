@@ -104,7 +104,7 @@ class UserController extends AbstractController
       
 
       $email = (new TemplatedEmail())
-        ->from('pokebuild.noreply@gmail.com')
+        ->from('noreply.pokebuild@gmail.com')
         ->to($userToAdd->getEmail())
         ->subject($translator->trans('signup', [], 'emails') . ' !')
         ->htmlTemplate('emails/signup.html.twig')
@@ -251,7 +251,7 @@ class UserController extends AbstractController
         $userToEdit->setEmail($userInfo['email']);
 
         $email = (new TemplatedEmail())
-        ->from('pokebuild.noreply@gmail.com')
+        ->from('noreply.pokebuild@gmail.com')
         ->to($userInfo['email'])
         ->subject($translator->trans('new-email', [], 'emails') . ' !')
         ->htmlTemplate('emails/new.html.twig')
